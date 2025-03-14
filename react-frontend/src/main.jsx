@@ -7,9 +7,10 @@ import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import Message from "./pages/message.jsx";
 import Listing from "./pages/Listing.jsx";
+import Main from "./pages/main.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Message />
+    <Listing />
   </StrictMode>
 );

@@ -1,8 +1,22 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/footer";
 
 function Listing() {
+  const [job, setJob] = useState(null);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/api/job") // Fetch from Flask API
+      .then((response) => response.json())
+      .then((data) => setJob(data))
+      .catch((error) => console.error("Error fetching job data:", error));
+  }, []);
+
+  if (!job) {
+    return <p className="text-center text-gray-500">Loading job details...</p>;
+  }
+
   return (
     <div>
       <Navbar />
@@ -24,83 +38,67 @@ function Listing() {
               &gt;
               <a href="#" className="hover:underline">
                 {" "}
-                Frontend Software Developer..
+                {job.title.substring(0, 30)}
               </a>
             </nav>
 
-            <h1 className="text-3xl font-bold mb-2">
-              Frontend Software Developer - Junior Web Development Position -
-              React/JavaScript
-            </h1>
-            <p className="text-gray-600 mb-4">
-              We are seeking a motivated Junior Frontend Developer to build
-              responsive, user-friendly web applications using React and
-              JavaScript.
-            </p>
+            {/* Job Title & Description */}
+            <h1 className="text-3xl font-bold mb-2">{job.title}</h1>
+            <p className="text-gray-600 mb-4">{job.description}</p>
 
             {/* Company Info */}
             <div className="flex items-center gap-2 mb-6">
               <img
-                src="your-company-logo-url"
+                src={job.company_logo}
                 alt="Company Logo"
                 className="w-10 h-10 rounded-full"
               />
-              <span className="font-semibold text-gray-700">
-                MyCompany Limited Co.
-              </span>
+              <span className="font-semibold text-gray-700">{job.company}</span>
             </div>
 
+            {/* Listing Image */}
             <div className="relative mb-6">
               <img
-                src="your-image-url"
-                alt="Listing image"
+                src={job.listing_image}
+                alt="Listing"
                 className="w-full rounded-lg"
               />
             </div>
 
+            {/* Description & Requirements */}
             <h2 className="text-xl font-bold mb-3">Description</h2>
             <p className="text-gray-600 leading-relaxed mb-6">
-              We are looking for a motivated Junior Frontend Developer with a
-              passion for creating engaging and user-friendly web
-              applications...
+              {job.description}
             </p>
 
             <h2 className="text-xl font-bold mb-3">Requirement:</h2>
             <ul className="text-gray-600 space-y-2">
-              <li className="flex items-center">
-                <span className="text-orange-500 mr-2">✔</span> Lorem ipsum
-                dolor sit amet consectetur adipisicing elit. Praesentium,
-                dignissimos?
-              </li>
-              <li className="flex items-center">
-                <span className="text-orange-500 mr-2">✔</span> Lorem ipsum
-                dolor sit amet consectetur adipisicing elit. Tempore, vero?
-              </li>
-              <li className="flex items-center">
-                <span className="text-orange-500 mr-2">✔</span> Lorem ipsum
-                dolor, sit amet consectetur adipisicing elit. Nam, totam.
-              </li>
+              {job.requirements.map((req, index) => (
+                <li key={index} className="flex items-center">
+                  <span className="text-orange-500 mr-2">✔</span> {req}
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Right Sidebar */}
-          <div className="bg-white p-5 rounded-lg shadow-md ">
-            <p className="text-gray-500 text-sm mb-2 text-center text-orange-500 ">
-              Posted 2 days ago
+          <div className="bg-white p-5 rounded-lg shadow-md mt-6">
+            <p className="text-gray-500 text-sm mb-2 text-center text-orange-500">
+              {job.posted_days_ago}
             </p>
 
             <div className="space-y-4">
               <div className="flex justify-between text-gray-700">
-                <span>Duration:</span> <span>Full-Time</span>
+                <span>Duration:</span> <span>{job.duration}</span>
               </div>
               <div className="flex justify-between text-gray-700">
-                <span>Position Level:</span> <span>Intermediate</span>
+                <span>Position Level:</span> <span>{job.position_level}</span>
               </div>
               <div className="flex justify-between text-gray-700">
-                <span>Work experience:</span> <span>0 - 3 years</span>
+                <span>Work experience:</span> <span>{job.work_experience}</span>
               </div>
               <div className="flex justify-between text-gray-700">
-                <span>Location:</span> <span>Bangkok</span>
+                <span>Location:</span> <span>{job.location}</span>
               </div>
             </div>
 
