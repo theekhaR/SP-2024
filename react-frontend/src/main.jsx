@@ -8,6 +8,7 @@ import Login from "./pages/Login.jsx";
 import Message from "./pages/message.jsx";
 import Listing from "./pages/Listing.jsx";
 import Main from "./pages/main.jsx";
+import TokenAuthenTest from "./pages/TokenAuthenTest.jsx";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -16,7 +17,8 @@ const router = createBrowserRouter([
     { path: "/login", element: <Login /> },
     { path: "/message", element: <Message /> },
     { path: "/listing", element: <Listing /> },
-    { path: "/main", element: <Main />}
+    { path: "/main", element: <Main />},
+    { path: "/authen", element: <TokenAuthenTest />}
 ])
 createRoot(document.getElementById("root")).render(
   <StrictMode>

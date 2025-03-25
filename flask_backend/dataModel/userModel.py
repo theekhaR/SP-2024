@@ -1,7 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
-db = SQLAlchemy()
+from .__init__ import db
 
 #Snake case = Python / Camel case = JSON
 
@@ -18,12 +16,10 @@ class User(db.Model): #To indicate that this is a database model
     AccountType = db.Column(db.Integer, nullable=False)
     Validated = db.Column(db.Boolean, default=False)
     Company = db.Column(db.String(2000))
-    CreatedOn = db.Column(db.DateTime, default=datetime.utcnow)
+    CreatedOn = db.Column(db.DateTime, default=datetime.now)
     IsActive = db.Column(db.Boolean, default=True)
 
-    def to_json(self):
-        return {
-            'userID': self.UserID,
-            'userFirstName': self.UserFirstName,
-            'userLastName': self.UserLastName,
-        }
+    from .companyMemberMappingModel import CompanyMemberMapping
+    companies = db.relationship('Company', backref='User')
+    companies_mapping = db.relationship('CompanyMemberMapping', backref='User')
+
