@@ -20,6 +20,9 @@ class Company(db.Model):
     from .companyPermissionListModel import CompanyPermissionList
     #NEEDED TO BE HERE TO FIX PROBLEM
     #Before declaring relation, import the class that you want to declear first to ensure that the class will already be created by the time this relation function is called
-    member_mapping = db.relationship('CompanyMemberMapping', backref='Company')
-    listing_mapping = db.relationship('CompanyListingMapping', backref='Company')
-    permission_mapping = db.relationship('CompanyPermissionList', backref='Company')
+    user_mapping = db.relationship('User', back_populates='company_mapping')
+    companymembermapping_mapping = db.relationship('CompanyMemberMapping', back_populates='company_mapping')
+    companylistingmapping_mapping = db.relationship('CompanyListingMapping', back_populates='company_mapping')
+    companypermissionlist_mapping = db.relationship('CompanyPermissionList', back_populates='company_mapping')
+    listing_mapping = db.relationship('Listing', back_populates='company_mapping')
+    companyindustrylist_mapping = db.relationship('CompanyIndustryList', back_populates='company_mapping')

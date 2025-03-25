@@ -36,8 +36,10 @@ db.init_app(app)
 
 from CRUDApi.userAPI import userAPI
 from CRUDApi.companyAPI import companyAPI
+from CRUDApi.listingAPI import listingAPI
 app.register_blueprint(userAPI)
 app.register_blueprint(companyAPI)
+app.register_blueprint(listingAPI)
 
 @app.route('/api/data', methods=['GET'])
 def get_data():

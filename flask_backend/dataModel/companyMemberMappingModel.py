@@ -9,5 +9,6 @@ class CompanyMemberMapping(db.Model):
     Role = db.Column(db.String(100))
     PermissionID = db.Column(db.Integer, db.ForeignKey('SP2024-4.CompanyPermissionList.PermissionID'))
 
-    company_mapping = db.relationship('Company', backref='CompanyMemberMapping')
-    user_mapping = db.relationship('User', backref='CompanyMemberMapping')
+    companypermissionlist_mapping = db.relationship('CompanyPermissionList', back_populates='companymembermapping_mapping')
+    company_mapping = db.relationship('Company', back_populates='companymembermapping_mapping')
+    user_mapping = db.relationship('User', back_populates='companymembermapping_mapping')

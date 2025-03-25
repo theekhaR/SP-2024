@@ -21,8 +21,8 @@ def get_all_companies():
             'CompanyOverview': company.CompanyOverview,
             'CompanySite': company.CompanySite,
             'CompanyLocation': company.CompanyLocation,
-            'IndustryID': company.Industry.IndustryName if company.Industry else None,
-            'CreatedBy': f"{company.User.UserFirstName} {company.User.UserLastName}"  if company.User else None,
+            'IndustryID': company.companyindustrylist_mapping.IndustryName if company.companyindustrylist_mapping else None,
+            'CreatedBy': f"{company.user_mapping.UserFirstName} {company.user_mapping.UserLastName}"  if company.user_mapping else None,
             'CreatedOn': company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if company.CreatedOn else None
         }
         for company in companies
@@ -42,18 +42,18 @@ def get_all_members():
 
     member_list = [
         {
-            'UserID': member.User.UserID,
-            'Name': f"{member.User.UserFirstName} {member.User.UserLastName}"  if member.User else None,
+            'UserID': member.user_mapping.UserID,
+            'Name': f"{member.user_mapping.UserFirstName} {member.user_mapping.UserLastName}"  if member.user_mapping else None,
             'Role': member.Role,
-            'Permission': member.CompanyPermissionList.PermissionName if member.CompanyPermissionList else None
+            'Permission': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None
         }
         for member in members
     ]
     print(member_list)
     return jsonify(member_list)
 
-@companyAPI.route('/listings', methods=['GET'])
-def get_all_listings():
+@companyAPI.route('/companylistings', methods=['GET'])
+def get_all_listings_from_company():
     data = request.get_json()
     if not data or 'CompanyID' not in data:
         return jsonify({'error': 'Missing required fields'}), 400
@@ -66,7 +66,7 @@ def get_all_listings():
     listing_list = [
         {
             'ListingID': listing.ListingID,
-            'Position': f"{listing.ListingID.Position}",
+            'Position': f"{listing.listing_mapping.Position}",
         }
         for listing in listings
     ]

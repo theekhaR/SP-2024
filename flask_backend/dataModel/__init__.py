@@ -10,3 +10,7 @@ db = SQLAlchemy()
 Base = declarative_base()
 
 # __all__ = ['CompanyMemberMapping', 'CompanyIndustryList', 'Company', 'User']
+
+# For consistantcy
+# Define relation backward MANUALLY
+# Backref doesn't really work

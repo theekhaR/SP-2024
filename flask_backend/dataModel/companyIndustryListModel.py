@@ -8,7 +8,7 @@ class CompanyIndustryList(db.Model): #To indicate that this is a database model
     IndustryName = db.Column(db.String(50))
 
     from .companyModel import Company
-    companies = db.relationship('Company', backref='Industry')
+    company_mapping = db.relationship('Company', back_populates='companyindustrylist_mapping')
 
     #Backref is essentially an additional column created to link to the parent column
     #which in this case in CompanyIndustryList table

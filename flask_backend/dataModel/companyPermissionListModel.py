@@ -8,7 +8,7 @@ class CompanyPermissionList(db.Model):
     PermissionName = db.Column(db.String(100))
     PermissionID = db.Column(db.Integer, primary_key=True)
 
-    CompanyMemberMapping = db.relationship('CompanyMemberMapping',backref='CompanyPermissionList')
-    CompanyMapping = db.relationship('Company', backref='CompanyPermissionList')
+    companymembermapping_mapping = db.relationship('CompanyMemberMapping',back_populates='companypermissionlist_mapping')
+    company_mapping = db.relationship('Company', back_populates='companypermissionlist_mapping')
 
     # primaryjoin='and_(''CompanyPermissionList.PermissionID == CompanyMemberMapping.PermissionID)'
