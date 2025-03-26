@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <header class="flex shadow-md py-4 px-4 sm:px-10 bg-slate-800 font-[sans-serif] min-h-[70px] tracking-wide sticky top-0 z-50">
       <div class="flex items-center justify-evenly w-full">
-        <a href="#">
+        <a href="/">
           <h3 class="text-2xl text-[#cf5c2e] font-semibold">Logo</h3>
         </a>
 
@@ -35,13 +35,13 @@ function Navbar() {
 
           <ul class=" hidden lg:flex gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
             <li class="mb-6 hidden max-lg:block">
-              <a href="#">
+              <a href="/">
                 <h3 class="text-2xl text-[#cf5c2e] font-semibold">Logo</h3>
               </a>
             </li>
             <li class="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
               <a
-                href="#"
+                href="/"
                 class="hover:text-[#FF6636] text-[#8C94A3] block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
                 Home
@@ -49,7 +49,7 @@ function Navbar() {
             </li>
             <li class="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
               <a
-                href="#"
+                href="/listing"
                 class="hover:text-[#FF6636] text-[#8C94A3]  block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
                 Job Searching
@@ -75,12 +75,16 @@ function Navbar() {
         </div>
 
         <div class="flex max-lg:ml-auto space-x-4">
-          <button class="px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#FF6636] bg-[#FF6636] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#FF6636]">
-            Login
-          </button>
-          <button class="px-4 py-2 text-sm rounded-full font-bold text-gray-500 border-2 border-gray-50  bg-gray-50 transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#FF6636]">
-            Company-side
-          </button>
+          <a href="/register">
+            <button class="px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#cf5c2e] bg-[#cf5c2e] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#FF6636]">
+              Register
+            </button>
+          </a>
+          <a href="/login">
+            <button class="px-4 py-2 text-sm rounded-full font-bold text-gray-500 border-2 border-gray-50  bg-gray-50 transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#FF6636]">
+              Login
+            </button>
+          </a>
 
           {/* Button for relative  */}
           {/* <button id="toggleOpen" class="lg:hidden">

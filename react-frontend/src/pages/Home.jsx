@@ -1,6 +1,8 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/footer"
 
+const token = localStorage.getItem("token");
 const Home = () => {
   return (
     <div className="flex flex-col bg-neutral-50 ">
@@ -17,6 +19,7 @@ const Home = () => {
               for your organization.
             </p>
             <div className="flex flex-col items-center gap-4 lg:flex-row">
+              {(token && token!="" && token!=undefined) ? <h1>You are logged in Token: {token}</h1> : <h1>You are not logged in</h1>}
               <button className="flex items-center py-4 text-sm font-bold text-white px-7 bg-slate-800 hover:bg-slate-700 focus:ring-4 focus:ring-blue-200 transition duration-300 rounded-xl">
                 Find Jobs Now
               </button>
@@ -34,6 +37,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

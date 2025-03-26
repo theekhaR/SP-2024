@@ -1,8 +1,58 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/footer";
 import Pic from "../assets/Tech.png";
 
-const About = () => {
+const Register = () => {
+  //To do
+  //Make it so that the "User created" pop up in the website itself, not as browser alert
+
+  const [firstNameState, setFirstname] = React.useState("");
+  const [lastnameState, setLastname] = React.useState("");
+  const [passwordState, setPassword] = React.useState("");
+  const [passwordConfirmState, setPasswordConfirm] = React.useState("");
+  const [emailState, setEmail] = React.useState("");
+
+  const handleCreateUserRequest = () => {
+    event.preventDefault();
+
+    const opts = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userEmail: emailState,
+        userPassword: passwordState,
+        userFirstName: firstNameState,
+        userLastName: lastnameState,
+      }),
+    };
+    try {
+      if (passwordState !== passwordConfirmState) {
+        alert("Passwords do not match");
+        return;
+      }
+      fetch("http://localhost:5000/create_user", opts) //DO NOT FORGET TO CHANGE TO DYNAMIC
+        .then((resp) => {
+          if (resp.status === 201) {
+            return resp.json();
+          } else alert(resp.statusText);
+        })
+        .then((data) => {
+          console.log("Backend returned:", data);
+          // Redirect to a success page or display a message
+          alert(data.message); // Show success message
+          window.location.href = "/login"; // Redirect to another page
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
@@ -35,6 +85,7 @@ const About = () => {
                     id="firstname"
                     name="firstname"
                     placeholder="First name.."
+                    onChange={(e) => setFirstname(e.target.value)}
                     className="mt-1 p-3 flex-1 border rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
                   />
                   <input
@@ -42,24 +93,25 @@ const About = () => {
                     id="lastname"
                     name="lastname"
                     placeholder="Last name.."
+                    onChange={(e) => setLastname(e.target.value)}
                     className="mt-1 p-3 flex-1 border rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
                   />
                 </div>
               </div>
               <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Username
-                </label>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  placeholder="Username.."
-                  className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
-                />
+                {/*<label*/}
+                {/*  htmlFor="username"*/}
+                {/*  className="block text-sm font-medium text-gray-700"*/}
+                {/*>*/}
+                {/*  Username*/}
+                {/*</label>*/}
+                {/*<input*/}
+                {/*  type="text"*/}
+                {/*  id="username"*/}
+                {/*  name="username"*/}
+                {/*  placeholder="Username.."*/}
+                {/*  className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"*/}
+                {/*/>*/}
               </div>
               <div>
                 <label
@@ -73,6 +125,7 @@ const About = () => {
                   id="email"
                   name="email"
                   placeholder="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
                   className="mt-1 p-3 w-full border rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
                 />
               </div>
@@ -89,6 +142,7 @@ const About = () => {
                     id="password"
                     name="password"
                     placeholder="Create password"
+                    onChange={(e) => setPassword(e.target.value)}
                     className="mt-1 p-3 flex-1 border rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
                   />
                 </div>
@@ -104,6 +158,7 @@ const About = () => {
                     id="confirm-password"
                     name="confirm-password"
                     placeholder="Confirm password"
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
                     className="mt-1 p-3 flex-1 border rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
                   />
                 </div>
@@ -124,15 +179,16 @@ const About = () => {
               </div>
               <button
                 type="submit"
+                onClick={handleCreateUserRequest}
                 className="w-full bg-orange-500 text-white p-3 rounded-md hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
               >
                 Create Account
               </button>
             </form>
-            <div class="mt-4 text-sm text-gray-600 text-center">
+            <div className="mt-4 text-sm text-gray-600 text-center">
               <p>
                 Already have an account?{" "}
-                <a href="#" class="text-black hover:underline">
+                <a href="/login" className="text-black hover:underline">
                   Login here
                 </a>
               </p>
@@ -144,4 +200,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Register;
