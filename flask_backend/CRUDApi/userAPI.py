@@ -90,7 +90,7 @@ def update_user():
         data = request.get_json()
 
         #check if required field is included (OFTEN THE PRIMARY KEY)
-        if (not data or'userID' not in data or not data.get('userEmail')):
+        if (not data or'userID' not in data or not data.get('userID')):
             return jsonify({'error': 'Missing userID'}), 400
 
         update_userID = data.get('userID')
