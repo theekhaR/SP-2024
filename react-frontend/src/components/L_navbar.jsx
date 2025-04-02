@@ -1,6 +1,6 @@
 import React from "react";
 
-function Navbar() {
+function L_navbar() {
   return (
     <header class="flex shadow-md py-4 px-4 sm:px-10 bg-slate-800 font-[sans-serif] min-h-[70px] tracking-wide sticky top-0 z-50">
       <div class="flex items-center justify-evenly w-full">
@@ -99,4 +99,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default L_navbar;
