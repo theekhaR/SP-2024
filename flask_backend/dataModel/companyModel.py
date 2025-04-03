@@ -21,6 +21,7 @@ class Company(db.Model):
     #NEEDED TO BE HERE TO FIX PROBLEM
     #Before declaring relation, import the class that you want to declear first to ensure that the class will already be created by the time this relation function is called
     user_mapping = db.relationship('User', back_populates='company_mapping')
+    userfollowing_mapping = db.relationship('UserFollowing', back_populates='company_mapping')
     companymembermapping_mapping = db.relationship('CompanyMemberMapping', back_populates='company_mapping')
     companylistingmapping_mapping = db.relationship('CompanyListingMapping', back_populates='company_mapping')
     companypermissionlist_mapping = db.relationship('CompanyPermissionList', back_populates='company_mapping')

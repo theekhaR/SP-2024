@@ -38,5 +38,6 @@ class User(db.Model): #To indicate that this is a database model
     userfollowing_mapping = db.relationship('UserFollowing', back_populates='user_mapping')
     userprofile_mapping = db.relationship('UserProfile', back_populates='user_mapping')
     userskill_mapping = db.relationship('UserSkill', back_populates='user_mapping')
+    listingapplicantmapping_mapping = db.relationship('ListingApplicantMapping', back_populates='user_mapping')
 
 

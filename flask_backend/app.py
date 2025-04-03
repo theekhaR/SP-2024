@@ -31,15 +31,23 @@ db_name = config['postgresql']['database']
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@{db_host}/{db_name}?sslmode=require'
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
+
 
 from CRUDApi.userAPI import userAPI
 from CRUDApi.companyAPI import companyAPI
 from CRUDApi.listingAPI import listingAPI
+from CRUDApi.userApplicationAPI import userApplicationAPI
+from CRUDApi.userBookmarkAPI import userBookmarkAPI
+from CRUDApi.userEducationAPI import userEducationAPI
 app.register_blueprint(userAPI)
 app.register_blueprint(companyAPI)
 app.register_blueprint(listingAPI)
+app.register_blueprint(userApplicationAPI)
+app.register_blueprint(userBookmarkAPI)
+app.register_blueprint(userEducationAPI)
 
 @app.route('/api/data', methods=['GET'])
 def get_data():

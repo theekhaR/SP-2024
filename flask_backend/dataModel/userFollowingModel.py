@@ -8,4 +8,5 @@ class UserFollowing(db.Model):
     CompanyID = db.Column(db.String(36), db.ForeignKey('SP2024-4.Company.CompanyID'), primary_key=True)
 
     user_mapping = db.relationship('User', back_populates='userfollowing_mapping')
+    company_mapping = db.relationship('Company', back_populates='userfollowing_mapping')
 

@@ -8,4 +8,4 @@ class UserApplication(db.Model):
     ListingID = db.Column(db.String(36), db.ForeignKey('SP2024-4.Listing.ListingID'), primary_key=True)
 
     user_mapping = db.relationship('User', back_populates='userapplication_mapping')
-
+    listing_mapping = db.relationship('Listing', back_populates='userapplication_mapping')
