@@ -27,7 +27,7 @@ config.read('database.ini')
 db_user = config['postgresql']['user']
 db_password = config['postgresql']['password']
 db_host = config['postgresql']['host']
-db_name = config['postgresql']['database']
+db_name = config['postgresql']['dbname']
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@{db_host}/{db_name}?sslmode=require'
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -67,12 +67,9 @@ def create_token():
         if not user is None:
             print(email, user.UserEmail, password, user.UserPassword)   #FOR DEBUGGING ONLY
         return jsonify({"msg": "Bad username or password"}), 401
-    firstname = user.UserFirstName
-    access_token = create_access_token(identity=firstname)
+    user_id = user.UserID
+    access_token = create_access_token(identity=user_id)
     return jsonify(access_token=access_token)
-
-
-
 
 @app.route('/api/job', methods=['GET'])
 def get_job():
@@ -94,27 +91,6 @@ def get_job():
         ]
     }
     return jsonify(job_data)
-
-# @app.route('/api/job', methods=['GET'])
-# def get_job():
-#     job_data = {
-#         "title": "Frontend Software Developer - Junior Web Development Position - React/JavaScript",
-#         "description": "We are seeking a motivated Junior Frontend Developer to build responsive, user-friendly web applications using React and JavaScript.",
-#         "company": "MyCompany Limited Co.",
-#         "company_logo": "your-company-logo-url",
-#         "listing_image": "your-image-url",
-#         "posted_days_ago": "2 days ago",
-#         "duration": "Full-Time",
-#         "position_level": "Intermediate",
-#         "work_experience": "0 - 3 years",
-#         "location": "Bangkok",
-#         "requirements": [
-#             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-#             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-#             "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam."
-#         ]
-#     }
-#     return jsonify(job_data)
 
 @app.route('/create_company', methods=['POST'])
 

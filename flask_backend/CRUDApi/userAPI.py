@@ -21,6 +21,18 @@ def get_all_users():
     users_list = [{'ID': user.UserID, 'name': user.UserFirstName, 'email': user.UserEmail} for user in users]
     return jsonify(users_list)
 
+@userAPI.route('/check_if_user_exists', methods=['GET'])
+def check_if_user_exists():
+    user_email = request.args.get('userEmail')
+    if not user_email:
+        return jsonify({'error': 'Missing userEmail'}), 400
+
+    existing_user = User.query.filter_by(UserEmail=user_email).first()
+    if existing_user:
+        return jsonify({'error': 'User with this email already exists'}), 409
+
+    return jsonify({'message': 'No User with this Email'}), 200
+
 @userAPI.route('/create_user', methods=['POST'])
 def create_user():
     try:

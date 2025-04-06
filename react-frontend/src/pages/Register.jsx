@@ -4,7 +4,6 @@ import Footer from "../components/footer";
 import Pic from "../assets/Tech.png";
 
 const Register = () => {
-
   //To do
   //Make it so that the "User created" pop up in the website itself, not as browser alert
 
@@ -14,8 +13,7 @@ const Register = () => {
   const [passwordConfirmState, setPasswordConfirm] = React.useState("");
   const [emailState, setEmail] = React.useState("");
 
-  const handleCreateUserRequest = () =>
-  {
+  const handleCreateUserRequest = () => {
     event.preventDefault();
 
     const opts = {
@@ -30,34 +28,31 @@ const Register = () => {
         userFirstName: firstNameState,
         userLastName: lastnameState,
       }),
-    }
+    };
     try {
       if (passwordState !== passwordConfirmState) {
         alert("Passwords do not match");
         return;
       }
       fetch("http://localhost:5000/create_user", opts) //DO NOT FORGET TO CHANGE TO DYNAMIC
-          .then(resp => {
-            if (resp.status === 201)
-            {
-              return resp.json();
-            }
-            else alert(resp.statusText);
-          })
-          .then((data) => {
-    console.log("Backend returned:", data);
-    // Redirect to a success page or display a message
-    alert(data.message); // Show success message
-    window.location.href = "/login"; // Redirect to another page
-  })
-          .catch(error => {
-            console.log(error)
-          })
+        .then((resp) => {
+          if (resp.status === 201) {
+            return resp.json();
+          } else alert(resp.statusText);
+        })
+        .then((data) => {
+          console.log("Backend returned:", data);
+          // Redirect to a success page or display a message
+          alert(data.message); // Show success message
+          window.location.href = "/login"; // Redirect to another page
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error.message);
     }
-    catch (error) {
-      console.log(error.message)
-    }
-  }
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -194,7 +189,7 @@ const Register = () => {
             <div className="mt-4 text-sm text-gray-600 text-center">
               <p>
                 Already have an account?{" "}
-                <a href="#" className="text-black hover:underline">
+                <a href="/login" className="text-black hover:underline">
                   Login here
                 </a>
               </p>

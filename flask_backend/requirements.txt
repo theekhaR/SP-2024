@@ -3,3 +3,5 @@ flask_cors==5.0.1
 Flask_JWT_Extended==4.7.1
 flask_sqlalchemy==3.1.1
 SQLAlchemy==2.0.40
+psycopg2==2.9.10
+python-dotenv==1.1.0
