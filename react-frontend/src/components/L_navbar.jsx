@@ -67,7 +67,7 @@ function L_navbar() {
               <ul className="py-2">
                 <li>
                   <a
-                    href="#"
+                    href="/setting"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
                   >
                     Profile setting
@@ -75,7 +75,7 @@ function L_navbar() {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="/bookmark"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
                   >
                     Bookmarks
@@ -83,7 +83,7 @@ function L_navbar() {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="/status"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
                   >
                     Apply Status
