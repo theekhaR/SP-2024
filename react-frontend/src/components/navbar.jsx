@@ -52,15 +52,7 @@ function Navbar() {
                 href="/listing"
                 class="hover:text-[#FF6636] text-[#8C94A3]  block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
-                Job Searching
-              </a>
-            </li>
-            <li class="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
-              <a
-                href="#"
-                class="hover:text-[#FF6636] text-[#8C94A3]  block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
-              >
-                Profile
+                Find Jobs
               </a>
             </li>
             <li class="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
@@ -68,7 +60,7 @@ function Navbar() {
                 href="#"
                 class="hover:text-[#FF6636] text-[#8C94A3] block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
-                Company Review
+                Company Side
               </a>
             </li>
           </ul>
