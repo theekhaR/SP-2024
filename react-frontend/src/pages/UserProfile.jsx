@@ -2,7 +2,7 @@ import React from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 
-function Setting() {
+function UserProfile() {
   const User = { image_url: "/images/Tech.png" };
 
   return (
@@ -81,4 +81,4 @@ function Setting() {
   );
 }
 
-export default Setting;
+export default UserProfile;

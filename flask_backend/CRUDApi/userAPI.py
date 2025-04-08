@@ -96,6 +96,46 @@ def create_user():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+@userAPI.route('/create_subsequence_tables', methods=['POST'])
+def create_subsequence_tables():
+    try:
+        data = request.get_json()
+
+        #check if all none nullable field contains null or empty string
+        if (not data or
+                'userID' not in data or not data.get('userID')):
+            return jsonify({'error': 'Missing userID to create subsequence tables'}), 400
+
+        new_usereducation_entry = UserEducation(
+            UserID=data.get('userID')
+        )
+        db.session.add(new_usereducation_entry)
+        db.session.flush()
+
+        new_userexperience_entry = UserExperience(
+            UserID=data.get('userID')
+        )
+        db.session.add(new_userexperience_entry)
+        db.session.flush()
+
+        new_userprofile_entry = UserProfile(
+            UserID=data.get('userID')
+        )
+        db.session.add(new_userprofile_entry)
+        db.session.flush()
+
+        new_userskill_entry = UserSkill(
+            UserID=data.get('userID')
+        )
+        db.session.add(new_userskill_entry)
+        db.session.commit()
+
+        return jsonify({'message': 'User subsequence table created successfully', 'UserID': data.get('userID')}), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @userAPI.route('/update_user', methods=['PATCH'])
 def update_user():
     try:
