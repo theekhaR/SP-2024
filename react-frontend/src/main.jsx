@@ -11,6 +11,9 @@ import Main from "./pages/main.jsx";
 import Setting from "./pages/Setting.jsx";
 import Astatus from "./pages/AppStatus.jsx";
 import Bookmark from "./pages/Bookmark.jsx";
+import Company from "./pages/Company.jsx";
+import C_Company from "./pages/createCompany.jsx";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -23,6 +26,8 @@ const router = createBrowserRouter([
   { path: "/setting", element: <Setting /> },
   { path: "/bookmark", element: <Bookmark /> },
   { path: "/status", element: <Astatus /> },
+  { path: "/Company", element: <Company /> },
+  { path: "/createCompany", element: <C_Company /> },
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
