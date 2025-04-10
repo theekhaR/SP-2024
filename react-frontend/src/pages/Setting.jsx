@@ -8,7 +8,7 @@ function Setting() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Lnavbar />
-      <div className="w-full max-w-5xl mx-auto px-4 py-4 space-y-10 bg-white shadow-md rounded-lg">
+      <div className="w-full max-w-5xl mx-auto px-4 py-4 space-y-10 bg-white shadow-md rounded-lg mt-12">
         {/* Account Settings */}
         <div className="flex flex-col space-y-4">
           <h2 className="text-xl font-bold text-gray-800">Account Settings</h2>
