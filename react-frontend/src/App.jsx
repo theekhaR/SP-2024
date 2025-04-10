@@ -17,9 +17,6 @@ function App() {
   }, []);
 
   return (
-    // <div>
-    //   <p> Hello world </p>
-    // </div>
 
     // Test back-end
     <div>

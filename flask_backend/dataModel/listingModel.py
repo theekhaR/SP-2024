@@ -23,8 +23,12 @@ class Listing(db.Model):
     # NEEDED TO BE HERE TO FIX PROBLEM
     # Before declaring relation, import the class that you want to declear first to ensure that the class will already be created by the time this relation function is called
 
+    # uselist = False will return object as the object instead of a list
+    # only use when it's a one to one. e.g. when the Mapping table can only map one A to one B, the A and mapping table relationship should be one-to-one
+
     companylistingmapping_mapping = db.relationship('CompanyListingMapping', back_populates='listing_mapping', uselist=False)
-    #uselist = False will return object as the object instead of a list
-    #only use when it's a one to one. e.g. when the Mapping table can only map one A to one B, the A and mapping table relationship should be one-to-one
     company_mapping = db.relationship('Company', back_populates='listing_mapping')
     user_mapping = db.relationship('User', back_populates='listing_mapping')
+    userapplication_mapping = db.relationship('UserApplication', back_populates='listing_mapping')
+    userbookmark_mapping = db.relationship('UserBookmark', back_populates='listing_mapping')
+    listingapplicantmapping_mapping = db.relationship('ListingApplicantMapping', back_populates='listing_mapping')

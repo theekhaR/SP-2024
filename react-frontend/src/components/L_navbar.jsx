@@ -5,41 +5,41 @@ function L_navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header class="flex shadow-md py-4 px-4 sm:px-10 bg-slate-800 font-[sans-serif] min-h-[70px] tracking-wide sticky top-0 z-50">
-      <div class="flex items-center justify-evenly w-full">
+    <header className="flex shadow-md py-4 px-4 sm:px-10 bg-slate-800 font-[sans-serif] min-h-[70px] tracking-wide sticky top-0 z-50">
+      <div className="flex items-center justify-evenly w-full">
         <a href="/">
-          <h3 class="text-2xl text-[#cf5c2e] font-semibold">Logo</h3>
+          <h3 className="text-2xl text-[#cf5c2e] font-semibold">Logo</h3>
         </a>
 
         <div
           id="collapseMenu"
-          class="ml-30 lg:!block max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-50 max-lg:before:inset-0 max-lg:before:z-50"
+          className="ml-30 lg:!block max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-50 max-lg:before:inset-0 max-lg:before:z-50"
         >
-          <ul class=" hidden pr-2 lg:flex gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
-            <li class="mb-6 hidden max-lg:block">
+          <ul className=" hidden pr-2 lg:flex gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
+            <li className="mb-6 hidden max-lg:block">
               <a href="/">
-                <h3 class="text-2xl text-[#cf5c2e] font-semibold">Logo</h3>
+                <h3 className="text-2xl text-[#cf5c2e] font-semibold">Logo</h3>
               </a>
             </li>
-            <li class="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
+            <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
               <a
                 href="/"
-                class="hover:text-[#FF6636] text-[#8C94A3] block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
+                className="hover:text-[#FF6636] text-[#8C94A3] block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
                 Home
               </a>
             </li>
-            <li class="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
+            <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
               <a
                 href="/listing"
-                class="hover:text-[#FF6636] text-[#8C94A3]  block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
+                className="hover:text-[#FF6636] text-[#8C94A3]  block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
                 Find Jobs
               </a>
             </li>
-            <li class="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
+            <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
               <a
-                href="/Company"
+                href="#"
                 class="hover:text-[#FF6636] text-[#8C94A3] block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
                 Company Side
