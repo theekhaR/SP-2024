@@ -6,7 +6,6 @@ import Login from "./pages/Login.jsx";
 import Message from "./pages/message.jsx";
 import Listing from "./pages/Listing.jsx";
 import Main from "./pages/main.jsx";
-import UploadFile from "./pages/uploadFileTest.jsx";
 import Register from "./pages/Register.jsx"
 import UserProfile from "./pages/UserProfile.jsx"
 
@@ -20,7 +19,6 @@ const router = createBrowserRouter([
     { path: "/login", element: <Login /> },
     { path: "/message", element: <ProtectedRouteWrapper> <Message /> </ProtectedRouteWrapper> },
     { path: "/listing", element: <Listing /> },
-    { path: "/upload", element: <UploadFile/>},
     { path: "/main", element: <Main />},
     { path: "/userprofile", element: <UserProfile/>}
 ])

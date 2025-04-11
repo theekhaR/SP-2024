@@ -20,7 +20,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
               </div>
               <div className="flex-1">
@@ -34,7 +34,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
               </div>
               <div className="flex-1">
@@ -48,7 +48,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
               </div>
               <div className="flex-1">
@@ -62,7 +62,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
               </div>
               <div className="flex-1">
@@ -76,7 +76,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
               </div>
               <div className="flex-1">
@@ -90,7 +90,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
               </div>
               <div className="flex-1">
@@ -104,7 +104,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
               </div>
               <div className="flex-1">
@@ -118,7 +118,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
               </div>
               <div className="flex-1">
@@ -144,7 +144,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
               <div className="flex max-w-96 bg-[#FFEEE8] rounded-lg p-3 gap-3">
@@ -163,7 +163,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="My Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
             </div>
@@ -174,7 +174,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
               <div className="flex max-w-96 bg-[#FFEEE8] rounded-lg p-3 gap-3">
@@ -196,7 +196,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="My Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
             </div>
@@ -207,7 +207,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
               <div className="flex max-w-96 bg-[#FFEEE8] rounded-lg p-3 gap-3">
@@ -226,7 +226,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="My Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
             </div>
@@ -237,7 +237,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
               <div className="flex max-w-96 bg-[#FFEEE8] rounded-lg p-3 gap-3">
@@ -254,7 +254,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="My Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
             </div>
@@ -265,7 +265,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="User Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
               <div className="flex max-w-96 bg-[#FFEEE8] rounded-lg p-3 gap-3">
@@ -282,7 +282,7 @@ function message() {
                 <img
                   src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
                   alt="My Avatar"
-                  class="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full"
                 />
               </div>
             </div>

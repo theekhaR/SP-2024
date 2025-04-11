@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import Navbar from "../components/Navbar";
 import Pic from "../assets/Login.png";
 import { supabase } from '../supabaseClient';
+import {v4 as uuidv4} from "uuid";
 
 function Register() {
 
@@ -12,6 +13,10 @@ function Register() {
     const [emailState, setEmail] = React.useState("");
     const [authenticated, setAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+
+    useEffect( () => {
+        console.log(emailState)}
+    , [emailState])
 
     //Check if user is already authenticated
     useEffect(() => {
@@ -39,7 +44,7 @@ function Register() {
 
             if (response.status === 409) {
                 const data = await response.json();
-                alert(data.error); // Or display with your UI
+                alert(data.error);
                 return false; // STOP: user exists
             }
 
@@ -96,8 +101,20 @@ function Register() {
         }
 
         if (data) { //if data exists, the sign up on supabase is finished
+
+            //Create a folder in storage
+            const newuser_id = await data.session.user.id
+
+            const { data: create_folder_data, error } = await supabase.storage
+                .from('user-profile-image')
+                .upload(newuser_id + '/placeholder.txt', {
+                    cacheControl: '3600',
+                    upsert: false
+                })
+            if (create_folder_data) {alert(create_folder_data.path)}
+            if (error) { alert(error.message) }
+
             //start creating subsequence tables in the database using the same UserID
-            const newuser_id = data.session.user.id
             try {
                 const response = await fetch(`http://localhost:5000/create_subsequence_tables`, {
                     method: 'POST',

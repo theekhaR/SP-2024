@@ -5,3 +5,4 @@ flask_sqlalchemy==3.1.1
 SQLAlchemy==2.0.40
 psycopg2==2.9.10
 python-dotenv==1.1.0
+supabase==2.15.0
