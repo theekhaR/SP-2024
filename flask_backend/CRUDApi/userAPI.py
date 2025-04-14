@@ -1,9 +1,13 @@
-from flask import blueprints , jsonify, request
-from datetime import datetime, timedelta
+import os
 import uuid
 
+from flask import blueprints , jsonify, request
+from datetime import datetime, timedelta
+
+# from .__init__ import supabase_client
+from dataModel.__init__ import db
 from dataModel.companyModel import Company
-from dataModel.userModel import db, User
+from dataModel.userModel import User
 from dataModel.userApplicationModel import UserApplication
 from dataModel.userBookmarkModel import UserBookmark
 from dataModel.userEducationModel import UserEducation

@@ -11,7 +11,7 @@ import uuid
 companyAPI = blueprints.Blueprint('companyAPI', __name__)
 
 # region Company Table -------------------------------------------------------------------------------------------------------------------------------------
-@companyAPI.route('/create_company', methods=['GET'])
+@companyAPI.route('/create_company', methods=['POST'])
 def create_company():
 
     data = request.get_json()
@@ -27,11 +27,11 @@ def create_company():
             CompanyName= data.get('companyName', ''),
             CompanyAbout= data.get('companyAbout', ''),
             CompanyOverview= data.get('companyOverview', ''),
-            CompanySite= data.get('companySite', ''),
             CompanyLocation= data.get('companyLocation', ''),
             IndustryID= int(data.get('industryID', 1)) if data.get('industryID', 1) not in [None, ""] else 1,
-            CreatedBy= data.get('createdBy', ''),
-            CreatedOn= datetime.now()
+            CreatedBy= data.get('createdBy'),
+            CreatedOn= datetime.now(),
+            CompanyLogoURL=data.get('companyLogoURL', ''),
     )
     db.session.add(new_company)
     db.session.flush()
@@ -59,7 +59,7 @@ def create_company():
 def get_company():
 
     data = request.get_json()
-    if not data or 'CompanyID' not in data:
+    if not data or 'CompanyID' not in data or not data.get('CompanyID'):
         return jsonify({'error': 'Missing required fields'}), 400
 
     query_company = Company.query.filter_by(CompanyID=data['CompanyID']).first()
@@ -78,6 +78,8 @@ def get_company():
     }]
 
     return jsonify(company_json)
+
+
 @companyAPI.route('/get_all_companies', methods=['GET'])
 def get_all_companies():
     companies = Company.query.all()
@@ -97,6 +99,13 @@ def get_all_companies():
     ]
     return jsonify(company_list)
 
+@companyAPI.route('/add_user_to_company', methods=['POST'])
+def add_user_to_company():
+    data = request.get_json()
+    if not data or 'userID' not in data:
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    members = CompanyMemberMapping.query.filter_by(CompanyID=data['CompanyID'])
 # endregion =======================================================================================================================================================
 
 # region CompanyMemberMapping Table -------------------------------------------------------------------------------------------------------------------------------------
@@ -123,7 +132,6 @@ def get_company_member():
     ]
     print(member_list)
     return jsonify(member_list)
-
 
 # endregion =======================================================================================================================================================
 

@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { useUserContext } from "../components/UserContext.jsx";
+import DefaultProfilePic from "../assets/DefaultProfilePic.jpg";
 
 function L_navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { userProfilePicURL, loading } = useUserContext(); //imported UserProfilePic
+  const [profilePic, setProfilePic] = useState(DefaultProfilePic); //local profilePic to deal with loading
+
+  useEffect(() => {
+    if (userProfilePicURL) {
+      setProfilePic(userProfilePicURL);
+      console.log("save new pfp");
+    }
+  }, [userProfilePicURL]);
 
   return (
     <header className="flex shadow-md py-4 px-4 sm:px-10 bg-slate-800 font-[sans-serif] min-h-[70px] tracking-wide sticky top-0 z-50">
@@ -39,8 +50,8 @@ function L_navbar() {
             </li>
             <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
               <a
-                href="/company"
-                class="hover:text-[#FF6636] text-[#8C94A3] block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
+                href="#"
+                className="hover:text-[#FF6636] text-[#8C94A3] block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
                 Company Side
               </a>
@@ -55,7 +66,7 @@ function L_navbar() {
             onClick={() => setIsOpen(!isOpen)}
           >
             <img
-              src="https://via.placeholder.com/40"
+              src={profilePic}
               alt="User"
               className="w-10 h-10 rounded-full border-2 border-white cursor-pointer"
             />
