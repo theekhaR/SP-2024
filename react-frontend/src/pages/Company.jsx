@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Pic1 from "../assets/Location.png";
 import Pic2 from "../assets/Login.png";
 import Pic3 from "../assets/Tech.png";
+import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg"
+import { useUserContext } from "../components/UserContext.jsx";
 
 function Company() {
   const companies = [
@@ -38,7 +40,61 @@ function Company() {
       image_url: "/images/Login.png",
     },
   ];
-  return (
+
+  const { userID, loading, authenticated } = useUserContext();
+  const [ companyList, setCompanyList] = useState([]); //Current pfp of user
+
+  useEffect( () => {
+    console.log("Log from Company Call")
+    console.log(userID)
+    if (userID) {
+      getCompanyList().then(setCompanyList);
+    }
+  }, [userID, loading, authenticated]);
+
+  async function getCompanyList(){
+    try {
+      const response = await fetch(`http://localhost:5000/get_company_of_a_user?userID=${userID}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log(response)
+
+      if (response.status === 200) {
+        const data = await response.json();
+
+        // Map raw data to desired format
+        const companies = data.map((company, index) => ({
+          id: index + 1,
+          name: company.companyName,
+          role: company.role,
+          image_url: null, // optional logic to pick images
+        }));
+
+        console.log("Companies:", companies);
+        return companies;
+      }
+
+      if (response.status === 409) {
+        const data = await response.json();
+        alert(data.error);
+        return [];
+      }
+
+      // Unexpected error
+      const data = await response.json();
+      alert(data.error);
+      return [];
+    } catch (error) {
+      console.error("Error checking user:", error);
+      return [];
+    }
+  };
+
+return (
     <div className="min-h-screen bg-gray-100">
       <Lnavbar />
       <div className="max-w-7xl mx-auto py-10 px-4">
@@ -63,13 +119,13 @@ function Company() {
               </tr>
             </thead>
             <tbody>
-              {companies.map((company) => (
+              {Array.isArray(companyList) && companyList.map((company) => (
                 <tr key={company.id} className="border-b">
                   <td className="px-6 py-4 flex items-center space-x-4">
                     <img
-                      src={company.image_url}
-                      alt={company.name}
-                      className="font-semibold h-12 w-12 object-contain"
+                        src={company.image_url || MissingImagePlaceHolder }
+                        alt="Invalid"
+                        className="font-semibold h-12 w-12 object-contain"
                     />
                     <span>{company.name}</span>
                   </td>

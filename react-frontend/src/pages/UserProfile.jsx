@@ -77,8 +77,9 @@ function UserProfile() {
           offset: 0
         });
     if (error) { alert(error.message); }
-    if (imageList[0].name === "placeholder.txt") {
-      console.log("Profile Image doesn't exist")
+    if ( !!imageList || imageList[0].name === null || imageList[0].name === "placeholder.txt") {
+      //console.log("Profile Image doesn't exist")
+      setprofileExistBoolean(false)
     }
     if (imageList && imageList.length > 0 && imageList[0].name !== "placeholder.txt") {
       const {data} = supabase.storage
