@@ -18,25 +18,28 @@ import ListingEdit from "./pages/listingEdit.jsx";
 import Member from "./pages/member.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx"
+import { UserProvider } from "./components/UserContext.jsx";
+
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   { path: "/register", element: <Register /> },
   { path: "/login", element: <Login /> },
-  { path: "/message", element: <Message /> },
+  { path: "/message", element: <UserProvider> <ProtectedRouteWrapper> <Message /> </ProtectedRouteWrapper> </UserProvider> },
   { path: "/listing", element: <Listing /> },
   { path: "/main", element: <Main /> },
   { path: "/setting", element: <Setting /> },
   { path: "/bookmark", element: <Bookmark /> },
   { path: "/status", element: <Astatus /> },
-  { path: "/company", element: <Company /> },
-  { path: "/companyE/:id", element: <CompanyEdit /> },
-  { path: "/cCompany", element: <CreateCompany /> },
-  { path: "/CompanyM", element: <CompanyManage /> },
+  { path: "/company", element: <UserProvider> <Company /> </UserProvider> },
+  { path: "/CompanyEdit/:id", element: <CompanyEdit /> },
+  { path: "/createCompany", element: <UserProvider> <CreateCompany /> </UserProvider>},
+  { path: "/CompanyManage", element: <CompanyManage /> },
   { path: "/member", element: <Member /> },
   { path: "/listingE", element: <ListingEdit /> },
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+      <RouterProvider router={router}/>
   </StrictMode>
 );

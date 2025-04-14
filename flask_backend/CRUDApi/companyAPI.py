@@ -53,7 +53,7 @@ def create_company():
     db.session.add(new_companymembermapping)
     db.session.commit()
 
-    return jsonify({'message': 'Company created successfully', 'CompanyID': new_company.CompanyID}), 201
+    return jsonify({'message': 'Company created successfully', 'companyID': new_company.CompanyID}), 201
 
 @companyAPI.route('/get_company', methods=['GET'])
 def get_company():

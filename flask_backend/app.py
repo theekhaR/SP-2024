@@ -43,6 +43,7 @@ from CRUDApi.userApplicationAPI import userApplicationAPI
 from CRUDApi.userBookmarkAPI import userBookmarkAPI
 from CRUDApi.userEducationAPI import userEducationAPI
 from CRUDApi.companyMemberMappingAPI import companyMemberMappingAPI
+from CRUDApi.companyIndustryListAPI import companyIndustryListAPI
 app.register_blueprint(userAPI)
 app.register_blueprint(companyAPI)
 app.register_blueprint(listingAPI)
@@ -50,6 +51,7 @@ app.register_blueprint(userApplicationAPI)
 app.register_blueprint(userBookmarkAPI)
 app.register_blueprint(userEducationAPI)
 app.register_blueprint(companyMemberMappingAPI)
+app.register_blueprint(companyIndustryListAPI)
 @app.route('/api/data', methods=['GET'])
 def get_data():
     return jsonify({"message": "Hello from Flask!"})
