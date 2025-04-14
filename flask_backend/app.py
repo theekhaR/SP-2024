@@ -1,20 +1,18 @@
 import configparser
-from datetime import datetime, timedelta
-import uuid
+from datetime import timedelta
 import os
 from flask import Flask, jsonify, request
 from flask.cli import load_dotenv
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from werkzeug.debug import console
 
-from dataModel import db, User
-from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
-                               unset_jwt_cookies, jwt_required, JWTManager
-
+from dataModel.userModel import db, User
+from flask_jwt_extended import create_access_token, get_jwt_identity, \
+    jwt_required, JWTManager
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+
 
 load_dotenv()
 
@@ -29,13 +27,29 @@ config.read('database.ini')
 db_user = config['postgresql']['user']
 db_password = config['postgresql']['password']
 db_host = config['postgresql']['host']
-db_name = config['postgresql']['database']
+db_name = config['postgresql']['dbname']
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@{db_host}/{db_name}?sslmode=require'
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
 
+
+from CRUDApi.userAPI import userAPI
+from CRUDApi.companyAPI import companyAPI
+from CRUDApi.listingAPI import listingAPI
+from CRUDApi.userApplicationAPI import userApplicationAPI
+from CRUDApi.userBookmarkAPI import userBookmarkAPI
+from CRUDApi.userEducationAPI import userEducationAPI
+from CRUDApi.companyMemberMappingAPI import companyMemberMappingAPI
+app.register_blueprint(userAPI)
+app.register_blueprint(companyAPI)
+app.register_blueprint(listingAPI)
+app.register_blueprint(userApplicationAPI)
+app.register_blueprint(userBookmarkAPI)
+app.register_blueprint(userEducationAPI)
+app.register_blueprint(companyMemberMappingAPI)
 @app.route('/api/data', methods=['GET'])
 def get_data():
     return jsonify({"message": "Hello from Flask!"})
@@ -54,45 +68,9 @@ def create_token():
         if not user is None:
             print(email, user.UserEmail, password, user.UserPassword)   #FOR DEBUGGING ONLY
         return jsonify({"msg": "Bad username or password"}), 401
-
-    access_token = create_access_token(identity=email) #To be upgraded
+    user_id = user.UserID
+    access_token = create_access_token(identity=user_id)
     return jsonify(access_token=access_token)
-
-
-@app.route('/create_user', methods=['POST'])
-def add_user():
-    try:
-        data = request.get_json()
-        print(data)
-        if not data or 'userEmail' not in data or 'userPassword' not in data or 'userFirstName' not in data or 'userLastName' not in data:
-            return jsonify({'error': 'Missing required fields'}), 400
-
-        # Check if user already exists
-        existing_user = User.query.filter_by(UserEmail=data['userEmail']).first()
-        if existing_user:
-            return jsonify({'error': 'User with this email already exists'}), 409
-
-        new_user = User(
-            UserID=str(uuid.uuid4()),  # Generate a unique ID
-            UserFirstName=data.get('userFirstName', ''),
-            UserLastName=data.get('userLastName', ''),
-            UserPassword=data['userPassword'],  # Hash password
-            UserEmail=data['userEmail'],
-            UserPicURL=data.get('userPicURL', ''),
-            AccountType=data.get('accountType', 0),
-            Validated=data.get('validated', False),
-            Company=data.get('company', ''),
-            CreatedOn=datetime.now(),
-            IsActive=True
-        )
-
-        db.session.add(new_user)
-        db.session.commit()
-
-        return jsonify({'message': 'User created successfully', 'UserID': new_user.UserID}), 201
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/job', methods=['GET'])
 def get_job():
@@ -115,11 +93,21 @@ def get_job():
     }
     return jsonify(job_data)
 
-@app.route('/users', methods=['GET'])
-def get_all_users():
+@app.route('/create_company', methods=['POST'])
+
+# @app.route('/users', methods=['GET'])
+# def get_all_users():
+#     users = User.query.all()
+#     users_list = [{'id': user.UserID, 'name': user.UserFirstName, 'email': user.UserEmail} for user in users]
+#     return jsonify(users_list)
+
+@app.route('/users_token', methods=['GET'])
+@jwt_required()
+def get_all_users_token():
+    request_by = get_jwt_identity()
     users = User.query.all()
     users_list = [{'id': user.UserID, 'name': user.UserFirstName, 'email': user.UserEmail} for user in users]
-    return jsonify(users_list)
+    return jsonify(request_by, users_list)
 
 if __name__ == "__main__":
     app.run(debug=True)
