@@ -14,25 +14,25 @@ function Company() {
       image_url: "/images/Location.png",
     },
     {
-      id: 2,
+      id: 1,
       name: "ABC Company",
       role: "Member",
       image_url: "/images/Login.png",
     },
     {
-      id: 3,
+      id: 1,
       name: "XYZ Holdings",
       role: "Member",
       image_url: "/images/Tech.png",
     },
     {
-      id: 4,
+      id: 1,
       name: "AAA",
       role: "Member",
       image_url: "/images/Tech.png",
     },
     {
-      id: 5,
+      id: 1,
       name: "BBB Z",
       role: "Member",
       image_url: "/images/Login.png",
@@ -47,7 +47,7 @@ function Company() {
             My Company ({companies.length})
           </h2>
           <button className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-600">
-            <a href="/createCompany" className="text-white">
+            <a href="/cCompany" className="text-white">
               Create Company
             </a>
           </button>
@@ -80,7 +80,7 @@ function Company() {
                   </td>
                   <td className="px-6 py-4 space-x-2">
                     <button className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700">
-                      View
+                      <a href="/companyM">View</a>
                     </button>
                     <button
                       className={`px-4 py-1 rounded ${
@@ -90,7 +90,7 @@ function Company() {
                       }`}
                       disabled={company.role !== "Administrator"}
                     >
-                      Manage
+                      <a href={`/companyE/${company.id}`}>Edit</a>
                     </button>
                   </td>
                 </tr>
