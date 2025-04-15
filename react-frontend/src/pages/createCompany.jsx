@@ -43,6 +43,9 @@ function createCompany() {
   const handleCreateCompany = async (event) => {
     event.preventDefault();
     try {
+                if (!companyLogo){
+                  alert("Please choose a company logo")
+                }
                 const response = await fetch(`http://localhost:5000/create_company`, {
                     method: 'POST',
                     headers: {

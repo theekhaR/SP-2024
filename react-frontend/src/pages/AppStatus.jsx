@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/footer";
+import L_navbar from "../components/L_navbar.jsx";
 
 function AppStatus() {
   const appliedList = [
@@ -24,7 +25,7 @@ function AppStatus() {
 
   return (
     <div>
-      <Navbar />
+      <L_navbar />
       <div className="min-h-screen bg-[#f7f9fc] py-10 px-4 md:px-10">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Applied Status
