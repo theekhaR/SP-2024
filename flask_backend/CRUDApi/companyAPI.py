@@ -53,7 +53,7 @@ def create_company():
     db.session.add(new_companymembermapping)
     db.session.commit()
 
-    return jsonify({'message': 'Company created successfully', 'CompanyID': new_company.CompanyID}), 201
+    return jsonify({'message': 'Company created successfully', 'companyID': new_company.CompanyID}), 201
 
 @companyAPI.route('/get_company', methods=['GET'])
 def get_company():
@@ -106,55 +106,4 @@ def add_user_to_company():
         return jsonify({'error': 'Missing required fields'}), 400
 
     members = CompanyMemberMapping.query.filter_by(CompanyID=data['CompanyID'])
-# endregion =======================================================================================================================================================
-
-# region CompanyMemberMapping Table -------------------------------------------------------------------------------------------------------------------------------------
-
-@companyAPI.route('/get_company_member', methods=['GET'])
-def get_company_member():
-    data = request.get_json()
-    if not data or 'CompanyID' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-
-    members = CompanyMemberMapping.query.filter_by(CompanyID=data['CompanyID'])
-
-    if not members:
-        return jsonify({'error': 'This company does not exists or do not have a member'}), 409
-
-    member_list = [
-        {
-            'UserID': member.user_mapping.UserID,
-            'Name': f"{member.user_mapping.UserFirstName} {member.user_mapping.UserLastName}"  if member.user_mapping else None,
-            'Role': member.Role,
-            'Permission': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None
-        }
-        for member in members
-    ]
-    print(member_list)
-    return jsonify(member_list)
-
-# endregion =======================================================================================================================================================
-
-
-# region CompanyListingMapping Table -------------------------------------------------------------------------------------------------------------------------------------
-@companyAPI.route('/companylistings', methods=['GET'])
-def get_all_listings_from_company():
-    data = request.get_json()
-    if not data or 'companyID' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-
-    listings = CompanyListingMapping.query.filter_by(CompanyID=data['companyID'])
-
-    if not listings:
-        return jsonify({'error': 'This company does not exists or do not have a listing'}), 409
-    print(listings)
-    listing_list = [
-        {
-            'listingID': listing.ListingID,
-            'position': f"{listing.listing_mapping.Position}",
-        }
-        for listing in listings
-    ]
-    return jsonify(listing_list)
-
 # endregion =======================================================================================================================================================

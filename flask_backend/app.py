@@ -1,18 +1,13 @@
-import configparser
+import configparser, os
 from datetime import timedelta
-import os
 from flask import Flask, jsonify, request
 from flask.cli import load_dotenv
 from flask_cors import CORS
-
-from dataModel.userModel import db, User
-from flask_jwt_extended import create_access_token, get_jwt_identity, \
-    jwt_required, JWTManager
-
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
+from dataModel.__init__ import db
+from dataModel.userModel import User
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
-
-
 
 load_dotenv()
 
@@ -35,7 +30,6 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
 
-
 from CRUDApi.userAPI import userAPI
 from CRUDApi.companyAPI import companyAPI
 from CRUDApi.listingAPI import listingAPI
@@ -43,6 +37,8 @@ from CRUDApi.userApplicationAPI import userApplicationAPI
 from CRUDApi.userBookmarkAPI import userBookmarkAPI
 from CRUDApi.userEducationAPI import userEducationAPI
 from CRUDApi.companyMemberMappingAPI import companyMemberMappingAPI
+from CRUDApi.companyIndustryListAPI import companyIndustryListAPI
+from CRUDApi.companyListingMappingAPI import companyListingMappingAPI
 app.register_blueprint(userAPI)
 app.register_blueprint(companyAPI)
 app.register_blueprint(listingAPI)
@@ -50,6 +46,8 @@ app.register_blueprint(userApplicationAPI)
 app.register_blueprint(userBookmarkAPI)
 app.register_blueprint(userEducationAPI)
 app.register_blueprint(companyMemberMappingAPI)
+app.register_blueprint(companyIndustryListAPI)
+app.register_blueprint(companyListingMappingAPI)
 @app.route('/api/data', methods=['GET'])
 def get_data():
     return jsonify({"message": "Hello from Flask!"})
@@ -92,14 +90,6 @@ def get_job():
         ]
     }
     return jsonify(job_data)
-
-@app.route('/create_company', methods=['POST'])
-
-# @app.route('/users', methods=['GET'])
-# def get_all_users():
-#     users = User.query.all()
-#     users_list = [{'id': user.UserID, 'name': user.UserFirstName, 'email': user.UserEmail} for user in users]
-#     return jsonify(users_list)
 
 @app.route('/users_token', methods=['GET'])
 @jwt_required()

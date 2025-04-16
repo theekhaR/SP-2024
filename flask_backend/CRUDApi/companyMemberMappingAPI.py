@@ -72,3 +72,26 @@ def create_company_member_mapping():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@companyMemberMappingAPI.route('/get_company_member', methods=['GET'])
+def get_company_member():
+    data = request.get_json()
+    if not data or 'CompanyID' not in data:
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    members = CompanyMemberMapping.query.filter_by(CompanyID=data['CompanyID'])
+
+    if not members:
+        return jsonify({'error': 'This company does not exists or do not have a member'}), 409
+
+    member_list = [
+        {
+            'UserID': member.user_mapping.UserID,
+            'Name': f"{member.user_mapping.UserFirstName} {member.user_mapping.UserLastName}"  if member.user_mapping else None,
+            'Role': member.Role,
+            'Permission': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None
+        }
+        for member in members
+    ]
+    print(member_list)
+    return jsonify(member_list)

@@ -14,35 +14,11 @@ function Company() {
       name: "MyCompany Limited Co.",
       role: "Administrator",
       image_url: "/images/Location.png",
-    },
-    {
-      id: 1,
-      name: "ABC Company",
-      role: "Member",
-      image_url: "/images/Login.png",
-    },
-    {
-      id: 1,
-      name: "XYZ Holdings",
-      role: "Member",
-      image_url: "/images/Tech.png",
-    },
-    {
-      id: 1,
-      name: "AAA",
-      role: "Member",
-      image_url: "/images/Tech.png",
-    },
-    {
-      id: 1,
-      name: "BBB Z",
-      role: "Member",
-      image_url: "/images/Login.png",
-    },
+    }
   ];
 
   const { userID, loading, authenticated } = useUserContext();
-  const [ companyList, setCompanyList] = useState([]); //Current pfp of user
+  const [ companyList, setCompanyList] = useState([]);
 
   useEffect( () => {
     console.log("Log from Company Call")
@@ -68,7 +44,7 @@ function Company() {
 
         // Map raw data to desired format
         const companies = data.map((company, index) => ({
-          id: index + 1,
+          id: company.companyID,
           name: company.companyName,
           role: company.role,
           image_url: null, // optional logic to pick images
@@ -103,7 +79,7 @@ return (
             My Company ({companies.length})
           </h2>
           <button className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-600">
-            <a href="/cCompany" className="text-white">
+            <a href="/react-frontend/src/pages/createCompany" className="text-white">
               Create Company
             </a>
           </button>
@@ -136,7 +112,7 @@ return (
                   </td>
                   <td className="px-6 py-4 space-x-2">
                     <button className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700">
-                      <a href="/companyM">View</a>
+                      <a href={`/companylisting/${company.id}`}>View</a>
                     </button>
                     <button
                       className={`px-4 py-1 rounded ${
@@ -146,7 +122,7 @@ return (
                       }`}
                       disabled={company.role !== "Administrator"}
                     >
-                      <a href={`/companyE/${company.id}`}>Edit</a>
+                      <a href={`/companyedit/${company.id}`}>Edit</a>
                     </button>
                   </td>
                 </tr>

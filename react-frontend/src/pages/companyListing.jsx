@@ -1,37 +1,53 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
+import {useParams} from "react-router-dom";
+import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
 
-function companyManage() {
-  const listings = [
-    {
-      id: "l1",
-      logo: "/logo1.png",
-      title: "Website Development",
-    },
-    {
-      id: "l2",
-      logo: "/logo2.png",
-      title: "Junior Software Development",
-    },
-    {
-      id: "l3",
-      logo: "/logo2.png",
-      title: "Lorem ipsum dolor sit.",
-    },
-    {
-      id: "l4",
-      logo: "/logo2.png",
-      title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    },
-    {
-      id: "l5",
-      logo: "/logo2.png",
-      title:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, minus.t",
-    },
-  ];
+function companyListing() {
+
+  const { companyID } = useParams();
+  const [ listingList, setListingList] = useState([]);
+
+  useEffect(() => {
+    getCompanyListings().then(setListingList)
+  }, []);
+
+  async function getCompanyListings(){
+    try {
+      const response = await fetch(`http://localhost:5000/get_listings_of_company?companyID=${companyID}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+
+        const listings = data.map((listing, index) => ({
+          listingID: listing.listingID,
+          position: listing.position,
+          image_url: null,
+        }));
+
+        console.log("Listings:", listings);
+        return listings;
+      }
+
+      // Unexpected error
+      const data = await response.json();
+      alert(data.error);
+      return [];
+
+    }
+    catch (error) {
+      console.error("Error checking user:", error);
+      return [];
+    }
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Lnavbar />
@@ -41,9 +57,9 @@ function companyManage() {
 
         <div className="flex-1 p-8">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Listing ({listings.length})</h1>
+            <h1 className="text-2xl font-bold">Listing ({listingList.length})</h1>
             <button className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600">
-              Create Listing
+              <a href={`/companyEdit/${companyID}`}>Create Listing</a>
             </button>
           </div>
 
@@ -53,20 +69,20 @@ function companyManage() {
               <div className="text-right">Action</div>
             </div>
 
-            {listings.map((item, index) => (
+            {listingList.map((listing, index) => (
               <div
-                key={index}
+                key={listing.listingID}
                 className="grid grid-cols-3 items-center px-6 py-4 border-t hover:bg-gray-50"
               >
                 <div className="flex items-center space-x-4 col-span-2">
                   <img
-                    src={item.logo}
-                    alt="Company Logo"
+                    src={listing.image_url || MissingImagePlaceHolder }
+                    alt="Image"
                     className="w-12 h-12 object-contain"
                   />
                   <div>
                     <div className="font-medium text-gray-800">
-                      {item.title}
+                      {listing.position}
                     </div>
                   </div>
                 </div>
@@ -84,7 +100,7 @@ function companyManage() {
 
           <div className="flex justify-center mt-6">
             <button className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">
-              View All ({listings.length})
+              View All ({listingList.length})
             </button>
           </div>
         </div>
@@ -95,4 +111,4 @@ function companyManage() {
   );
 }
 
-export default companyManage;
+export default companyListing;
