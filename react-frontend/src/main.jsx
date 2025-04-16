@@ -16,13 +16,27 @@ import CompanyManage from "./pages/companyManage.jsx";
 import CompanyEdit from "./pages/companyEdit.jsx";
 import ListingEdit from "./pages/listingEdit.jsx";
 import Member from "./pages/member.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
+import { UserProvider } from "./components/UserContext.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   { path: "/register", element: <Register /> },
   { path: "/login", element: <Login /> },
-  { path: "/message", element: <Message /> },
+  {
+    path: "/message",
+    element: (
+      <UserProvider>
+        {" "}
+        <ProtectedRouteWrapper>
+          {" "}
+          <Message />{" "}
+        </ProtectedRouteWrapper>{" "}
+      </UserProvider>
+    ),
+  },
   { path: "/listing", element: <Listing /> },
   { path: "/main", element: <Main /> },
   { path: "/setting", element: <Setting /> },
@@ -34,6 +48,14 @@ const router = createBrowserRouter([
   { path: "/CompanyM", element: <CompanyManage /> },
   { path: "/member", element: <Member /> },
   { path: "/listingE", element: <ListingEdit /> },
+  {
+    path: "/userprofile",
+    element: (
+      <UserProvider>
+        <UserProfile />
+      </UserProvider>
+    ),
+  },
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>

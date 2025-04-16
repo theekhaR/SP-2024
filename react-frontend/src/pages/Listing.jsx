@@ -153,7 +153,7 @@ function Listing() {
 
   return (
     <div className="bg-gray-100 flex flex-col">
-      <Lnavbar />
+      <Navbar />
       {/* Search */}
       <div className="p-8 rounded-lg flex flex-wrap gap-2 items-center justify-center">
         <input
