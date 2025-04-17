@@ -4,15 +4,21 @@ import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
 import {useParams} from "react-router-dom";
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
+import {useCompanyContext} from "../components/CompanyContext.jsx";
+import {useUserContext} from "../components/UserContext.jsx";
 
-function companyListing() {
 
-  const { companyID } = useParams();
+function CompanyListing() {
+
+  const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } = useCompanyContext();
+  const { userID } = useUserContext();
   const [ listingList, setListingList] = useState([]);
 
   useEffect(() => {
-    getCompanyListings().then(setListingList)
-  }, []);
+    console.log(companyID)
+      if (!companyID) return; // Avoid running if companyID is not ready
+      getCompanyListings().then(setListingList);
+  }, [companyID]);
 
   async function getCompanyListings(){
     try {
@@ -31,8 +37,6 @@ function companyListing() {
           position: listing.position,
           image_url: null,
         }));
-
-        console.log("Listings:", listings);
         return listings;
       }
 
@@ -111,4 +115,4 @@ function companyListing() {
   );
 }
 
-export default companyListing;
+export default CompanyListing;

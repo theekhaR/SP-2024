@@ -18,19 +18,20 @@ def edit_user_education():
             return jsonify({'error': 'Missing userID'}), 400
 
         update_userID = data.get('userID')
-        subject_user = UserEducation.query.filter_by(UserID=update_userID).first()
+        subject_user = UserExperince.query.filter_by(UserID=update_userID).first()
 
         # Check if user exists
         if not subject_user:
             return jsonify({'error': 'This user does not exist'}), 409
 
-        #
-        if 'placeOfEducation' in data and (data.get('placeOfEducation')):
-            subject_user.PlaceOfEducation = data['placeOfEducation']
-        if 'degree' in data and (data.get('degree')):
-            subject_user.Degree = data['degree']
-        if 'curriculum' in data and (data.get('curriculum')):
-            subject_user.Curriculum = data['curriculum']
+        if 'position' in data and (data.get('position')):
+            subject_user.Position = data['position']
+        if 'organization' in data and (data.get('organization')):
+            subject_user.Organization = data['organization']
+        if 'placeOfWork' in data and (data.get('placeOfWork')):
+            subject_user.PlaceOfWork = data['placeOfWork']
+        if 'details' in data and (data.get('details')):
+            subject_user.Details = data['details']
         if 'startYear' in data and data.get('startYear') and 'startMonth' in data and data.get('startMonth'):
             year = int(data['startYear'])
             month = int(data['startMonth'])
@@ -39,11 +40,9 @@ def edit_user_education():
             year = int(data['finishYear'])
             month = int(data['finishMonth'])
             subject_user.FinishYear = datetime(year, month, 1)  # Always use the 1st of the month as it is not important
-        if 'GPA' in data and (data.get('GPA')):
-            subject_user.GPA = float(data['GPA'])
 
         db.session.commit()
-        return jsonify({'message': 'UserEducation updated successfully', 'UserID': subject_user.UserID}), 201
+        return jsonify({'message': 'UserExperience updated successfully', 'UserID': subject_user.UserID}), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
