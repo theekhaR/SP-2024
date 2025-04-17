@@ -14,6 +14,7 @@ import {
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import {supabase} from "../supabaseClient.jsx";
 import {v4 as uuidv4} from "uuid";
+import { useNavigate } from "react-router-dom"
 
 function createCompany() {
 
@@ -35,6 +36,8 @@ function createCompany() {
   const [fileName, setFileName] = useState("None");
 
   const [companyLogoPreview, setCompanyLogoPreview] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect( () => {
     getIndustryList().then(setIndustryList);
@@ -74,6 +77,7 @@ function createCompany() {
                   await uploadCompanyLogo(data.companyID); //we need to pass in the companyID manually because
                   //setCompanyID won't update companyID until code is finished, so it will be null when we call the func
                   console.log("Company Created")
+                  navigate(`/company`);
                 }
 
             } catch (error) {

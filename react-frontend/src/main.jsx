@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider , Outlet} from "react-router-dom";
 
 import "./index.css";
 
@@ -24,24 +24,51 @@ import Setting from "./pages/UserProfile.jsx";
 // Components
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
 import { UserProvider } from "./components/UserContext.jsx";
+import { CompanyProvider } from "./components/CompanyContext.jsx";
+
+// Wrapping component defined inline
+function ContextWrapper() {
+  return (
+    <UserProvider>
+      <CompanyProvider>
+        <Outlet />
+      </CompanyProvider>
+    </UserProvider>
+  );
+}
 
 // Routes
 const router = createBrowserRouter([
+  // Public routes (no context)
   { path: "/", element: <Home /> },
-  { path: "/bookmark", element: <Bookmark /> },
-  { path: "/company", element: <UserProvider><Company /></UserProvider> },
-  { path: "/companyEdit/:id", element: <UserProvider><CompanyEdit /></UserProvider> },
-  { path: "/companyListing/:companyID", element: <UserProvider><CompanyListing /></UserProvider> },
-  { path: "/createCompany", element: <UserProvider><CreateCompany /></UserProvider> },
-  { path: "/listing/:companyID", element: <UserProvider><Listing /></UserProvider> },
-  { path: "/listingE", element: <UserProvider><ListingEdit /></UserProvider> },
   { path: "/login", element: <Login /> },
-  { path: "/main", element: <Main /> },
-  { path: "/member", element: <UserProvider><Member /></UserProvider> },
-  { path: "/message", element: <UserProvider><ProtectedRouteWrapper><Message /></ProtectedRouteWrapper></UserProvider> },
   { path: "/register", element: <Register /> },
-  { path: "/setting", element: <Setting /> },
-  { path: "/status", element: <UserProvider><Astatus /></UserProvider> },
+
+  // Context-wrapped routes
+  {
+    element: <ContextWrapper />,
+    children: [
+      { path: "/bookmark", element: <Bookmark /> },
+      { path: "/company", element: <Company /> },
+      { path: "/companyedit", element: <CompanyEdit /> },
+      { path: "/companyListing", element: <CompanyListing /> },
+      { path: "/createCompany", element: <CreateCompany /> },
+      { path: "/listing/:companyID", element: <Listing /> },
+      { path: "/listingE", element: <ListingEdit /> },
+      { path: "/main", element: <Main /> },
+      { path: "/member", element: <Member /> },
+      {
+        path: "/message",
+        element: (
+          <ProtectedRouteWrapper>
+            <Message />
+          </ProtectedRouteWrapper>
+        ),
+      },
+      { path: "/setting", element: <Setting /> },
+      { path: "/status", element: <Astatus /> },
+    ],
+  },
 ]);
 
 // Render

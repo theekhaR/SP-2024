@@ -9,7 +9,6 @@ from dataModel.userBookmarkModel import UserBookmark
 from dataModel.listingApplicantMapping import ListingApplicantMapping
 from dataModel.companyModel import Company
 from dataModel.companyMemberMappingModel import CompanyMemberMapping
-#from dataModel.companyPermissionListModel import CompanyPermissionList
 
 from flask_backend.dataModel.companyMemberMappingModel import CompanyMemberMapping
 from flask_backend.dataModel.companyPermissionListModel import CompanyPermissionList

@@ -26,7 +26,7 @@ def get_listings_of_company():
         listings_count = listings.count()
 
         if listings_count == 0:
-            return jsonify({'error': 'This company does not exists or are not in a listing'}), 409
+            return jsonify({'error': 'This company does not exists or does not have a listing'}), 409
 
         listings_json = [
             {

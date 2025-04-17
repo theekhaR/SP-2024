@@ -33,11 +33,32 @@ def get_company_of_user():
                 'companyName': company.company_mapping.CompanyName,
                 'role': company.Role,
                 'permissionID': company.companypermissionlist_mapping.PermissionID,
-                'permissionName': company.companypermissionlist_mapping.PermissionName
+                'permissionName': company.companypermissionlist_mapping.PermissionName,
+                'companyLogoURL': company.company_mapping.CompanyLogoURL,
             }
             for company in companies
         ]
         return jsonify(companies_json), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@companyMemberMappingAPI.route('/get_user_data_in_company', methods=['GET'])
+def get_user_data_in_company():
+    try:
+        userID = request.args.get('userID')
+        companyID = request.args.get('companyID')
+
+        if not userID or not companyID:
+            return jsonify({'error': 'Missing UserID or CompanyID'}), 400
+
+        user_company_data = CompanyMemberMapping.query.filter_by(UserID=userID, CompanyID=companyID).first()
+        user_company_data_json = {
+            'role': user_company_data.Role,
+            'permissionID': user_company_data.PermissionID,
+        }
+
+        return jsonify(user_company_data_json), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
