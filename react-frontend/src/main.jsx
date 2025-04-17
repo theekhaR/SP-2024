@@ -62,7 +62,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/listing/:companyID",
+    path: "/listing",
     element: (
       <UserProvider>
         <Listing />
@@ -98,7 +98,14 @@ const router = createBrowserRouter([
     ),
   },
   { path: "/register", element: <Register /> },
-  { path: "/setting", element: <Setting /> },
+  {
+    path: "/setting",
+    element: (
+      <UserProvider>
+        <Setting />
+      </UserProvider>
+    ),
+  },
   {
     path: "/status",
     element: (

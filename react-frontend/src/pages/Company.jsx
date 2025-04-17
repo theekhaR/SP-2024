@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Pic1 from "../assets/Location.png";
 import Pic2 from "../assets/Login.png";
 import Pic3 from "../assets/Tech.png";
-import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg"
+import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
 import { useUserContext } from "../components/UserContext.jsx";
 
 function Company() {
@@ -14,30 +14,33 @@ function Company() {
       name: "MyCompany Limited Co.",
       role: "Administrator",
       image_url: "/images/Location.png",
-    }
+    },
   ];
 
   const { userID, loading, authenticated } = useUserContext();
-  const [ companyList, setCompanyList] = useState([]);
+  const [companyList, setCompanyList] = useState([]);
 
-  useEffect( () => {
-    console.log("Log from Company Call")
-    console.log(userID)
+  useEffect(() => {
+    console.log("Log from Company Call");
+    console.log(userID);
     if (userID) {
       getCompanyList().then(setCompanyList);
     }
   }, [userID, loading, authenticated]);
 
-  async function getCompanyList(){
+  async function getCompanyList() {
     try {
-      const response = await fetch(`http://localhost:5000/get_company_of_a_user?userID=${userID}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `http://localhost:5000/get_company_of_a_user?userID=${userID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
-      console.log(response)
+      console.log(response);
 
       if (response.status === 200) {
         const data = await response.json();
@@ -68,9 +71,9 @@ function Company() {
       console.error("Error checking user:", error);
       return [];
     }
-  };
+  }
 
-return (
+  return (
     <div className="min-h-screen bg-gray-100">
       <Lnavbar />
       <div className="max-w-7xl mx-auto py-10 px-4">
@@ -79,7 +82,7 @@ return (
             My Company ({companies.length})
           </h2>
           <button className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-600">
-            <a href="/react-frontend/src/pages/createCompany" className="text-white">
+            <a href="/createCompany" className="text-white">
               Create Company
             </a>
           </button>
@@ -95,38 +98,39 @@ return (
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(companyList) && companyList.map((company) => (
-                <tr key={company.id} className="border-b">
-                  <td className="px-6 py-4 flex items-center space-x-4">
-                    <img
-                        src={company.image_url || MissingImagePlaceHolder }
+              {Array.isArray(companyList) &&
+                companyList.map((company) => (
+                  <tr key={company.id} className="border-b">
+                    <td className="px-6 py-4 flex items-center space-x-4">
+                      <img
+                        src={company.image_url || MissingImagePlaceHolder}
                         alt="Invalid"
                         className="font-semibold h-12 w-12 object-contain"
-                    />
-                    <span>{company.name}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="font-medium text-green-600">
-                      {company.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 space-x-2">
-                    <button className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700">
-                      <a href={`/companylisting/${company.id}`}>View</a>
-                    </button>
-                    <button
-                      className={`px-4 py-1 rounded ${
-                        company.role === "Administrator"
-                          ? "bg-orange-600 text-white hover:bg-orange-700"
-                          : "bg-[#F9AD95] text-white cursor-not-allowed"
-                      }`}
-                      disabled={company.role !== "Administrator"}
-                    >
-                      <a href={`/companyedit/${company.id}`}>Edit</a>
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      />
+                      <span>{company.name}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="font-medium text-green-600">
+                        {company.role}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 space-x-2">
+                      <button className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700">
+                        <a href={`/companylisting/${company.id}`}>View</a>
+                      </button>
+                      <button
+                        className={`px-4 py-1 rounded ${
+                          company.role === "Administrator"
+                            ? "bg-orange-600 text-white hover:bg-orange-700"
+                            : "bg-[#F9AD95] text-white cursor-not-allowed"
+                        }`}
+                        disabled={company.role !== "Administrator"}
+                      >
+                        <a href={`/companyedit/${company.id}`}>Edit</a>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
