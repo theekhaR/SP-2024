@@ -1,6 +1,4 @@
 from flask import blueprints , jsonify, request
-from datetime import datetime, timedelta
-import uuid
 
 from dataModel.userModel import db, User
 from dataModel.userApplicationModel import UserApplication

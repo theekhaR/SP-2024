@@ -81,7 +81,7 @@ def create_company_member_mapping():
             return jsonify({'error': 'This user does not exists or are not in a company'}), 409
 
         new_companymembermapping = CompanyMemberMapping(
-            CompanyID=data.get('CompanyID'),
+            CompanyID=data.get('companyID'),
             UserID=data.get('userID'),
             Role=data.get('role') if data.get('role') else None,
             PermissionID=data.get('permissionID'),
@@ -96,11 +96,11 @@ def create_company_member_mapping():
 
 @companyMemberMappingAPI.route('/get_company_member', methods=['GET'])
 def get_company_member():
-    data = request.get_json()
-    if not data or 'CompanyID' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
+    companyID = request.args.get('companyID')
+    if not 'companyID':
+        return jsonify({'error': 'Missing companyID'}), 400
 
-    members = CompanyMemberMapping.query.filter_by(CompanyID=data['CompanyID'])
+    members = CompanyMemberMapping.query.filter_by(CompanyID=companyID)
 
     if not members:
         return jsonify({'error': 'This company does not exists or do not have a member'}), 409

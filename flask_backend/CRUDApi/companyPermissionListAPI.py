@@ -9,9 +9,7 @@ from dataModel.userBookmarkModel import UserBookmark
 from dataModel.listingApplicantMapping import ListingApplicantMapping
 from dataModel.companyModel import Company
 from dataModel.companyMemberMappingModel import CompanyMemberMapping
-
-from flask_backend.dataModel.companyMemberMappingModel import CompanyMemberMapping
-from flask_backend.dataModel.companyPermissionListModel import CompanyPermissionList
+from dataModel.companyPermissionListModel import CompanyPermissionList
 
 companyPermissionListAPI = blueprints.Blueprint('companyPermissionListAPI', __name__)
 
@@ -27,9 +25,14 @@ def create_new_permission():
                 'permissionID' not in data or not data.get('permissionID')):
             return jsonify({'error': 'Missing required fields'}), 400
 
+        existing_permissionID = CompanyPermissionList.query.filter_by(CompanyID=data.get('companyID'), PermissionID=data.get('permissionID') ).first()
+
+        if existing_permissionID:
+            return jsonify({'error': 'This permissionID already exists in this company'}), 409
+
         new_companypermissionlist = CompanyPermissionList(
-            UserID=data.get('companyID'),
-            ListingID=data.get('permissionID'),
+            CompanyID=data.get('companyID'),
+            PermissionID=data.get('permissionID'),
             PermissionName=data.get('permissionName') if data.get('permissionName') else None,
         )
 

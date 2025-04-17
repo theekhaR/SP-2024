@@ -8,10 +8,9 @@ from dataModel.userModel import User
 
 listingAPI = blueprints.Blueprint('listingAPI', __name__)
 
-@listingAPI.route('/allListings', methods=['GET'])
+@listingAPI.route('/get_all_listings', methods=['GET'])
 def get_all_listings():
     listings = Listing.query.all()
-
     listings_list = [
         {
         'listingID': listing.ListingID,

@@ -12,8 +12,8 @@ from dataModel.companyIndustryListModel import CompanyIndustryList
 companyIndustryListAPI = blueprints.Blueprint('companyIndustryListAPI', __name__)
 
 
-@companyIndustryListAPI.route('/add_company_industry', methods=['POST'])
-def add_company_industry():
+@companyIndustryListAPI.route('/add_new_industry', methods=['POST'])
+def add_new_industry():
     try:
         data = request.get_json()
 
@@ -29,7 +29,7 @@ def add_company_industry():
         db.session.add(new_companyindustrylist_entry)
         db.session.commit()
 
-        return jsonify({'message': 'User application added successfully'}), 201
+        return jsonify({'message': 'New Industry Added Successfully'}), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

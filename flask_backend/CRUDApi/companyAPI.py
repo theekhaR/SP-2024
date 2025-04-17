@@ -88,7 +88,7 @@ def get_all_companies():
             'CompanyName': company.CompanyName,
             'CompanyAbout': company.CompanyAbout,
             'CompanyOverview': company.CompanyOverview,
-            'CompanySite': company.CompanySite,
+            'CompanyLogoURL': company.CompanyLogoURL,
             'CompanyLocation': company.CompanyLocation,
             'IndustryID': company.companyindustrylist_mapping.IndustryName if company.companyindustrylist_mapping else None,
             'CreatedBy': f"{company.user_mapping.UserFirstName} {company.user_mapping.UserLastName}"  if company.user_mapping else None,
@@ -97,12 +97,3 @@ def get_all_companies():
         for company in companies
     ]
     return jsonify(company_list)
-
-@companyAPI.route('/add_user_to_company', methods=['POST'])
-def add_user_to_company():
-    data = request.get_json()
-    if not data or 'userID' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-
-    members = CompanyMemberMapping.query.filter_by(CompanyID=data['CompanyID'])
-# endregion =======================================================================================================================================================
