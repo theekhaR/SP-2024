@@ -81,11 +81,11 @@ def remove_user_application():
 
 @userApplicationAPI.route('/get_user_application', methods=['GET'])
 def get_user_application():
-    data = request.get_json()
-    if not data or 'userID' not in data or not data.get('userID'):
+    userID = request.args.get('userID')
+    if not userID:
         return jsonify({'error': 'Missing required field userID'}), 400
 
-    listings = UserApplication.query.filter_by(UserID=data['userID'])
+    listings = UserApplication.query.filter_by(UserID=userID)
     listings_count = listings.count()
 
     if listings_count == 0:

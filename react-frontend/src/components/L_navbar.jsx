@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useUserContext } from "../components/UserContext.jsx";
 import DefaultProfilePic from "../assets/DefaultProfilePic.jpg";
@@ -11,7 +11,7 @@ function L_navbar() {
   useEffect(() => {
     if (userProfilePicURL) {
       setProfilePic(userProfilePicURL);
-      console.log("save new pfp")
+      //is still set new pfp on every render
     }
   }, [userProfilePicURL]);
 

@@ -3,7 +3,7 @@ import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import DefaultProfilePic from "../assets/DefaultProfilePic.jpg";
 import {supabase} from "../supabaseClient.jsx";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 function UserProfile() {
 
@@ -32,54 +32,109 @@ function UserProfile() {
     const fileUploaded = e.target.files[0];
     if (fileUploaded) {
       setFileName(fileUploaded.name); // Update the span text with file name
-      setNewProfileImage(e.target.files[0])
+      setNewProfileImage(e.target.files[0]);
     } else {
       setFileName("No file chosen"); // Reset if no file is selected
     }
   }
 
 
+  async function updateUserProfileURL() {
+    try {
+      const { data: imageList, error } = await supabase.storage
+          .from('user-profile-image')
+          .list(userID + '/', {
+            limit: 1,
+            offset: 0
+          });
+
+      if (error) {
+        alert(error.message);
+        return;
+
+      }
+
+      if (imageList && imageList.length > 0 && imageList[0].name !== "placeholder.txt") {
+        const { data: urlData } = supabase.storage
+            .from('user-profile-image')
+            .getPublicUrl(`${userID}/${imageList[0].name}`);
+
+        const publicUrl = urlData.publicUrl;
+
+        const response = await fetch(`http://localhost:5000/update_user`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userID: userID,
+            userPicURL: publicUrl // <--- Use freshly retrieved URL here
+          })
+        });
+
+        if (response.ok) {
+          setProfileImageURL(publicUrl); // Update the state after successful update
+          alert("Updated profile URL");
+        }
+      } else {
+        setprofileExistBoolean(false);
+      }
+    } catch (error) {
+      console.error("Error updating profile URL:", error);
+    }
+  }
+
   async function uploadProfileImage() {
 
     await removeAllItemInFolder();
-    const { data, error } = await supabase.storage.from('user-profile-image')
+    const {data, error} = await supabase.storage.from('user-profile-image')
         .upload(userID + '/' + uuidv4(), newProfileImage);
 
-    if (data){
+    if (data) {
       setNewProfileImage(null);
       setFileName("No file chosen")
+      // Wait a moment to allow the upload to propagate
+      setTimeout(async () => {
+        await updateUserProfileURL(); // now fetch new URL after small delay
+      }, 1000); // try with 1000ms (1 sec), tweak if needed
     }
-    if (error){
+    if (error) {
       alert(error.message);
     }
   }
 
-  async function removeAllItemInFolder () {
+  async function removeAllItemInFolder() {
     //Remove all image inside folder as it should only have 1 image at a time
-    const { data:list, errorGetList } = await supabase.storage
+    const {data: list, errorGetList} = await supabase.storage
         .from('user-profile-image')
         .list(userID + '/');
-    if (errorGetList) { alert(errorGetList.message) }
+    if (errorGetList) {
+      alert(errorGetList.message)
+    }
 
     const filesToRemove = list.map((x) => `${userID}/${x.name}`);
-    const { data, errorRemove } = await supabase.storage
+    const {data, errorRemove} = await supabase.storage
         .from('user-profile-image')
         .remove(filesToRemove);
-    if (errorRemove) { alert(errorRemove.message) }
+    if (errorRemove) {
+      alert(errorRemove.message)
+    }
 
   }
 
-  //To get current profile image
+//To get current profile image
   async function getCurrentProfilePic() {
-    const { data: imageList , error } = await supabase.storage.from('user-profile-image')
+    const {data: imageList, error} = await supabase.storage.from('user-profile-image')
         .list(userID + '/', {
           limit: 1,
           offset: 0
         });
-    if (error) { alert(error.message); }
-    if ( !!imageList || imageList[0].name === null || imageList[0].name === "placeholder.txt") {
+    if (error) {
+      alert(error.message);
+    }
+    if (!!imageList || imageList[0].name === null || imageList[0].name === "placeholder.txt") {
       //console.log("Profile Image doesn't exist")
-      setprofileExistBoolean(false)
+      setprofileExistBoolean(false);
     }
     if (imageList && imageList.length > 0 && imageList[0].name !== "placeholder.txt") {
       const {data} = supabase.storage
@@ -90,19 +145,24 @@ function UserProfile() {
     }
   }
 
+
   const getUserId = async () => {
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user !== null) { setUserID(user.id); }
-      else { setUserID('') }
+      const {data: {user}} = await supabase.auth.getUser()
+      if (user !== null) {
+        setUserID(user.id);
+      } else {
+        setUserID('')
+      }
+    } catch (e) {
+      console.log(e)
     }
-    catch (e) {console.log(e)}
   }
 
   return (
       <div className="flex flex-col min-h-screen bg-gray-50">
-        <Lnavbar />
+        <Lnavbar/>
         <div className="w-full max-w-5xl mx-auto px-4 py-4 space-y-10 bg-white shadow-md rounded-lg">
           {/* Account Settings */}
           <div className="flex flex-col space-y-4">
@@ -111,18 +171,26 @@ function UserProfile() {
               {/* Picture Box (a) */}
               <div className="flex flex-col items-center border rounded-md p-4 shadow">
                 {
-                  profileExistBoolean?
+                  profileExistBoolean ?
                       (
                           <img
-                              src= {profileImageURL}
+                              src={profileImageURL}
                               className="w-full h-full object-cover rounded"
-                              style={{ width: "200px", height: "200px", objectFit: "cover" }} //Force image to fit in 200x200
+                              style={{
+                                width: "200px",
+                                height: "200px",
+                                objectFit: "cover"
+                              }} //Force image to fit in 200x200
                           />
-                      ):(
+                      ) : (
                           <img
-                              src= {DefaultProfilePic}
+                              src={DefaultProfilePic}
                               className="w-full h-full object-cover rounded"
-                              style={{ width: "200px", height: "200px", objectFit: "cover" }} //Force image to fit in 200x200
+                              style={{
+                                width: "200px",
+                                height: "200px",
+                                objectFit: "cover"
+                              }} //Force image to fit in 200x200
                           />
                       )
                 }
@@ -147,7 +215,7 @@ function UserProfile() {
                 </button>
 
                 {
-                  newProfileImage?
+                  newProfileImage ?
                       (
                           <label
                               //htmlFor="upload-photo"
@@ -194,7 +262,7 @@ function UserProfile() {
                     placeholder="Phone Number"
                     className="w-full px-3 py-2 border rounded"
                 />
-                <input type="date" className="w-full px-3 py-2 border rounded" />
+                <input type="date" className="w-full px-3 py-2 border rounded"/>
 
                 <div className="flex justify-end space-x-4">
                   <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
@@ -216,7 +284,7 @@ function UserProfile() {
           </div>
         </div>
 
-        <Footer />
+        <Footer/>
       </div>
   );
 }

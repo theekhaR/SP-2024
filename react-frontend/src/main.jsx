@@ -1,32 +1,77 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { createBrowserRouter, RouterProvider , Outlet} from "react-router-dom";
+
 import "./index.css";
-import Home from "./pages/Home";
-import Login from "./pages/Login.jsx";
-import Message from "./pages/message.jsx";
-import Listing from "./pages/Listing.jsx";
-import Main from "./pages/main.jsx";
-import Register from "./pages/Register.jsx"
-import UserProfile from "./pages/UserProfile.jsx"
+
+// Pages
+import ApplicationStatus from "./pages/ApplicationStatus.jsx";
+import Bookmark from "./pages/Bookmark.jsx";
 import Company from "./pages/Company.jsx";
+import CompanyProfileEdit from "./pages/CompanyProfileEdit.jsx";
+import CompanyListing from "./pages/CompanyListing.jsx";
+import CreateCompany from "./pages/CreateCompany.jsx";
+import Home from "./pages/Home.jsx";
+import Listing from "./pages/Listing.jsx";
+import ListingEdit from "./pages/ListingEdit.jsx";
+import Login from "./pages/Login.jsx";
+import Member from "./pages/CompanyMember.jsx";
+import Message from "./pages/Message.jsx";
+import Register from "./pages/Register.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
 
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
-
-import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx"
+// Components
+import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
 import { UserProvider } from "./components/UserContext.jsx";
+import { CompanyProvider } from "./components/CompanyContext.jsx";
 
+// Wrapping component defined inline
+function ContextWrapper() {
+  return (
+    <UserProvider>
+      <CompanyProvider>
+        <Outlet />
+      </CompanyProvider>
+    </UserProvider>
+  );
+}
+
+// Routes
 const router = createBrowserRouter([
-    { path: "/", element: <Home /> },
-    { path: "/register", element: <Register /> },
-    { path: "/login", element: <Login /> },
-    { path: "/message", element: <UserProvider> <ProtectedRouteWrapper> <Message /> </ProtectedRouteWrapper> </UserProvider> },
-    { path: "/company", element: <UserProvider> <Company /> </UserProvider> },
-    { path: "/listing", element: <Listing /> },
-    { path: "/main", element: <Main />},
-    { path: "/userprofile", element: <UserProvider><UserProfile/></UserProvider>}
-])
+  // Public routes (no context)
+  { path: "/", element: <Home /> },
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
+
+  // Context-wrapped routes
+  {
+    element: <ContextWrapper />,
+    children: [
+      { path: "/bookmark", element: <Bookmark /> },
+      { path: "/company", element: <Company /> },
+      { path: "/companyprofileedit", element: <CompanyProfileEdit /> },
+      { path: "/companyListing", element: <CompanyListing /> },
+      { path: "/createCompany", element: <CreateCompany /> },
+      { path: "/listing", element: <Listing /> },
+      { path: "/listingedit", element: <ListingEdit /> },
+      { path: "/companymember", element: <Member /> },
+      {
+        path: "/message",
+        element: (
+          <ProtectedRouteWrapper>
+            <Message />
+          </ProtectedRouteWrapper>
+        ),
+      },
+      { path: "/userprofile", element: <UserProfile /> },
+      { path: "/applicationstatus", element: <ApplicationStatus /> },
+    ],
+  },
+]);
+
+// Render
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-      <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </StrictMode>
 );
