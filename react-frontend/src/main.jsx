@@ -20,11 +20,7 @@ import CompanyMember from "./pages/CompanyMember.jsx";
 import Message from "./pages/Message.jsx";
 import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
-<<<<<<< HEAD
-import ManageApplication from "./pages/ManageApplication.jsx"
-=======
 import CreateListing from "./pages/CreateListing.jsx";
->>>>>>> origin/dev_Tul
 
 // Components
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
@@ -79,6 +75,7 @@ const router = createBrowserRouter([
 ]);
 
 // Render
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <RouterProvider router={router} />
