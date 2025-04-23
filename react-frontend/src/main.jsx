@@ -19,6 +19,7 @@ import Member from "./pages/CompanyMember.jsx";
 import Message from "./pages/Message.jsx";
 import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
+import ManageApplication from "./pages/ManageApplication.jsx"
 
 // Components
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
@@ -65,6 +66,7 @@ const router = createBrowserRouter([
       },
       { path: "/userprofile", element: <UserProfile /> },
       { path: "/applicationstatus", element: <ApplicationStatus /> },
+      { path: "/manageapplication", element: <ManageApplication /> },
     ],
   },
 ]);
