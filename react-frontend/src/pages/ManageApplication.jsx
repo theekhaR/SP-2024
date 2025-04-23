@@ -26,7 +26,7 @@ function ManageApplication() {
                 <a href="/course" className="hover:underline">Course</a>
                 <span className="mx-1">/</span>
                 <span className="text-gray-700 font-medium">
-                2021 Complete Python Bootcamp From Zero to Hero in Python
+                Full Stack Developer Intern 
                 </span>
             </nav>
             </div>
