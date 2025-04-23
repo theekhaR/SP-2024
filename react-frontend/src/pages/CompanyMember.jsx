@@ -3,7 +3,7 @@ import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
 
-function member() {
+function CompanyMember() {
   const Member = [
     {
       id: "m1",
@@ -104,4 +104,4 @@ function member() {
   );
 }
 
-export default member;
+export default CompanyMember;

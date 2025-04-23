@@ -34,22 +34,16 @@ function sidebar() {
       {/* Menu */}
       <nav className="flex-1 space-y-2">
         <a
-          href="/companyM"
+          href="/companylisting"
           className="flex items-center px-3 py-2 hover:text-[#FF6636]"
         >
           Listing
         </a>
         <a
-          href="/member"
+          href="/companymember"
           className="flex items-center px-3 py-2 hover:text-[#FF6636]"
         >
           Company member
-        </a>
-        <a
-          href="/"
-          className="flex items-center px-3 py-2 hover:text-[#FF6636]"
-        >
-          Message
         </a>
       </nav>
     </div>

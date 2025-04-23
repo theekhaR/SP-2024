@@ -1,6 +1,6 @@
 import React from "react";
 
-function listingEdit() {
+function ListingEdit() {
   return (
     <div>
       <div></div>
@@ -8,4 +8,4 @@ function listingEdit() {
   );
 }
 
-export default listingEdit;
+export default ListingEdit;

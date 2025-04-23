@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/footer";
 import L_navbar from "../components/L_navbar.jsx";
 
-function AppStatus() {
+function ApplicationStatus() {
   const appliedList = [
     {
       title: "Financial Accounting",
@@ -75,4 +75,4 @@ function AppStatus() {
   );
 }
 
-export default AppStatus;
+export default ApplicationStatus;

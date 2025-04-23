@@ -16,7 +16,7 @@ import {supabase} from "../supabaseClient.jsx";
 import {v4 as uuidv4} from "uuid";
 import { useNavigate } from "react-router-dom"
 
-function createCompany() {
+function CreateCompany() {
 
   const { userID } = useUserContext();
 
@@ -440,4 +440,4 @@ function createCompany() {
   );
 }
 
-export default createCompany;
+export default CreateCompany;

@@ -7,7 +7,7 @@ import { faGlobe, faIndustry } from "@fortawesome/free-solid-svg-icons";
 import {useCompanyContext} from "../components/CompanyContext.jsx";
 import {useUserContext} from "../components/UserContext.jsx";
 
-function CompanyEdit() {
+function CompanyProfileEdit() {
 
   const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } = useCompanyContext();
   const { userID } = useUserContext();
@@ -241,4 +241,4 @@ function CompanyEdit() {
   );
 }
 
-export default CompanyEdit;
+export default CompanyProfileEdit;

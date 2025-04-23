@@ -5,21 +5,20 @@ import { createBrowserRouter, RouterProvider , Outlet} from "react-router-dom";
 import "./index.css";
 
 // Pages
-import Astatus from "./pages/AppStatus.jsx";
+import ApplicationStatus from "./pages/ApplicationStatus.jsx";
 import Bookmark from "./pages/Bookmark.jsx";
 import Company from "./pages/Company.jsx";
-import CompanyEdit from "./pages/companyEdit.jsx";
-import CompanyListing from "./pages/companyListing.jsx";
-import CreateCompany from "./pages/createCompany.jsx";
+import CompanyProfileEdit from "./pages/CompanyProfileEdit.jsx";
+import CompanyListing from "./pages/CompanyListing.jsx";
+import CreateCompany from "./pages/CreateCompany.jsx";
 import Home from "./pages/Home.jsx";
 import Listing from "./pages/Listing.jsx";
-import ListingEdit from "./pages/listingEdit.jsx";
+import ListingEdit from "./pages/ListingEdit.jsx";
 import Login from "./pages/Login.jsx";
-import Main from "./pages/main.jsx";
-import Member from "./pages/member.jsx";
-import Message from "./pages/message.jsx";
+import Member from "./pages/CompanyMember.jsx";
+import Message from "./pages/Message.jsx";
 import Register from "./pages/Register.jsx";
-import Setting from "./pages/UserProfile.jsx";
+import UserProfile from "./pages/UserProfile.jsx";
 
 // Components
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
@@ -50,13 +49,12 @@ const router = createBrowserRouter([
     children: [
       { path: "/bookmark", element: <Bookmark /> },
       { path: "/company", element: <Company /> },
-      { path: "/companyedit", element: <CompanyEdit /> },
+      { path: "/companyprofileedit", element: <CompanyProfileEdit /> },
       { path: "/companyListing", element: <CompanyListing /> },
       { path: "/createCompany", element: <CreateCompany /> },
-      { path: "/listing/:companyID", element: <Listing /> },
-      { path: "/listingE", element: <ListingEdit /> },
-      { path: "/main", element: <Main /> },
-      { path: "/member", element: <Member /> },
+      { path: "/listing", element: <Listing /> },
+      { path: "/listingedit", element: <ListingEdit /> },
+      { path: "/companymember", element: <Member /> },
       {
         path: "/message",
         element: (
@@ -65,8 +63,8 @@ const router = createBrowserRouter([
           </ProtectedRouteWrapper>
         ),
       },
-      { path: "/setting", element: <Setting /> },
-      { path: "/status", element: <Astatus /> },
+      { path: "/userprofile", element: <UserProfile /> },
+      { path: "/applicationstatus", element: <ApplicationStatus /> },
     ],
   },
 ]);

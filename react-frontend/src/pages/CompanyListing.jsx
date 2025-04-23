@@ -91,11 +91,11 @@ function CompanyListing() {
                   </div>
                 </div>
                 <div className="flex justify-end space-x-2">
-                  <button className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm">
-                    Manage
+                  <button className="bg-green-600 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm">
+                    Applicants
                   </button>
-                  <button className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-800 text-sm">
-                    Kick
+                  <button className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm">
+                    Edit
                   </button>
                 </div>
               </div>
