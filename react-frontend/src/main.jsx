@@ -8,6 +8,7 @@ import "./index.css";
 import ApplicationStatus from "./pages/ApplicationStatus.jsx";
 import Bookmark from "./pages/Bookmark.jsx";
 import Company from "./pages/Company.jsx";
+import CompanyProfile from "./pages/CompanyProfile.jsx"
 import CompanyProfileEdit from "./pages/CompanyProfileEdit.jsx";
 import CompanyListing from "./pages/CompanyListing.jsx";
 import CreateCompany from "./pages/CreateCompany.jsx";
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/bookmark", element: <Bookmark /> },
       { path: "/company", element: <Company /> },
+      { path: "/companyprofile", element: <CompanyProfile /> },
       { path: "/companyprofileedit", element: <CompanyProfileEdit /> },
       { path: "/companyListing", element: <CompanyListing /> },
       { path: "/createCompany", element: <CreateCompany /> },
