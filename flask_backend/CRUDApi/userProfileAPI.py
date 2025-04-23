@@ -38,7 +38,7 @@ def edit_user_profile():
                 subject_user.Sex = int(data['sex'])
             except ValueError:
                 raise ValueError("Invalid value for 'sex'. Must be an integer.")
-        if 'phone' in data and (data.get('degree')):
+        if 'phone' in data and (data.get('phone')):
             subject_user.Phone = data.get('phone')
         if 'about' in data and (data.get('about')):
             subject_user.About = data.get('about')

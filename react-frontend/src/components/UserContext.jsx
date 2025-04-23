@@ -19,35 +19,6 @@ export function UserProvider({ children }) {
     const [authenticated, setAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true); //To check if supabase is loading or not
 
-    //To get current profile image
-    // async function getCurrentProfilePic() {
-    //     const {data: imageList, error} = await supabase.storage.from('user-profile-image')
-    //         .list(userID + '/', {
-    //             limit: 1,
-    //             offset: 0
-    //         });
-    //     if (error) {
-    //         alert(error.message);
-    //     }
-    //
-    //     if (imageList.length > 0) {
-    //         if (imageList[0].name === null|| imageList[0].name === "placeholder.txt" ) {
-    //             console.log("Profile Image doesn't exist ===")
-    //             console.log('Name:' + imageList[0].name)
-    //             setProfileExistBoolean(false)
-    //         }
-    //         if (imageList && imageList.length > 0 && imageList[0].name !== null && imageList[0].name !== "placeholder.txt") {
-    //             const {data} = supabase.storage
-    //                 .from('user-profile-image')
-    //                 .getPublicUrl(`${userID}/${imageList[0].name}`)
-    //             setUserProfilePicUrl(data.publicUrl)
-    //             setProfileExistBoolean(true);
-    //         }
-    //     }
-    // }
-
-
-
     useEffect( () => {
 
             const initiateUserContext = async () => {
@@ -91,7 +62,7 @@ export function UserProvider({ children }) {
         const getCurrentProfilePic = async () => {
             if (!userID) return;
 
-            console.log("Fetching profile pic for user:", userID);
+            //console.log("Fetching profile pic for user:", userID);
             const { data: imageList, error } = await supabase.storage
                 .from('user-profile-image')
                 .list(`${userID}/`, { limit: 1 });
@@ -100,8 +71,6 @@ export function UserProvider({ children }) {
                 console.error("Image fetch error:", error.message);
                 return;
             }
-
-            console.log("Image list:", imageList);
 
             if (imageList.length > 0) {
                 const imageName = imageList[0].name;
@@ -116,7 +85,7 @@ export function UserProvider({ children }) {
                     .from('user-profile-image')
                     .getPublicUrl(`${userID}/${imageName}`);
 
-                console.log("Setting profile pic URL:", data.publicUrl);
+                //console.log("Setting profile pic URL:", data.publicUrl);
                 setUserProfilePicUrl(data.publicUrl);
                 setProfileExistBoolean(true);
             }

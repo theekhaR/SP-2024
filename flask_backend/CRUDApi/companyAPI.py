@@ -53,29 +53,28 @@ def create_company():
     db.session.add(new_companymembermapping)
     db.session.commit()
 
-    return jsonify({'message': 'Company created successfully', 'CompanyID': new_company.CompanyID}), 201
+    return jsonify({'message': 'Company created successfully', 'companyID': new_company.CompanyID}), 201
 
 @companyAPI.route('/get_company', methods=['GET'])
 def get_company():
 
-    data = request.get_json()
-    if not data or 'CompanyID' not in data or not data.get('CompanyID'):
+    companyID = request.args.get('companyID')
+    if not companyID:
         return jsonify({'error': 'Missing required fields'}), 400
 
-    query_company = Company.query.filter_by(CompanyID=data['CompanyID']).first()
+    query_company = Company.query.filter_by(CompanyID=companyID).first()
 
-    company_json =[
-    {
+    company_json ={
         'companyID': query_company.CompanyID,
         'companyName': query_company.CompanyName,
         'companyAbout': query_company.CompanyAbout,
         'companyOverview': query_company.CompanyOverview,
-        'companySite': query_company.CompanySite,
+        'companyLogoURL': query_company.CompanyLogoURL,
         'companyLocation': query_company.CompanyLocation,
         'industryName': query_company.companyindustrylist_mapping.IndustryName if query_company.companyindustrylist_mapping else None,
-        'createdBy': f"{query_company.user_mapping.UserFirstName} {query_company.user_mapping.UserLastName}"  if company.user_mapping else None,
+        'createdBy': f"{query_company.user_mapping.UserFirstName} {query_company.user_mapping.UserLastName}"  if query_company.user_mapping else None,
         'createdOn': query_company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_company.CreatedOn else None
-    }]
+    }
 
     return jsonify(company_json)
 
@@ -89,7 +88,7 @@ def get_all_companies():
             'CompanyName': company.CompanyName,
             'CompanyAbout': company.CompanyAbout,
             'CompanyOverview': company.CompanyOverview,
-            'CompanySite': company.CompanySite,
+            'CompanyLogoURL': company.CompanyLogoURL,
             'CompanyLocation': company.CompanyLocation,
             'IndustryID': company.companyindustrylist_mapping.IndustryName if company.companyindustrylist_mapping else None,
             'CreatedBy': f"{company.user_mapping.UserFirstName} {company.user_mapping.UserLastName}"  if company.user_mapping else None,
@@ -98,63 +97,3 @@ def get_all_companies():
         for company in companies
     ]
     return jsonify(company_list)
-
-@companyAPI.route('/add_user_to_company', methods=['POST'])
-def add_user_to_company():
-    data = request.get_json()
-    if not data or 'userID' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-
-    members = CompanyMemberMapping.query.filter_by(CompanyID=data['CompanyID'])
-# endregion =======================================================================================================================================================
-
-# region CompanyMemberMapping Table -------------------------------------------------------------------------------------------------------------------------------------
-
-@companyAPI.route('/get_company_member', methods=['GET'])
-def get_company_member():
-    data = request.get_json()
-    if not data or 'CompanyID' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-
-    members = CompanyMemberMapping.query.filter_by(CompanyID=data['CompanyID'])
-
-    if not members:
-        return jsonify({'error': 'This company does not exists or do not have a member'}), 409
-
-    member_list = [
-        {
-            'UserID': member.user_mapping.UserID,
-            'Name': f"{member.user_mapping.UserFirstName} {member.user_mapping.UserLastName}"  if member.user_mapping else None,
-            'Role': member.Role,
-            'Permission': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None
-        }
-        for member in members
-    ]
-    print(member_list)
-    return jsonify(member_list)
-
-# endregion =======================================================================================================================================================
-
-
-# region CompanyListingMapping Table -------------------------------------------------------------------------------------------------------------------------------------
-@companyAPI.route('/companylistings', methods=['GET'])
-def get_all_listings_from_company():
-    data = request.get_json()
-    if not data or 'companyID' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-
-    listings = CompanyListingMapping.query.filter_by(CompanyID=data['companyID'])
-
-    if not listings:
-        return jsonify({'error': 'This company does not exists or do not have a listing'}), 409
-    print(listings)
-    listing_list = [
-        {
-            'listingID': listing.ListingID,
-            'position': f"{listing.listing_mapping.Position}",
-        }
-        for listing in listings
-    ]
-    return jsonify(listing_list)
-
-# endregion =======================================================================================================================================================

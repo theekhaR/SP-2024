@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useUserContext } from "../components/UserContext.jsx";
 import DefaultProfilePic from "../assets/DefaultProfilePic.jpg";
@@ -11,7 +11,7 @@ function L_navbar() {
   useEffect(() => {
     if (userProfilePicURL) {
       setProfilePic(userProfilePicURL);
-      console.log("save new pfp")
+      //is still set new pfp on every render
     }
   }, [userProfilePicURL]);
 
@@ -50,7 +50,7 @@ function L_navbar() {
             </li>
             <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
               <a
-                href="#"
+                href="/company"
                 className="hover:text-[#FF6636] text-[#8C94A3] block font-semibold text-[15px] relative cursor-pointer before:bg-[#FF6636] before:absolute before:-bottom-1 before:block before:h-[2px] before:w-full before:origin-bottom-right before:scale-x-0 before:transition before:duration-300 before:ease-in-out hover:before:origin-bottom-left hover:before:scale-x-100"
               >
                 Company Side

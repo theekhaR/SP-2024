@@ -25,8 +25,8 @@ def get_all_users():
     users_list = [{'ID': user.UserID, 'name': user.UserFirstName, 'email': user.UserEmail} for user in users]
     return jsonify(users_list)
 
-@userAPI.route('/check_if_user_exists', methods=['GET'])
-def check_if_user_exists():
+@userAPI.route('/check_if_user_email_exists', methods=['GET'])
+def check_if_user_email_exists():
     user_email = request.args.get('userEmail')
     if not user_email:
         return jsonify({'error': 'Missing userEmail'}), 400
@@ -167,8 +167,6 @@ def update_user():
             subject_user.UserEmail = data['userEmail']
         if 'userPicURL' in data and (data.get('userPicURL')):
             subject_user.UserPicURL = data['userPicURL']
-        if 'company' in data and (data.get('company')):
-            subject_user.Company = data['company']
 
         db.session.commit()
         return jsonify({'message': 'User updated successfully', 'UserID': subject_user.UserID}), 201
@@ -194,28 +192,3 @@ def deactivate_user():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-# endregion =======================================================================================================================================================
-
-
-#region UserFollowing Table -------------------------------------------------------------------------------------------------------------------------------------
-@userAPI.route('/create_user_following', methods=['POST'])
-def create_user_following():
-    try:
-        data = request.get_json()
-        print(data)
-        if not data or 'userID' not in data or 'companyID' not in data:
-            jsonify({'error': 'Missing required fields'}), 400
-
-        new_user_following = UserFollowing(
-            UserID=data.get('userID', ''),  # Generate a unique ID
-            CompanyID=data.get('companyID', ''),
-        )
-        db.session.add(new_user_following)
-        db.session.commit()
-
-        return jsonify({'message': 'UserFollowing entry created successfully', 'userID': new_user_application.UserID, 'companyID': new_user_application.ListingID}), 201
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-#endregion =======================================================================================================================================================

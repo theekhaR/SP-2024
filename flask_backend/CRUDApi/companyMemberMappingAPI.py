@@ -33,11 +33,32 @@ def get_company_of_user():
                 'companyName': company.company_mapping.CompanyName,
                 'role': company.Role,
                 'permissionID': company.companypermissionlist_mapping.PermissionID,
-                'permissionName': company.companypermissionlist_mapping.PermissionName
+                'permissionName': company.companypermissionlist_mapping.PermissionName,
+                'companyLogoURL': company.company_mapping.CompanyLogoURL,
             }
             for company in companies
         ]
         return jsonify(companies_json), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@companyMemberMappingAPI.route('/get_user_data_in_company', methods=['GET'])
+def get_user_data_in_company():
+    try:
+        userID = request.args.get('userID')
+        companyID = request.args.get('companyID')
+
+        if not userID or not companyID:
+            return jsonify({'error': 'Missing UserID or CompanyID'}), 400
+
+        user_company_data = CompanyMemberMapping.query.filter_by(UserID=userID, CompanyID=companyID).first()
+        user_company_data_json = {
+            'role': user_company_data.Role,
+            'permissionID': user_company_data.PermissionID,
+        }
+
+        return jsonify(user_company_data_json), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -60,7 +81,7 @@ def create_company_member_mapping():
             return jsonify({'error': 'This user does not exists or are not in a company'}), 409
 
         new_companymembermapping = CompanyMemberMapping(
-            CompanyID=data.get('CompanyID'),
+            CompanyID=data.get('companyID'),
             UserID=data.get('userID'),
             Role=data.get('role') if data.get('role') else None,
             PermissionID=data.get('permissionID'),
@@ -72,3 +93,26 @@ def create_company_member_mapping():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@companyMemberMappingAPI.route('/get_company_member', methods=['GET'])
+def get_company_member():
+    companyID = request.args.get('companyID')
+    if not 'companyID':
+        return jsonify({'error': 'Missing companyID'}), 400
+
+    members = CompanyMemberMapping.query.filter_by(CompanyID=companyID)
+
+    if not members:
+        return jsonify({'error': 'This company does not exists or do not have a member'}), 409
+
+    member_list = [
+        {
+            'UserID': member.user_mapping.UserID,
+            'Name': f"{member.user_mapping.UserFirstName} {member.user_mapping.UserLastName}"  if member.user_mapping else None,
+            'Role': member.Role,
+            'Permission': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None
+        }
+        for member in members
+    ]
+    print(member_list)
+    return jsonify(member_list)

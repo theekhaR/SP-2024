@@ -59,15 +59,15 @@ def remove_user_bookmark():
 
 @userBookmarkAPI.route('/get_user_bookmark', methods=['GET'])
 def get_user_bookmark():
-    data = request.get_json()
-    if not data or 'userID' not in data or not data.get('userID'):
+    userID = request.args.get('userID')
+    if not userID:
         return jsonify({'error': 'Missing required field userID'}), 400
 
-    listings = UserBookmark.query.filter_by(UserID=data['userID'])
+    listings = UserBookmark.query.filter_by(UserID=userID)
     listings_count = listings.count()
 
     if listings_count == 0:
-        return jsonify({'error': 'This user does not exists or do not have an application'}), 409
+        return jsonify({'error': 'This user does not exists or do not have a bookmark'}), 409
 
     listings_json = [
         {
