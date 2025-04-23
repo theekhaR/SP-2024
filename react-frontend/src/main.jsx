@@ -13,6 +13,7 @@ import CompanyListing from "./pages/companyListing.jsx";
 import CreateCompany from "./pages/createCompany.jsx";
 import Home from "./pages/Home.jsx";
 import Listing from "./pages/Listing.jsx";
+import CreateListing from "./pages/createListing.jsx";
 import ListingEdit from "./pages/listingEdit.jsx";
 import Login from "./pages/Login.jsx";
 import Main from "./pages/main.jsx";
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       { path: "/companyListing", element: <CompanyListing /> },
       { path: "/createCompany", element: <CreateCompany /> },
       { path: "/listing", element: <Listing /> },
+      { path: "/createListing", element: <CreateListing /> },
       { path: "/listingE", element: <ListingEdit /> },
       { path: "/main", element: <Main /> },
       { path: "/member", element: <Member /> },

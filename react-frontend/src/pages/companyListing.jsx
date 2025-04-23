@@ -1,33 +1,35 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
-import {useCompanyContext} from "../components/CompanyContext.jsx";
-import {useUserContext} from "../components/UserContext.jsx";
-
+import { useCompanyContext } from "../components/CompanyContext.jsx";
+import { useUserContext } from "../components/UserContext.jsx";
 
 function CompanyListing() {
-
-  const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } = useCompanyContext();
+  const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } =
+    useCompanyContext();
   const { userID } = useUserContext();
-  const [ listingList, setListingList] = useState([]);
+  const [listingList, setListingList] = useState([]);
 
   useEffect(() => {
-    console.log(companyID)
-      if (!companyID) return; // Avoid running if companyID is not ready
-      getCompanyListings().then(setListingList);
+    console.log(companyID);
+    if (!companyID) return; // Avoid running if companyID is not ready
+    getCompanyListings().then(setListingList);
   }, [companyID]);
 
-  async function getCompanyListings(){
+  async function getCompanyListings() {
     try {
-      const response = await fetch(`http://localhost:5000/get_listings_of_company?companyID=${companyID}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `http://localhost:5000/get_listings_of_company?companyID=${companyID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -44,9 +46,7 @@ function CompanyListing() {
       const data = await response.json();
       alert(data.error);
       return [];
-
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error checking user:", error);
       return [];
     }
@@ -61,9 +61,11 @@ function CompanyListing() {
 
         <div className="flex-1 p-8">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Listing ({listingList.length})</h1>
+            <h1 className="text-2xl font-bold">
+              Listing ({listingList.length})
+            </h1>
             <button className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600">
-              <a href={`/companyEdit/${companyID}`}>Create Listing</a>
+              <a href="/createListing">Create Listing</a>
             </button>
           </div>
 
@@ -80,7 +82,7 @@ function CompanyListing() {
               >
                 <div className="flex items-center space-x-4 col-span-2">
                   <img
-                    src={listing.image_url || MissingImagePlaceHolder }
+                    src={listing.image_url || MissingImagePlaceHolder}
                     alt="Image"
                     className="w-12 h-12 object-contain"
                   />
