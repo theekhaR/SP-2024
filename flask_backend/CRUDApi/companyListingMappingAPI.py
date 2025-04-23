@@ -30,6 +30,8 @@ def get_listings_of_company():
             {
                 "listingID": listing.ListingID,
                 'position': listing.listing_mapping.Position,
+                'createdOn': listing.listing_mapping.CreatedOn,
+                'affectiveUntil': listing.listing_mapping.AffectiveUntil
             }
             for listing in listings
         ]
