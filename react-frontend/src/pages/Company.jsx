@@ -170,7 +170,7 @@ function Company() {
                         disabled={company.role !== "Administrator"}
                         onClick={() => {
                           setCompanyID(company.id); // Set context first
-                          navigate("/companyedit"); // Then navigate
+                          navigate("/companyprofileedit"); // Then navigate
                         }}
                       >
                         Edit
