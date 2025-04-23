@@ -151,7 +151,6 @@ def update_user():
 
         update_userID = data.get('userID')
         subject_user = User.query.filter_by(UserID=update_userID).first()
-
         # Check if user exists
         if not subject_user:
             return jsonify({'error': 'This user does not exist'}), 409
@@ -166,12 +165,13 @@ def update_user():
         if 'userEmail' in data and (data.get('userEmail')):
             subject_user.UserEmail = data['userEmail']
         if 'userPicURL' in data and (data.get('userPicURL')):
-            subject_user.UserPicURL = data['userPicURL']
+            subject_user.UserPicURL = data.get('userPicURL')
 
         db.session.commit()
         return jsonify({'message': 'User updated successfully', 'UserID': subject_user.UserID}), 201
 
     except Exception as e:
+        print("Exception occurred:", str(e))
         return jsonify({'error': str(e)}), 500
 
 @userAPI.route('/deactivate_user', methods=['PATCH'])

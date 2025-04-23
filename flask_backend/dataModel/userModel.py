@@ -12,7 +12,7 @@ class User(db.Model): #To indicate that this is a database model
     UserLastName = db.Column(db.String(50), nullable=False)
     UserPassword = db.Column(db.String(100), nullable=False)
     UserEmail = db.Column(db.String(100), unique=True, nullable=False)
-    UserPicURL = db.Column(db.String(100))
+    UserPicURL = db.Column(db.Text)
     AccountType = db.Column(db.Integer, nullable=False)
     Validated = db.Column(db.Boolean, default=False)
     Company = db.Column(db.String(2000))

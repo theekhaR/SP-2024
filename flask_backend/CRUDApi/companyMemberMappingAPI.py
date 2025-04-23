@@ -107,10 +107,11 @@ def get_company_member():
 
     member_list = [
         {
-            'UserID': member.user_mapping.UserID,
-            'Name': f"{member.user_mapping.UserFirstName} {member.user_mapping.UserLastName}"  if member.user_mapping else None,
-            'Role': member.Role,
-            'Permission': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None
+            'userID': member.user_mapping.UserID,
+            'name': f"{member.user_mapping.UserFirstName} {member.user_mapping.UserLastName}"  if member.user_mapping else None,
+            'role': member.Role,
+            'permission': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None,
+            'userPicURL': member.user_mapping.UserPicURL
         }
         for member in members
     ]

@@ -1,6 +1,7 @@
 import os
 import cv2
 import pytesseract
+import fitz  # PyMuPDF
 from google import genai
 from typing import List, Dict
 from rouge_score import rouge_scorer
@@ -38,8 +39,6 @@ def generate_summary(cv_text: str) -> str:
     except Exception as e:
         print(f"Error generating summary: {e}")
         return ""
-
-import fitz  # PyMuPDF
 
 def extract_text_from_pdf(pdf_path):
     text = ""
