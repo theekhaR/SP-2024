@@ -53,7 +53,7 @@ const router = createBrowserRouter([
       { path: "/companyedit", element: <CompanyEdit /> },
       { path: "/companyListing", element: <CompanyListing /> },
       { path: "/createCompany", element: <CreateCompany /> },
-      { path: "/listing/:companyID", element: <Listing /> },
+      { path: "/listing", element: <Listing /> },
       { path: "/listingE", element: <ListingEdit /> },
       { path: "/main", element: <Main /> },
       { path: "/member", element: <Member /> },
