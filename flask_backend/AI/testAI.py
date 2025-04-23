@@ -56,7 +56,18 @@ def extract_text_from_file(file_path: str) -> str:
 # ───── Gemini Summary ─────
 def generate_summary(text: str) -> str:
     try:
-        prompt = f"Please summarize the following resume:\n\n{text[:60000]}"
+        prompt = f"""
+                From the resume text below, extract only the skills that are relevant and applicable for job applications.
+                These can include technical skills (e.g., programming, tools, frameworks), soft skills (e.g., leadership, teamwork), or language abilities.
+                Do NOT include education, job titles, certificates, or any personal background.
+
+                Return the skills as a clean bullet-point list.
+
+                Resume:
+                {text[:60000]}
+                """
+
+
         response = model.generate_content(prompt)
         return response.text.strip() if hasattr(response, 'text') else ""
     except Exception as e:
