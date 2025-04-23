@@ -10,7 +10,6 @@ import uuid
 
 companyAPI = blueprints.Blueprint('companyAPI', __name__)
 
-# region Company Table -------------------------------------------------------------------------------------------------------------------------------------
 @companyAPI.route('/create_company', methods=['POST'])
 def create_company():
 
@@ -39,7 +38,7 @@ def create_company():
     new_companypermissionlist = CompanyPermissionList(
         CompanyID=new_company.CompanyID,
         PermissionID=1,
-        PermissionName='Owner'
+        PermissionName='Default'
     )
     db.session.add(new_companypermissionlist)
     db.session.flush()
