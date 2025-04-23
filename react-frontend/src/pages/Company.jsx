@@ -1,44 +1,43 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Pic1 from "../assets/Location.png";
 import Pic2 from "../assets/Login.png";
 import Pic3 from "../assets/Tech.png";
-import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg"
+import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
 import { useUserContext } from "../components/UserContext.jsx";
 import { supabase } from "../supabaseClient.jsx";
 import { useCompanyContext } from "../components/CompanyContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 function Company() {
-
-
   const { userID, loading, authenticated } = useUserContext();
-  const { setCompanyID } = useCompanyContext()
-  const [ companyList, setCompanyList] = useState([]);
+  const { setCompanyID } = useCompanyContext();
+  const [companyList, setCompanyList] = useState([]);
 
   const navigate = useNavigate();
 
-  useEffect( () => {
+  useEffect(() => {
     if (userID) {
       getCompanyList();
     }
   }, [userID, loading, authenticated]);
 
-  async function getCompanyList(){
+  async function getCompanyList() {
     try {
-      const response = await fetch(`http://localhost:5000/get_company_of_a_user?userID=${userID}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `http://localhost:5000/get_company_of_a_user?userID=${userID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
       //console.log(response)
       const data = await response.json();
       if (response.status === 200) {
-
-
         // Map raw data to desired format
         const companies = data.map((company) => ({
           id: company.companyID,
@@ -82,7 +81,7 @@ function Company() {
       console.error("Error checking user:", error);
       return [];
     }
-  };
+  }
 
   // const getCompanyLogo = async (companyID) => {
   //           const { data: imageList, error } = await supabase.storage
@@ -108,7 +107,7 @@ function Company() {
   //           }
   //       };
 
-return (
+  return (
     <div className="min-h-screen bg-gray-100">
       <Lnavbar />
       <div className="max-w-7xl mx-auto py-10 px-4">
@@ -133,49 +132,52 @@ return (
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(companyList) && companyList.map((company) => (
-                <tr key={company.id} className="border-b">
-                  <td className="px-6 py-4 flex items-center space-x-4">
-                    <img
-                        src={company.image_url || MissingImagePlaceHolder }
+              {Array.isArray(companyList) &&
+                companyList.map((company) => (
+                  <tr key={company.id} className="border-b">
+                    <td className="px-6 py-4 flex items-center space-x-4">
+                      <img
+                        src={company.image_url || MissingImagePlaceHolder}
                         alt="Invalid"
                         className="font-semibold h-12 w-12 object-contain"
-                    />
-                    <span>{company.name}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="font-medium text-green-600">
-                      {company.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 space-x-2">
-                    {/*<button className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700">*/}
-                    {/*  <a href={`/companylisting/${company.id}`}>View</a>*/}
-                    {/*</button>*/}
-                    <button
+                      />
+                      <span>{company.name}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="font-medium text-green-600">
+                        {company.role}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 space-x-2">
+                      {/*<button className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700">*/}
+                      {/*  <a href={`/companylisting/${company.id}`}>View</a>*/}
+                      {/*</button>*/}
+                      <button
                         onClick={() => {
                           setCompanyID(company.id); // Set context first
                           navigate("/companylisting"); // Then navigate
                         }}
                         className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700"
-                    >View</button>
-                    <button
+                      >
+                        View
+                      </button>
+                      <button
                         className={`px-4 py-1 rounded ${
-                            company.role === "Administrator"
-                                ? "bg-orange-600 text-white hover:bg-orange-700"
-                                : "bg-[#F9AD95] text-white cursor-not-allowed"
+                          company.role === "Administrator"
+                            ? "bg-orange-600 text-white hover:bg-orange-700"
+                            : "bg-[#F9AD95] text-white cursor-not-allowed"
                         }`}
                         disabled={company.role !== "Administrator"}
                         onClick={() => {
                           setCompanyID(company.id); // Set context first
                           navigate("/companyedit"); // Then navigate
                         }}
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      >
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

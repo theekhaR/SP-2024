@@ -1,8 +1,8 @@
-import React, {useState, useEffect , useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Pic from "../assets/Login.png";
-import {useUserContext} from "../components/UserContext.jsx";
+import { useUserContext } from "../components/UserContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebookF,
@@ -12,9 +12,9 @@ import {
   faTiktok,
 } from "@fortawesome/free-brands-svg-icons";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
-import {supabase} from "../supabaseClient.jsx";
-import {v4 as uuidv4} from "uuid";
-import { useNavigate } from "react-router-dom"
+import { supabase } from "../supabaseClient.jsx";
+import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 function CreateCompany() {
 
@@ -30,7 +30,7 @@ function CreateCompany() {
   const [companySize, setCompanySize] = useState();
   const [companyLogo, setCompanyLogo] = useState();
 
-  const [ industryList, setIndustryList] = useState([]);
+  const [industryList, setIndustryList] = useState([]);
 
   const hiddenFileInput = useRef(null);
   const [fileName, setFileName] = useState("None");
@@ -39,7 +39,7 @@ function CreateCompany() {
 
   const navigate = useNavigate();
 
-  useEffect( () => {
+  useEffect(() => {
     getIndustryList().then(setIndustryList);
   }, []);
 
@@ -71,27 +71,26 @@ function CreateCompany() {
                     alert(data.error);
                 }
 
-                if (response.status === 201) {
-                  const data = await response.json();
-                  setCompanyID(data.companyID)
-                  await uploadCompanyLogo(data.companyID); //we need to pass in the companyID manually because
-                  //setCompanyID won't update companyID until code is finished, so it will be null when we call the func
-                  console.log("Company Created")
-                  navigate(`/company`);
-                }
-
-            } catch (error) {
-                console.error("Error encountered:", error);
-            }
-  }
+      if (response.status === 201) {
+        const data = await response.json();
+        setCompanyID(data.companyID);
+        await uploadCompanyLogo(data.companyID); //we need to pass in the companyID manually because
+        //setCompanyID won't update companyID until code is finished, so it will be null when we call the func
+        console.log("Company Created");
+        navigate(`/company`);
+      }
+    } catch (error) {
+      console.error("Error encountered:", error);
+    }
+  };
 
   async function getIndustryList() {
     try {
       const response = await fetch(`http://localhost:5000/get_all_industries`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       if (response.status === 200) {
@@ -118,15 +117,15 @@ function CreateCompany() {
   }
 
   async function uploadCompanyLogo(companyIDforUpload) {
-
-    const { data, error } = await supabase.storage.from('company-media')
-        .upload(companyIDforUpload + '/logo/' + uuidv4(), companyLogo);
+    const { data, error } = await supabase.storage
+      .from("company-media")
+      .upload(companyIDforUpload + "/logo/" + uuidv4(), companyLogo);
 
     if (data){
       setCompanyLogo(null);
-      setFileName("No file chosen")
+      setFileName("No file chosen");
     }
-    if (error){
+    if (error) {
       alert(error.message);
     }
   }
@@ -135,7 +134,7 @@ function CreateCompany() {
     hiddenFileInput.current.click();
   };
 
-    // to handle the user-selected file
+  // to handle the user-selected file
   async function handleChange(e) {
     const fileUploaded = e.target.files[0];
     if (fileUploaded) {
@@ -175,9 +174,11 @@ function CreateCompany() {
               <label className="text-sm font-medium text-gray-700 mb-1">
                 Industry
               </label>
-              <select className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={industryID}
-              onChange={(e) => setIndustryID(e.target.value)}>
+              <select
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={industryID}
+                onChange={(e) => setIndustryID(e.target.value)}
+              >
                 {industryList.map((industry) => (
                     <option key={industry.id} value={industry.id}>
                       {industry.name}
@@ -242,12 +243,13 @@ function CreateCompany() {
                 className="w-6/12 h-6/12 object-cover rounded-md mt-16 mb-12"
             />
 
-            <input type="file"
-                   className="hidden"
-                   id="upload"
-                   ref={hiddenFileInput}
-                   onChange={(e) => handleChange(e)}
-                />
+            <input
+              type="file"
+              className="hidden"
+              id="upload"
+              ref={hiddenFileInput}
+              onChange={(e) => handleChange(e)}
+            />
             <label
               htmlFor="upload"
               className="px-3 py-1 text-white bg-slate-600 hover:bg-gray-800  rounded-md transition"
@@ -421,8 +423,10 @@ function CreateCompany() {
           </div>
         </div>
         <div className="flex justify-end mt-4">
-          <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
-                  onClick={handleCreateCompany}>
+          <button
+            className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
+            onClick={handleCreateCompany}
+          >
             <a href="/Company" className="text-white">
               Save Change
             </a>
