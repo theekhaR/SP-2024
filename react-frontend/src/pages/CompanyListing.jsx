@@ -1,21 +1,20 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
-import {useCompanyContext} from "../components/CompanyContext.jsx";
-import {useUserContext} from "../components/UserContext.jsx";
-
+import { useCompanyContext } from "../components/CompanyContext.jsx";
+import { useUserContext } from "../components/UserContext.jsx";
 
 function CompanyListing() {
-
-  const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } = useCompanyContext();
+  const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } =
+    useCompanyContext();
   const { userID } = useUserContext();
-  const [ listingList, setListingList] = useState([]);
+  const [listingList, setListingList] = useState([]);
 
   useEffect(() => {
-    console.log(companyID)
+    console.log(companyID);
     if (!companyID) return; // Avoid running if companyID is not ready
     getCompanyListings().then(setListingList);
   }, [companyID]);
@@ -24,28 +23,33 @@ function CompanyListing() {
     const date = new Date(gmtDateString);
 
     const options = {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
       hour12: false,
-      timeZone: 'Asia/Bangkok'
+      timeZone: "Asia/Bangkok",
     };
 
     // Format the date in Thailand time zone
-    return new Intl.DateTimeFormat('en-GB', options).format(date).replace(',', '');
+    return new Intl.DateTimeFormat("en-GB", options)
+      .format(date)
+      .replace(",", "");
   }
 
-  async function getCompanyListings(){
+  async function getCompanyListings() {
     try {
-      const response = await fetch(`http://localhost:5000/get_listings_of_company?companyID=${companyID}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `http://localhost:5000/get_listings_of_company?companyID=${companyID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -64,86 +68,85 @@ function CompanyListing() {
       const data = await response.json();
       alert(data.error);
       return [];
-
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error checking user:", error);
       return [];
     }
   }
 
   return (
-      <div className="bg-gray-100 min-h-screen">
-        <Lnavbar />
+    <div className="bg-gray-100 min-h-screen">
+      <Lnavbar />
 
-        <div className="flex flex-row">
-          <Sidebar />
+      <div className="flex flex-row">
+        <Sidebar />
 
-          <div className="flex-1 p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold">Listing ({listingList.length})</h1>
-              <button className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600">
-                <a href={`/companyEdit/${companyID}`}>Create Listing</a>
-              </button>
+        <div className="flex-1 p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold">
+              Listing ({listingList.length})
+            </h1>
+            <button className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600">
+              <a href="/createListing">Create Listing</a>
+            </button>
+          </div>
+
+          <div className="bg-white rounded shadow overflow-hidden">
+            {/* HEADER ROW */}
+            <div className="grid grid-cols-[2fr_1fr_1fr_auto] px-6 py-4 bg-gray-50 font-semibold text-gray-600 text-sm">
+              <div>Name</div>
+              <div>CreatedOn</div>
+              <div>AffectiveUntil</div>
+              <div className="text-right">Action</div>
             </div>
 
-            <div className="bg-white rounded shadow overflow-hidden">
-              {/* HEADER ROW */}
-              <div className="grid grid-cols-[2fr_1fr_1fr_auto] px-6 py-4 bg-gray-50 font-semibold text-gray-600 text-sm">
-                <div>Name</div>
-                <div>CreatedOn</div>
-                <div>AffectiveUntil</div>
-                <div className="text-right">Action</div>
-              </div>
-
-              {/* LISTING ROWS */}
-              {listingList.map((listing, index) => (
-                  <div
-                      key={listing.listingID}
-                      className="grid grid-cols-[2fr_1fr_1fr_auto] items-center px-6 py-4 border-t hover:bg-gray-50 text-sm"
-                  >
-                    {/* NAME COLUMN (image + position) */}
-                    <div className="flex items-center space-x-4">
-                      <img
-                          src={listing.image_url || MissingImagePlaceHolder}
-                          alt="Image"
-                          className="w-12 h-12 object-contain"
-                      />
-                      <div className="font-medium text-gray-800">
-                        {listing.position}
-                      </div>
-                    </div>
-
-                    {/* CREATED ON COLUMN */}
-                    <div className="text-gray-700">{listing.createdOn}</div>
-
-                    {/* AFFECTIVE UNTIL COLUMN */}
-                    <div className="text-gray-700">{listing.affectiveUntil}</div>
-
-                    {/* ACTION COLUMN */}
-                    <div className="flex justify-end space-x-2">
-                      <button className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 text-sm">
-                        Applicants
-                      </button>
-                      <button className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm">
-                        Edit
-                      </button>
-                    </div>
+            {/* LISTING ROWS */}
+            {listingList.map((listing, index) => (
+              <div
+                key={listing.listingID}
+                className="grid grid-cols-[2fr_1fr_1fr_auto] items-center px-6 py-4 border-t hover:bg-gray-50 text-sm"
+              >
+                {/* NAME COLUMN (image + position) */}
+                <div className="flex items-center space-x-4">
+                  <img
+                    src={listing.image_url || MissingImagePlaceHolder}
+                    alt="Image"
+                    className="w-12 h-12 object-contain"
+                  />
+                  <div className="font-medium text-gray-800">
+                    {listing.position}
                   </div>
-              ))}
-            </div>
+                </div>
 
+                {/* CREATED ON COLUMN */}
+                <div className="text-gray-700">{listing.createdOn}</div>
 
-            <div className="flex justify-center mt-6">
-              <button className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">
-                View All ({listingList.length})
-              </button>
-            </div>
+                {/* AFFECTIVE UNTIL COLUMN */}
+                <div className="text-gray-700">{listing.affectiveUntil}</div>
+
+                {/* ACTION COLUMN */}
+                <div className="flex justify-end space-x-2">
+                  <button className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 text-sm">
+                    Applicants
+                  </button>
+                  <button className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm">
+                    Edit
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center mt-6">
+            <button className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">
+              View All ({listingList.length})
+            </button>
           </div>
         </div>
-
-        <Footer />
       </div>
+
+      <Footer />
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider , Outlet} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 import "./index.css";
 
@@ -13,9 +13,11 @@ import CompanyListing from "./pages/CompanyListing.jsx";
 import CreateCompany from "./pages/CreateCompany.jsx";
 import Home from "./pages/Home.jsx";
 import Listing from "./pages/Listing.jsx";
+import CreateListing from "./pages/createListing.jsx";
 import ListingEdit from "./pages/ListingEdit.jsx";
 import Login from "./pages/Login.jsx";
-import Member from "./pages/CompanyMember.jsx";
+import CompanyMember from "./pages/CompanyMember.jsx";
+// import Member from "./pages/member.jsx";
 import Message from "./pages/Message.jsx";
 import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
@@ -53,8 +55,9 @@ const router = createBrowserRouter([
       { path: "/companyListing", element: <CompanyListing /> },
       { path: "/createCompany", element: <CreateCompany /> },
       { path: "/listing", element: <Listing /> },
+      { path: "/createListing", element: <CreateListing /> },
       { path: "/listingedit", element: <ListingEdit /> },
-      { path: "/companymember", element: <Member /> },
+      { path: "/companymember", element: <CompanyMember /> },
       {
         path: "/message",
         element: (
