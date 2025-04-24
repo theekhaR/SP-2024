@@ -180,6 +180,18 @@ function CreateListing() {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+          {/* Location */}
+          <div>
+            <label className=" text-sm font-medium text-gray-700 mb-1">
+              Location
+            </label>
+            <input
+              type="text"
+              placeholder="Enter your location"
+              onChange={(e) => setCompanyName(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
           <div className="grid grid-cols-2 gap-6">
             {/* Work condition */}
@@ -192,8 +204,8 @@ function CreateListing() {
                 value={industryID}
                 onChange={(e) => setIndustryID(e.target.value)}
               >
-                <option value="remote">Remote</option>
                 <option value="onsite">On-site</option>
+                <option value="remote">Remote</option>
                 <option value="hybrid">Hybrid</option>
               </select>
             </div>
@@ -211,33 +223,37 @@ function CreateListing() {
               </select>
             </div>
 
-            {/* Period */}
+            {/* Work type */}
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700 mb-1">
-                Period
+                Work type
               </label>
               <select className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="monthly">Monthly</option>
-                <option value="yearly">Yearly</option>
+                <option value="Fulltime">Full-Time</option>
+                <option value="Parttime">Part-Time</option>
+                <option value="Contact">Contact</option>
+                <option value="Internship">Internship</option>
               </select>
             </div>
 
-            {/* Location */}
+            {/* Experience */}
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700 mb-1">
-                Location
+                Experience
               </label>
               <select className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="remote">Remote</option>
-                <option value="onsite">On-site</option>
-                <option value="hybrid">Hybrid</option>
+                <option value="remote">None require</option>
+                <option value="onsite">1 - 2 years</option>
+                <option value="hybrid">2 - 5 years</option>
+                <option value="hybrid">5 - 10 years</option>
               </select>
             </div>
           </div>
 
+          {/* Role description Section */}
           <div>
             <label className=" text-sm font-medium text-gray-700 mb-1">
-              Job description
+              Role description
             </label>
             <textarea
               rows="3"
@@ -248,10 +264,23 @@ function CreateListing() {
           </div>
         </div>
 
+        {/* Other detail Section */}
+        <div className="mb-6">
+          <label className=" text-sm font-medium text-gray-700 mb-1">
+            Other detail
+          </label>
+          <textarea
+            rows="3"
+            placeholder="Company advertising or benefit"
+            onChange={(e) => setCompanyOverview(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
         <div className="mt-3 mb-6 ">
           <div className="flex justify-between items-center">
-            <h3 className="text-md font-semibold">
-              Skill requirements ({skills.length}/8)
+            <h3 className="text-sm font-semibold">
+              Qualification ({skills.length}/8)
             </h3>
             <button
               type="button"
@@ -268,33 +297,6 @@ function CreateListing() {
               placeholder="What is your skill requirement..."
               value={skill}
               onChange={(e) => handleSkillChange(index, e.target.value)}
-              className="w-full px-4 py-2 border rounded-md mt-2"
-              maxLength={120}
-            />
-          ))}
-        </div>
-
-        {/* Benifits Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-md font-semibold">
-              Benefits ({benifits.length}/8)
-            </h3>
-            <button
-              type="button"
-              onClick={addbenifit}
-              className="text-orange-600 hover:underline text-sm"
-            >
-              + Add new
-            </button>
-          </div>
-          {benifits.map((item, index) => (
-            <input
-              key={index}
-              type="text"
-              placeholder="What is your Welfare..."
-              value={item}
-              onChange={(e) => handleBenifitChange(index, e.target.value)}
               className="w-full px-4 py-2 border rounded-md mt-2"
               maxLength={120}
             />

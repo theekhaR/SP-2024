@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import LocationPic from "../assets/Location.png";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 
@@ -25,11 +25,8 @@ function Listing() {
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
         "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
       ],
-      Benifit: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
+      Benifit:
+        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
     },
     {
       ListingID: 2,
@@ -48,11 +45,8 @@ function Listing() {
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
         "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
       ],
-      Benifit: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
+      Benifit:
+        "Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
     },
     {
       ListingID: 3,
@@ -72,11 +66,8 @@ function Listing() {
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
         "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
       ],
-      Benifit: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
+      Benifit:
+        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
     },
     {
       ListingID: 4,
@@ -95,11 +86,8 @@ function Listing() {
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
         "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
       ],
-      Benifit: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
+      Benifit:
+        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
     },
     {
       ListingID: 5,
@@ -119,11 +107,8 @@ function Listing() {
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
         "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
       ],
-      Benifit: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
+      Benifit:
+        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
     },
     {
       ListingID: 6,
@@ -142,11 +127,8 @@ function Listing() {
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
         "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
       ],
-      Benifit: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
+      Benifit:
+        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
     },
   ];
   const [selectedJob, setSelectedJob] = useState(jobs[0]);
@@ -214,7 +196,7 @@ function Listing() {
                 {selectedJob.title}
               </h2>
               <div className="flex gap-8 text-gray-600 text-base">
-                <p>{selectedJob.company}</p>
+                <p className="font-bold">{selectedJob.company}</p>
                 <div className="flex items-center gap-1">
                   <img
                     src={LocationPic}
@@ -227,15 +209,8 @@ function Listing() {
               <p className="text-gray-600 text-base">{selectedJob.Salary}</p>
 
               <p className="mt-6">{selectedJob.description}</p>
-              <div className="flex justify-center mt-4">
-                <img
-                  src={selectedJob.image_url}
-                  alt="Illustration"
-                  className="w-xl h-xl object-contain "
-                />
-              </div>
 
-              <h2 className="text-xl font-bold mb-3">Requirement:</h2>
+              <h2 className="text-xl font-bold mt-3 mb-3">Qualification:</h2>
               <ul className="text-gray-600 space-y-2">
                 {selectedJob.requirements.map((req, index) => (
                   <li key={index} className="flex items-center">
@@ -243,14 +218,8 @@ function Listing() {
                   </li>
                 ))}
               </ul>
-              <h2 className="mt-5 text-xl font-bold mb-3">Benefit:</h2>
-              <ul className="text-gray-600 space-y-2">
-                {selectedJob.Benifit.map((ben, index) => (
-                  <li key={index} className="flex items-center">
-                    <span className="text-orange-500 mr-2">✔</span> {ben}
-                  </li>
-                ))}
-              </ul>
+              <h2 className="mt-5 text-xl font-bold mb-3">Other detail:</h2>
+              <p className="mt-3">{selectedJob.Benifit}</p>
             </div>
           )}
         </div>
@@ -269,7 +238,7 @@ function Listing() {
                   <strong>Position:</strong> {selectedJob.position}
                 </p>
                 <p>
-                  <strong>Type:</strong> {selectedJob.Type}
+                  <strong>Work type:</strong> {selectedJob.Type}
                 </p>
                 <p>
                   <strong>Salary:</strong> {selectedJob.Salary}
