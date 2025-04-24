@@ -20,7 +20,6 @@ import CompanyMember from "./pages/CompanyMember.jsx";
 import Message from "./pages/Message.jsx";
 import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
-import CreateListing from "./pages/CreateListing.jsx";
 import ManageApplication from "./pages/ManageApplication.jsx";
 
 // Components
@@ -57,7 +56,6 @@ const router = createBrowserRouter([
       { path: "/createCompany", element: <CreateCompany /> },
       { path: "/createlisting", element: <CreateListing /> },
       { path: "/listing", element: <Listing /> },
-      { path: "/createListing", element: <CreateListing /> },
       { path: "/listingedit", element: <ListingEdit /> },
       { path: "/companymember", element: <CompanyMember /> },
       {

@@ -8,7 +8,7 @@ import { supabase } from "../supabaseClient.jsx";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 
-function createListing() {
+function CreateListing() {
   const { userID } = useUserContext();
 
   const [companyID, setCompanyID] = useState();
@@ -323,4 +323,4 @@ function createListing() {
   );
 }
 
-export default createListing;
+export default CreateListing;
