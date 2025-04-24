@@ -5,19 +5,53 @@ import Lnavbar from "../components/L_navbar";  // ✅ เพิ่มบรร�
 import Sidebar from "../components/sidebar";
 import Footer from "../components/footer";
 import SoftwareProfilePic from "../assets/manageapp_softwareprofile.jpg";
-
+import { useParams } from 'react-router';
 
 function ManageApplication() {
 
     const [showMore, setShowMore] = useState(false);
+    const { listingID }= useParams()
+
+  async function getListingDetail() {
+      try {
+          const response = await fetch(`http://localhost:5000/get_listings_of_company?companyID=${companyID}`, {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+
+          if (response.status === 200) {
+              const data = await response.json();
+
+              const listings = data.map((listing, index) => ({
+                  listingID: listing.listingID,
+                  position: listing.position,
+                  createdOn: formatToThaiTime(listing.createdOn),
+                  affectiveUntil: formatToThaiTime(listing.affectiveUntil),
+                  image_url: null,
+              }));
+              return listings;
+          }
+
+          // Unexpected error
+          const data = await response.json();
+          alert(data.error);
+          return [];
+
+      } catch (error) {
+          console.error("Error checking user:", error);
+          return [];
+      }
+  }
 
     return (
       <div className="bg-gray-100 min-h-screen">
         <Lnavbar />
-  
+
         <div className="flex flex-row">
           <Sidebar />
-  
+
           <div className="flex-1 p-8">
 
               {/* breadcum */}
@@ -26,7 +60,7 @@ function ManageApplication() {
                 <a href="/course" className="hover:underline">Course</a>
                 <span className="mx-1">/</span>
                 <span className="text-gray-700 font-medium">
-                Full Stack Developer Intern 
+                Full Stack Developer Intern
                 </span>
             </nav>
             </div>
@@ -52,7 +86,7 @@ function ManageApplication() {
                     <h2 className="text-xl font-bold text-gray-900">Full Stack Developer Intern – Entry-Level Opportunity for Aspiring Engineers</h2>
 
                     <div className="mt-1 text-gray-500 text-sm border-b border-gray-200 pb-2">
-                    Job detail 
+                    Job detail
                     <span className="ml-2 border-dotted border-b a align-middle"></span>
                     </div>
 
@@ -175,12 +209,12 @@ function ManageApplication() {
 
           </div>
         </div>
-  
+
         <Footer />
       </div>
     );
   }
-  
+
   export default ManageApplication;
 
 

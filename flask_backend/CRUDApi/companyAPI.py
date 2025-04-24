@@ -72,7 +72,11 @@ def get_company():
         'companyLocation': query_company.CompanyLocation,
         'industryName': query_company.companyindustrylist_mapping.IndustryName if query_company.companyindustrylist_mapping else None,
         'createdBy': f"{query_company.user_mapping.UserFirstName} {query_company.user_mapping.UserLastName}"  if query_company.user_mapping else None,
-        'createdOn': query_company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_company.CreatedOn else None
+        'createdOn': query_company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_company.CreatedOn else None,
+        'companySize': query_company.CompanySize if query_company.CompanySize else None,
+        'companyPhone': query_company.CompanyPhone if query_company.CompanyPhone else None,
+        'companyEmail': query_company.CompanyEmail if query_company.CompanyEmail else None,
+        'companyWebsite': query_company.CompanyWebsite if query_company.CompanyWebsite else None,
     }
 
     return jsonify(company_json)
@@ -89,7 +93,7 @@ def get_all_companies():
             'CompanyOverview': company.CompanyOverview,
             'CompanyLogoURL': company.CompanyLogoURL,
             'CompanyLocation': company.CompanyLocation,
-            'IndustryID': company.companyindustrylist_mapping.IndustryName if company.companyindustrylist_mapping else None,
+            'IndustryName': company.companyindustrylist_mapping.IndustryName if company.companyindustrylist_mapping else None,
             'CreatedBy': f"{company.user_mapping.UserFirstName} {company.user_mapping.UserLastName}"  if company.user_mapping else None,
             'CreatedOn': company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if company.CreatedOn else None
         }

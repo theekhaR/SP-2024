@@ -15,7 +15,7 @@ export function CompanyProvider({ children }) {
     const [ companyInfo, setCompanyInfo] = useState(null);
     const [ companyLogoURL, setCompanyLogoURL ] = useState(null);
     const [ userCompanyData, setUserCompanyData ] = useState(null);
-    const [ loading, setLoading] = useState(true);
+    const [ loadingCompanyContext, setLoadingCompanyContext] = useState(true);
 
     const { userID } = useUserContext();
 
@@ -31,6 +31,7 @@ export function CompanyProvider({ children }) {
                     console.log("Pulled from local");
                     setCompanyInfo(storedCompanyInfo);
                     setCompanyID(storedCompanyInfo.companyID);
+                    setLoadingCompanyContext(false);
                     return;
                 }
             }
@@ -45,11 +46,11 @@ export function CompanyProvider({ children }) {
                         .then(data => {
                             setCompanyInfo(data);
                             localStorage.setItem('companyInfo', JSON.stringify(data));
-                            setLoading(false);
+                            setLoadingCompanyContext(false);
                         })
                         .catch(err => {
                             console.error("Error fetching company:", err);
-                            setLoading(false);
+                            setLoadingCompanyContext(false);
                         });
 
                     fetch(`http://localhost:5000/get_user_data_in_company?userID=${userID}&companyID=${companyID}`)
@@ -61,16 +62,16 @@ export function CompanyProvider({ children }) {
                         })
                         .catch(err => {
                             console.error("Error fetching company:", err);
-                            setLoading(false);
+                            setLoadingCompanyContext(false);
                         });
                 }}
         }
         , [companyID, userID]);
 
-    // useEffect(() => {
-    //     console.log(companyInfo)
-    //     console.log(userCompanyData)
-    // }, [companyInfo, userCompanyData]);
+    useEffect(() => {
+        console.log(companyInfo)
+        console.log(userCompanyData)
+    }, [companyInfo, userCompanyData]);
 
 
     // Load profile pic AFTER userID is set
@@ -111,7 +112,7 @@ export function CompanyProvider({ children }) {
             companyInfo,
             companyLogoURL,
             userCompanyData,
-            loading
+            loadingCompanyContext
         }}>
             {children}
         </CompanyContext.Provider>

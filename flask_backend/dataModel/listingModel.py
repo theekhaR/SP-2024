@@ -12,11 +12,13 @@ class Listing(db.Model):
     PeriodOfWork = db.Column(db.Integer)
     WorkCondition = db.Column(db.Integer)
     RoleDescription = db.Column(db.String(1000))
-    Detail = db.Column(db.String(2000))
+    Detail = db.Column(db.Text)
     Qualification = db.Column(db.String(1000))
     ListingPicURL = db.Column(db.String(200))
     CreatedOn = db.Column(db.DateTime, default=datetime.now)
     AffectiveUntil = db.Column(db.DateTime)
+    Salary = db.Column(db.String(200))
+    Experience = db.Column(db.String(200))
 
     from .companyListingMappingModel import CompanyListingMapping
 

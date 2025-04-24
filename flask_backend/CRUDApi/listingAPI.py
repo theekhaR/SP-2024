@@ -75,3 +75,26 @@ def create_listing():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@listingAPI.route('/get_listing_detail', methods=['GET'])
+def get_listing_detail():
+
+    listingID = request.args.get('listingID')
+    if not listingID:
+        return jsonify({'error': 'Missing listingID'}), 400
+
+    query_listing = Listing.query.filter_by(ListingID=listingID).first()
+
+    listing_json ={
+        'listingID': query_listing.CompanyID,
+        'createdBy': query_listing.CompanyName,
+        'companyID': query_listing.CompanyAbout,
+        'position': query_listing.CompanyOverview,
+        'companyLogoURL': query_listing.CompanyLogoURL,
+        'companyLocation': query_listing.CompanyLocation,
+        'industryName': query_company.companyindustrylist_mapping.IndustryName if query_company.companyindustrylist_mapping else None,
+        'createdBy': f"{query_company.user_mapping.UserFirstName} {query_company.user_mapping.UserLastName}"  if query_company.user_mapping else None,
+        'createdOn': query_company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_company.CreatedOn else None
+    }
+
+    return jsonify(company_json)

@@ -9,7 +9,7 @@ import {useUserContext} from "../components/UserContext.jsx";
 
 function CompanyProfileEdit() {
 
-  const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } = useCompanyContext();
+  const { companyID, companyInfo, companyLogoURL, userCompanyData, loadingCompanyContext } = useCompanyContext();
   const { userID } = useUserContext();
 
   if (!companyInfo || companyInfo.companyID !== companyID) {
@@ -113,7 +113,7 @@ function CompanyProfileEdit() {
 
               <div>
                 <label className=" text-sm font-medium text-gray-700 mb-1">
-                  About
+                  About Us - Who we are and why we exist.
                 </label>
                 <input
                     type="text"
@@ -125,7 +125,7 @@ function CompanyProfileEdit() {
 
               <div>
                 <label className=" text-sm font-medium text-gray-700 mb-1">
-                  Overview
+                  Overview - What we do and how we operate.
                 </label>
                 <textarea
                     rows="3"
@@ -225,12 +225,12 @@ function CompanyProfileEdit() {
 
           <div className="flex justify-end mt-4">
             <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4">
-              <a href="/Company" className="text-white">
+              <a href="/CompanyProfile" className="text-white">
                 Save Change
               </a>
             </button>
             <button className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800">
-              <a href="/Company" className="text-white">
+              <a href="/CompanyProfile" className="text-white">
                 Cancel
               </a>
             </button>

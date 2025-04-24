@@ -10,12 +10,11 @@ import {useUserContext} from "../components/UserContext.jsx";
 
 function CompanyListing() {
 
-  const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } = useCompanyContext();
+  const { companyID, companyInfo, companyLogoURL, userCompanyData, loadingCompanyContext } = useCompanyContext();
   const { userID } = useUserContext();
   const [ listingList, setListingList] = useState([]);
 
   useEffect(() => {
-    console.log(companyID)
     if (!companyID) return; // Avoid running if companyID is not ready
     getCompanyListings().then(setListingList);
   }, [companyID]);

@@ -18,6 +18,7 @@ function Company() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(companyList)
     if (userID) {
       getCompanyList();
     }

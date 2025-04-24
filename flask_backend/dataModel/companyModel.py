@@ -14,6 +14,10 @@ class Company(db.Model):
     IndustryID = db.Column(db.Integer, db.ForeignKey('SP2024-4.CompanyIndustryList.IndustryID'))
     CreatedBy = db.Column(db.String(50), db.ForeignKey('SP2024-4.User.UserID'))
     CreatedOn = db.Column(db.DateTime, default=datetime.now)
+    CompanySize = db.Column(db.Integer)
+    CompanyPhone = db.Column(db.Text)
+    CompanyEmail = db.Column(db.Text)
+    CompanyWebsite = db.Column(db.Text)
 
     from .companyMemberMappingModel import CompanyMemberMapping
     from .companyListingMappingModel import CompanyListingMapping
