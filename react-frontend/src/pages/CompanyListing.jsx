@@ -82,7 +82,7 @@ function CompanyListing() {
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-2xl font-bold">Listing ({listingList.length})</h1>
               <button className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600">
-                <a href={`/companyEdit/${companyID}`}>Create Listing</a>
+                <a href={`/createlisting`}>Create Listing</a>
               </button>
             </div>
 

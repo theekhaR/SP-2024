@@ -4,6 +4,7 @@ import LocationPic from "../assets/Location.png";
 import Navbar from "../components/navbar";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
+import L_navbar from "../components/L_navbar";
 
 function Listing() {
   const jobs = [
@@ -153,7 +154,7 @@ function Listing() {
 
   return (
     <div className="bg-gray-100 flex flex-col">
-      <Navbar />
+      <L_navbar />
       {/* Search */}
       <div className="p-8 rounded-lg flex flex-wrap gap-2 items-center justify-center">
         <input
