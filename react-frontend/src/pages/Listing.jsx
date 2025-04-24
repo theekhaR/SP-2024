@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import LocationPic from "../assets/Location.png";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 
@@ -153,7 +153,7 @@ function Listing() {
 
   return (
     <div className="bg-gray-100 flex flex-col">
-      <Lnavbar />
+      <Navbar />
       {/* Search */}
       <div className="p-8 rounded-lg flex flex-wrap gap-2 items-center justify-center">
         <input

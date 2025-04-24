@@ -17,10 +17,11 @@ import CreateListing from "./pages/createListing.jsx";
 import ListingEdit from "./pages/ListingEdit.jsx";
 import Login from "./pages/Login.jsx";
 import CompanyMember from "./pages/CompanyMember.jsx";
-// import Member from "./pages/member.jsx";
 import Message from "./pages/Message.jsx";
 import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
+import CreateListing from "./pages/CreateListing.jsx";
+import ManageApplication from "./pages/ManageApplication.jsx";
 
 // Components
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       { path: "/companyprofileedit", element: <CompanyProfileEdit /> },
       { path: "/companyListing", element: <CompanyListing /> },
       { path: "/createCompany", element: <CreateCompany /> },
+      { path: "/createlisting", element: <CreateListing /> },
       { path: "/listing", element: <Listing /> },
       { path: "/createListing", element: <CreateListing /> },
       { path: "/listingedit", element: <ListingEdit /> },
@@ -68,6 +70,7 @@ const router = createBrowserRouter([
       },
       { path: "/userprofile", element: <UserProfile /> },
       { path: "/applicationstatus", element: <ApplicationStatus /> },
+      { path: "/manageapplication", element: <ManageApplication /> },
     ],
   },
 ]);

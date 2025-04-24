@@ -46,5 +46,28 @@ def create_new_permission():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@companyPermissionListAPI.route('/get_company_permission_list', methods=['GET'])
+def get_company_permission_list():
+    companyID = request.args.get('companyID')
+
+    if not 'companyID':
+        return jsonify({'error': 'Missing companyID'}), 400
+
+    permissions = CompanyPermissionList.query.filter_by(CompanyID=companyID)
+
+    if not permissions:
+        return jsonify({'error': 'This company does not exists or do not have a member'}), 409
+
+    permission_list = [
+        {
+            'permissionID': permission.PermissionID,
+            'permissionName': permission.PermissionName,
+        }
+        for permission in permissions
+    ]
+    return jsonify(permission_list)
+
+
+
 
 

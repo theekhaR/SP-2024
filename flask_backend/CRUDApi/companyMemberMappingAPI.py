@@ -63,21 +63,19 @@ def get_user_data_in_company():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-@companyMemberMappingAPI.route('/create_company_member_mapping', methods=['POST'])
-def create_company_member_mapping():
+@companyMemberMappingAPI.route('/add_new_member_to_company', methods=['POST'])
+def add_new_member_to_company():
     try:
         data = request.get_json()
 
-        if (not data or 'CompanyID' not in data or not data.get('CompanyID') or
-                'userID' not in data or not data.get('userID') or
-                'permissionID' not in data or not data.get('permissionID')):
+        if (not data or 'companyID' not in data or not data.get('companyID') or
+                'userID' not in data or not data.get('userID')):
             return jsonify({'error': 'Missing required fields'}), 400
 
-        companies = CompanyMemberMapping.query.filter_by(UserID=data['userID'])
-        companies_count = companies.count()
+        previous_relation = CompanyMemberMapping.query.filter_by(UserID=data.get('userID'), CompanyID=data.get('companyID'))
+        companies_count = previous_relation.count()
 
-        if companies_count == 0:
+        if companies_count != 0:
             return jsonify({'error': 'This user does not exists or are not in a company'}), 409
 
         new_companymembermapping = CompanyMemberMapping(
@@ -85,6 +83,42 @@ def create_company_member_mapping():
             UserID=data.get('userID'),
             Role=data.get('role') if data.get('role') else None,
             PermissionID=data.get('permissionID'),
+        )
+        db.session.add(new_companymembermapping)
+        db.session.commit()
+
+        return jsonify({'message': 'User successfully added to Company'}), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@companyMemberMappingAPI.route('/add_new_member_to_company_using_email', methods=['POST'])
+def add_new_member_to_company_using_email():
+    try:
+        data = request.get_json()
+
+        if (not data or
+                'companyID' not in data or not data.get('companyID') or
+                'userEmail' not in data or not data.get('userEmail')):
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        getUser = User.query.filter_by(UserEmail=data.get('userEmail')).first()
+
+        if not getUser:
+            return jsonify({'error': 'This user does not exist'}), 409
+
+        userID = getUser.UserID
+        previous_relation = CompanyMemberMapping.query.filter_by(UserID=userID , CompanyID=data.get('companyID'))
+        companies_count = previous_relation.count()
+
+        if companies_count != 0:
+            return jsonify({'error': 'This user does not exists or are not in a company'}), 409
+
+        new_companymembermapping = CompanyMemberMapping(
+            CompanyID=data.get('companyID'),
+            UserID=userID, #because userID was fetched from the query of getUser above
+            Role=data.get('role') if data.get('role') else None,
+            PermissionID=1, #1 is default
         )
         db.session.add(new_companymembermapping)
         db.session.commit()
@@ -110,10 +144,36 @@ def get_company_member():
             'userID': member.user_mapping.UserID,
             'name': f"{member.user_mapping.UserFirstName} {member.user_mapping.UserLastName}"  if member.user_mapping else None,
             'role': member.Role,
-            'permission': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None,
+            'permissionID': member.companypermissionlist_mapping.PermissionID if member.companypermissionlist_mapping else None,
+            'permissionName': member.companypermissionlist_mapping.PermissionName if member.companypermissionlist_mapping else None,
             'userPicURL': member.user_mapping.UserPicURL
         }
         for member in members
     ]
     print(member_list)
     return jsonify(member_list)
+
+@companyMemberMappingAPI.route('/edit_member_detail', methods=['PATCH'])
+def edit_member_detail():
+
+    data = request.get_json()
+
+    if (not data or
+            'userID' not in data or not data.get('userID') or
+            'companyID' not in data or not data.get('companyID')):
+        return jsonify({'error': 'Missing userID or companyID'}), 400
+
+    subject_query = CompanyMemberMapping.query.filter_by(UserID=data.get('userID'), CompanyID=data.get('companyID')).first()
+
+    if not subject_query:
+        return jsonify({'error': 'This relation does not exists'}), 409
+
+    #
+    if 'permissionID' in data and (data.get('permissionID')):
+        subject_query.PermissionID = data.get('permissionID')
+    if 'role' in data and (data.get('role')):
+        subject_query.Role = data.get('role')
+
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'}), 201
+
