@@ -29,3 +29,20 @@ __pycache__/
 venv/
 .vscode/
 
+# Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Virtual environment
+flask_backend/venv/
+
+# IDE/editor specific files (if using VS Code, PyCharm, etc.)
+.vscode/
+.idea/
+
+# Other common Python artifacts
+*.log
+*.sqlite
+
