@@ -221,19 +221,22 @@ return (
                 {/* Permission */}
                 <div className="text-gray-800 font-medium">
                   {editId === member.userID ? (
-                      <select
-                          value={editPermission}
-                          onChange={(e) => setEditPermission(e.target.value)}
-                          className="border px-2 py-1 rounded w-50"
-                      >
-                        {permissionList.map((permission) => (
-                            <option key={permission.permissionID} value={permission.permissionID}>
-                              {permission.permissionName}
-                            </option>
-                        ))}
-                      </select>
+                    <select
+                      value={editPermission}
+                      onChange={(e) => setEditPermission(e.target.value)}
+                      className="border px-2 py-1 rounded w-50"
+                    >
+                      {permissionList.map((permission) => (
+                        <option
+                          key={permission.permissionID}
+                          value={permission.permissionID}
+                        >
+                          {permission.permissionName}
+                        </option>
+                      ))}
+                    </select>
                   ) : (
-                      member.permissionName|| "Unknown"
+                    member.permissionName || "Unknown"
                   )}
                 </div>
 

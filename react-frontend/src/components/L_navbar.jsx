@@ -78,7 +78,7 @@ function L_navbar() {
               <ul className="py-2">
                 <li>
                   <a
-                    href="/setting"
+                    href="/userprofile"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
                   >
                     Profile setting

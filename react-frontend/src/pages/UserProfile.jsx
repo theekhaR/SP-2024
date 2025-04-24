@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 function UserProfile() {
-
   const hiddenFileInput = useRef(null);
   const [profileImageURL, setProfileImageURL] = useState(); //Current pfp of user
   const [userID, setUserID] = useState("");
@@ -53,38 +52,40 @@ function UserProfile() {
     }
   }
 
-
   async function updateUserProfileURL() {
     try {
       const { data: imageList, error } = await supabase.storage
-          .from('user-profile-image')
-          .list(userID + '/', {
-            limit: 1,
-            offset: 0
-          });
+        .from("user-profile-image")
+        .list(userID + "/", {
+          limit: 1,
+          offset: 0,
+        });
 
       if (error) {
         alert(error.message);
         return;
-
       }
 
-      if (imageList && imageList.length > 0 && imageList[0].name !== "placeholder.txt") {
+      if (
+        imageList &&
+        imageList.length > 0 &&
+        imageList[0].name !== "placeholder.txt"
+      ) {
         const { data: urlData } = supabase.storage
-            .from('user-profile-image')
-            .getPublicUrl(`${userID}/${imageList[0].name}`);
+          .from("user-profile-image")
+          .getPublicUrl(`${userID}/${imageList[0].name}`);
 
         const publicUrl = urlData.publicUrl;
 
         const response = await fetch(`http://localhost:5000/update_user`, {
-          method: 'PATCH',
+          method: "PATCH",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             userID: userID,
-            userPicURL: publicUrl // <--- Use freshly retrieved URL here
-          })
+            userPicURL: publicUrl, // <--- Use freshly retrieved URL here
+          }),
         });
 
         if (response.ok) {
@@ -100,7 +101,6 @@ function UserProfile() {
   }
 
   async function uploadProfileImage() {
-
     await removeAllItemInFolder();
     const { data, error } = await supabase.storage
       .from("user-profile-image")
@@ -121,19 +121,20 @@ function UserProfile() {
 
   async function removeAllItemInFolder() {
     //Remove all image inside folder as it should only have 1 image at a time
-    const {data: list, errorGetList} = await supabase.storage
-        .from('user-profile-image')
-        .list(userID + '/');
+    const { data: list, errorGetList } = await supabase.storage
+      .from("user-profile-image")
+      .list(userID + "/");
     if (errorGetList) {
-      alert(errorGetList.message)
+      alert(errorGetList.message);
     }
 
     const filesToRemove = list.map((x) => `${userID}/${x.name}`);
     const { data, errorRemove } = await supabase.storage
-        .from('user-profile-image')
-        .remove(filesToRemove);
-    if (errorRemove) { alert(errorRemove.message) }
-
+      .from("user-profile-image")
+      .remove(filesToRemove);
+    if (errorRemove) {
+      alert(errorRemove.message);
+    }
   }
 
   //To get current profile image
@@ -155,23 +156,33 @@ function UserProfile() {
       //console.log("Profile Image doesn't exist")
       setprofileExistBoolean(false);
     }
-    if (imageList && imageList.length > 0 && imageList[0].name !== "placeholder.txt") {
-      const {data} = supabase.storage
-          .from('user-profile-image')
-          .getPublicUrl(`${userID}/${imageList[0].name}`)
-      setProfileImageURL(data.publicUrl)
+    if (
+      imageList &&
+      imageList.length > 0 &&
+      imageList[0].name !== "placeholder.txt"
+    ) {
+      const { data } = supabase.storage
+        .from("user-profile-image")
+        .getPublicUrl(`${userID}/${imageList[0].name}`);
+      setProfileImageURL(data.publicUrl);
       setprofileExistBoolean(true);
     }
   }
 
   const getUserId = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user !== null) { setUserID(user.id); }
-      else { setUserID('') }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user !== null) {
+        setUserID(user.id);
+      } else {
+        setUserID("");
+      }
+    } catch (e) {
+      console.log(e);
     }
-    catch (e) {console.log(e)}
-  }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">

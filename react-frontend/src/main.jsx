@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider , Outlet} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 import "./index.css";
 
@@ -14,14 +14,14 @@ import CompanyListing from "./pages/CompanyListing.jsx";
 import CreateCompany from "./pages/CreateCompany.jsx";
 import Home from "./pages/Home.jsx";
 import Listing from "./pages/Listing.jsx";
+import CreateListing from "./pages/createListing.jsx";
 import ListingEdit from "./pages/ListingEdit.jsx";
 import Login from "./pages/Login.jsx";
 import CompanyMember from "./pages/CompanyMember.jsx";
 import Message from "./pages/Message.jsx";
 import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
-import CreateListing from "./pages/CreateListing.jsx";
-import ManageApplication from "./pages/ManageApplication.jsx"
+import ManageApplication from "./pages/ManageApplication.jsx";
 
 // Components
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
       { path: "/companyprofileedit", element: <CompanyProfileEdit /> },
       { path: "/companyListing", element: <CompanyListing /> },
       { path: "/createCompany", element: <CreateCompany /> },
-      { path: "/createlisting", element: <CreateListing />},
+      { path: "/createlisting", element: <CreateListing /> },
       { path: "/listing", element: <Listing /> },
       { path: "/listingedit", element: <ListingEdit /> },
       { path: "/companymember", element: <CompanyMember /> },
