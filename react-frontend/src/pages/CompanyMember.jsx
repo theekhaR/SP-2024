@@ -6,8 +6,8 @@ import { useCompanyContext } from "../components/CompanyContext.jsx";
 import { useUserContext } from "../components/UserContext.jsx";
 
 function CompanyMember() {
-  const { companyID, companyInfo, companyLogoURL, userCompanyData, loading } =
-    useCompanyContext();
+
+  const { companyID, companyInfo, companyLogoURL, userCompanyData, loadingCompanyContext } = useCompanyContext();
   const { userID } = useUserContext();
   const [memberList, setMemberList] = useState([]);
   const [permissionList, setPermissionList] = useState([]);

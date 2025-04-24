@@ -26,9 +26,11 @@ function sidebar() {
           {companyInfo?.companyName || "Company name loading..."}
         </div>
 
-        <button className="bg-orange-600 text-white hover:bg-orange-700 text-sm px-3 py-1 rounded">
-          View profile
-        </button>
+          <button className="bg-orange-600 text-white hover:bg-orange-700 text-sm px-3 py-1 rounded">
+              <a href="/companyprofile">
+                  View profile
+              </a>
+          </button>
       </div>
 
       {/* Menu */}

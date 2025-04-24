@@ -72,7 +72,11 @@ def get_company():
         'companyLocation': query_company.CompanyLocation,
         'industryName': query_company.companyindustrylist_mapping.IndustryName if query_company.companyindustrylist_mapping else None,
         'createdBy': f"{query_company.user_mapping.UserFirstName} {query_company.user_mapping.UserLastName}"  if query_company.user_mapping else None,
-        'createdOn': query_company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_company.CreatedOn else None
+        'createdOn': query_company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_company.CreatedOn else None,
+        'companySize': query_company.CompanySize if query_company.CompanySize else None,
+        'companyPhone': query_company.CompanyPhone if query_company.CompanyPhone else None,
+        'companyEmail': query_company.CompanyEmail if query_company.CompanyEmail else None,
+        'companyWebsite': query_company.CompanyWebsite if query_company.CompanyWebsite else None,
     }
 
     return jsonify(company_json)
@@ -89,10 +93,50 @@ def get_all_companies():
             'CompanyOverview': company.CompanyOverview,
             'CompanyLogoURL': company.CompanyLogoURL,
             'CompanyLocation': company.CompanyLocation,
-            'IndustryID': company.companyindustrylist_mapping.IndustryName if company.companyindustrylist_mapping else None,
+            'IndustryName': company.companyindustrylist_mapping.IndustryName if company.companyindustrylist_mapping else None,
             'CreatedBy': f"{company.user_mapping.UserFirstName} {company.user_mapping.UserLastName}"  if company.user_mapping else None,
             'CreatedOn': company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if company.CreatedOn else None
         }
         for company in companies
     ]
     return jsonify(company_list)
+
+@companyAPI.route('/edit_company', methods=['PATCH'])
+def edit_company():
+    try:
+        data = request.get_json()
+        update_companyID = data.get('companyID')
+        subject_company = Company.query.filter_by(CompanyID=update_companyID).first()
+
+        if not subject_company:
+            return jsonify({'error': 'This company does not exist'}), 409
+
+        if 'companyName' in data and (data.get('companyName')):
+            subject_company.CompanyName = data.get('companyName')
+        if 'companyAbout' in data and (data.get('companyAbout')):
+            subject_company.CompanyAbout = data.get('companyAbout')
+        if 'companyOverview' in data and (data.get('companyOverview')):
+            subject_company.CompanyOverview = data.get('companyOverview')
+        if 'companyLogoURL' in data and (data.get('companyLogoURL')):
+            subject_company.CompanyLogoURL = data.get('companyLogoURL')
+        if 'companyLocation' in data and (data.get('companyLocation')):
+            subject_company.CompanyLocation = data.get('companyLocation')
+        if 'industryID' in data and (data.get('industryID')):
+            exist_industry = CompanyIndustryList.query.filter_by(IndustryID=int(data.get('industryID'))).first()
+            if exist_industry:
+                subject_company.IndustryID = int(data.get('industryID'))
+        if 'companySize' in data and (data.get('companySize')):
+            subject_company.CompanySize = data.get('companySize')
+        if 'companyPhone' in data and (data.get('companyPhone')):
+            subject_company.CompanyPhone = data.get('companyPhone')
+        if 'companyEmail' in data and (data.get('companyEmail')):
+            subject_company.CompanyEmail = data.get('companyEmail')
+        if 'companyWebsite' in data and (data.get('companyWebsite')):
+            subject_company.CompanyWebsite = data.get('companyWebsite')
+
+        db.session.commit()
+        return jsonify({'message': 'Company updated successfully'}), 201
+
+    except Exception as e:
+        print("Exception occurred:", str(e))
+        return jsonify({'error': str(e)}), 500
