@@ -9,8 +9,8 @@ class Listing(db.Model):
     CreatedBy = db.Column(db.String(36), db.ForeignKey('SP2024-4.User.UserID'), nullable=False)  # ForeignKey can be added if linked to User
     CompanyID = db.Column(db.String(36), db.ForeignKey('SP2024-4.Company.CompanyID'), nullable=False)  # ForeignKey can be added if linked to Company
     Position = db.Column(db.String(50))
-    PeriodOfWork = db.Column(db.Integer)
-    WorkCondition = db.Column(db.Integer)
+    WorkType = db.Column(db.Text)
+    WorkCondition = db.Column(db.Text)
     RoleDescription = db.Column(db.String(1000))
     Detail = db.Column(db.Text)
     Qualification = db.Column(db.String(1000))

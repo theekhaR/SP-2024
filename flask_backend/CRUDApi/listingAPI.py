@@ -1,10 +1,11 @@
 from flask import blueprints , jsonify, request
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import uuid
 from dataModel.listingModel import db, Listing
 from dataModel.companyModel import Company
 from dataModel.companyListingMappingModel import CompanyListingMapping
 from dataModel.userModel import User
+from dateutil import parser
 
 listingAPI = blueprints.Blueprint('listingAPI', __name__)
 
@@ -29,7 +30,6 @@ def create_listing():
         if (not data or
                 'createdBy' not in data or not data.get('createdBy') or
                 'position' not in data or not data.get('position') or
-                'affectiveUntil' not in data or not data.get('affectiveUntil') or
                 'companyID' not in data or not data.get('companyID')):
 
            return jsonify({'error': 'Missing required fields'}), 400
@@ -49,14 +49,17 @@ def create_listing():
             CreatedBy=data.get('createdBy' if data.get('createdBy') else None),
             CompanyID=data.get('companyID' if data.get('companyID') else None),
             Position=data.get('position' if data.get('position') else None),
-            PeriodOfWork=int(data.get('periodOfWork', 1)) if data.get('periodOfWork' and data.get('periodOfWork').isdigit()) else 1,
-            WorkCondition=int(data.get('workCondition', 1)) if data.get('workCondition' and data.get('workCondition').isdigit()) else 1,
+            WorkType=data.get('workType') if data.get('workType') else "Not Specified",
+            WorkCondition=data.get('workCondition') if data.get('workCondition') else "Not Specified",
             RoleDescription=data.get('roleDescription', ''),
             Detail=data.get('detail', False),
             Qualification=data.get('qualification', ''),
             ListingPicURL=data.get('listingPicURL', ''),
+            Salary=data.get('salary', ''),
+            Experience=data.get('experience', ''),
             CreatedOn=datetime.now(),
-            AffectiveUntil=datetime.strptime(data.get('affectiveUntil', (datetime.now() + timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%S.%f%z')), '%Y-%m-%dT%H:%M:%S.%f%z')
+            #AffectiveUntil=datetime.strptime(data.get('affectiveUntil'), '%Y-%m-%dT%H:%M:%S%z')
+            AffectiveUntil = datetime.strptime(data.get('affectiveUntil', (datetime.now(timezone.utc).astimezone() + timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%S%z')), '%Y-%m-%dT%H:%M:%S%z')
         )
 
         db.session.add(new_listing)
@@ -92,9 +95,9 @@ def get_listing_detail():
         'position': query_listing.CompanyOverview,
         'companyLogoURL': query_listing.CompanyLogoURL,
         'companyLocation': query_listing.CompanyLocation,
-        'industryName': query_company.companyindustrylist_mapping.IndustryName if query_company.companyindustrylist_mapping else None,
-        'createdBy': f"{query_company.user_mapping.UserFirstName} {query_company.user_mapping.UserLastName}"  if query_company.user_mapping else None,
-        'createdOn': query_company.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_company.CreatedOn else None
+        'industryName': query_listing.companyindustrylist_mapping.IndustryName if query_listing.companyindustrylist_mapping else None,
+        'createdBy': f"{query_listing.user_mapping.UserFirstName} {query_listing.user_mapping.UserLastName}"  if query_listing.user_mapping else None,
+        'createdOn': query_listing.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_listing.CreatedOn else None
     }
 
     return jsonify(company_json)

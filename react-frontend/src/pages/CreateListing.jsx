@@ -7,26 +7,34 @@ import { useUserContext } from "../components/UserContext.jsx";
 import { supabase } from "../supabaseClient.jsx";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import {useCompanyContext} from "../components/CompanyContext.jsx";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import {isToday, setHours, setMinutes} from "date-fns";
 
 function CreateListing() {
   const { userID } = useUserContext();
+  const { companyID, companyInfo, companyLogoURL, userCompanyData, loadingCompanyContext } = useCompanyContext();
 
-  const [companyID, setCompanyID] = useState();
-  const [companyName, setCompanyName] = useState();
-  const [companyAbout, setCompanyAbout] = useState();
-  const [companyOverview, setCompanyOverview] = useState();
-  const [companyLogoURL, setCompanyLogoURL] = useState();
-  const [companyLocation, setCompanyLocation] = useState();
-  const [industryID, setIndustryID] = useState("");
-  const [companySize, setCompanySize] = useState();
-  const [companyLogo, setCompanyLogo] = useState();
+  const [ editPosition, setEditPosition ] = useState();
+  const [ editWorkType, setEditWorkType ] = useState();
+  const [ editWorkCondition, setEditWorkCondition ] = useState();
+  const [ editRoleDescription, setEditRoleDescription] = useState();
+  const [ editDetail, setEditDetail ] = useState();
+  const [ editQualification, setEditQualification ] = useState();
+  const [ editAffectiveUntil, setAffectiveUntil ] = useState();
+  const [ editAffectiveHours, setAffectiveHours ] = useState();
+  const [ editAffectiveMinute, setAffectiveMinute ] = useState();
+  const [ editAffectiveDay, setAffectiveDay ] = useState();
+  const [ editAffectiveMonth, setAffectiveMonth ] = useState();
+  const [ editAffectiveYear, setAffectiveYear ] = useState();
+  const [ editSalary, setEditSalary ] = useState();
+  const [ editExperience, setEditExperience ] = useState();
 
   const [industryList, setIndustryList] = useState([]);
 
   const hiddenFileInput = useRef(null);
   const [fileName, setFileName] = useState("None");
-
-  const [companyLogoPreview, setCompanyLogoPreview] = useState(null);
 
   const navigate = useNavigate();
 
@@ -54,274 +62,272 @@ function CreateListing() {
     setBenifits(newBenifits);
   };
 
-  useEffect(() => {
-    getIndustryList().then(setIndustryList);
-  }, []);
-
-  const handleCreateCompany = async (event) => {
+  const handleCreateListing = async (event) => {
     event.preventDefault();
     try {
-      if (!companyLogo) {
-        alert("Please choose a company logo");
-      }
-      const response = await fetch(`http://localhost:5000/create_company`, {
+      const response = await fetch(`http://localhost:5000/create_listing`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          companyName: companyName,
-          companyAbout: companyAbout,
-          companyOverview: companyOverview,
-          companyLogoURL: companyLogoURL,
-          companyLocation: companyLocation,
-          industryID: parseInt(industryID),
-          createdBy: userID,
-          companySize: companySize,
+          "createdBy": userID,
+          "companyID": companyID,
+          "position": editPosition,
+          "workType": editWorkType,
+          "workCondition": editWorkCondition,
+          "roleDescription": editRoleDescription,
+          "detail": editDetail,
+          "qualification": editQualification,
+          "salary": editSalary,
+          "experience": editExperience,
+          "affectiveUntil": editAffectiveUntil
         }),
       });
 
-      if (response.status === 500) {
-        const data = await response.json();
-        alert(data.error);
-      }
-
       if (response.status === 201) {
-        const data = await response.json();
-        setCompanyID(data.companyID);
-        await uploadCompanyLogo(data.companyID); //we need to pass in the companyID manually because
-        //setCompanyID won't update companyID until code is finished, so it will be null when we call the func
-        console.log("Company Created");
-        navigate(`/company`);
+        console.log("Listing Created");
+        navigate(`/companylisting`);
       }
+      const data = await response.json();
+      alert(data.error);
     } catch (error) {
       console.error("Error encountered:", error);
     }
   };
 
-  async function getIndustryList() {
-    try {
-      const response = await fetch(`http://localhost:5000/get_all_industries`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.status === 200) {
-        const data = await response.json();
-
-        // Map raw data to desired format
-        const industries = data.map((industry, index) => ({
-          id: industry.industryID,
-          name: industry.industryName,
-        }));
-
-        console.log("Industries:", industries);
-        return industries;
-      }
-
-      // Unexpected error
-      const data = await response.json();
-      alert(data.error);
-      return [];
-    } catch (error) {
-      console.error("Error checking user:", error);
-      return [];
-    }
-  }
-
-  async function uploadCompanyLogo(companyIDforUpload) {
-    const { data, error } = await supabase.storage
-      .from("company-media")
-      .upload(companyIDforUpload + "/logo/" + uuidv4(), companyLogo);
-
-    if (data) {
-      setCompanyLogo(null);
-      setFileName("No file chosen");
-    }
-    if (error) {
-      alert(error.message);
-    }
-  }
-
-  const handleClick = (event) => {
-    hiddenFileInput.current.click();
-  };
-
-  // to handle the user-selected file
-  async function handleChange(e) {
-    const fileUploaded = e.target.files[0];
-    if (fileUploaded) {
-      setFileName(fileUploaded.name); // Update the span text with file name
-      setCompanyLogo(e.target.files[0]);
-      setCompanyLogoPreview(URL.createObjectURL(fileUploaded));
-    } else {
-      setFileName("No file chosen"); // Reset if no file is selected
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Lnavbar />
-      <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md mt-12">
-        <h2 className="text-xl font-bold text-orange-500  mb-6">
-          Create Listing
-        </h2>
-        <div className="md:col-span-2 space-y-4">
-          <div>
-            <label className=" text-sm font-medium text-gray-700 mb-1">
-              Position
-            </label>
-            <input
-              type="text"
-              placeholder="Enter company name"
-              onChange={(e) => setCompanyName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+      <div className="min-h-screen bg-gray-100">
+        <Lnavbar />
+        <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md mt-12">
+          <h2 className="text-xl font-bold text-orange-500  mb-6">
+            Create Listing
+          </h2>
+          <div className="md:col-span-2 space-y-4">
+            <div>
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Position
+              </label>
+              <input
+                  type="text"
+                  placeholder="Enter company name"
+                  onChange={(e) => setEditPosition(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            {/* Location */}
+            {/*<div>*/}
+            {/*  <label className=" text-sm font-medium text-gray-700 mb-1">*/}
+            {/*    Location*/}
+            {/*  </label>*/}
+            {/*  <input*/}
+            {/*    type="text"*/}
+            {/*    placeholder="Enter your location"*/}
+            {/*    onChange={(e) => setEditLocation(e.target.value)}*/}
+            {/*    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"*/}
+            {/*  />*/}
+            {/*</div>*/}
+
+
+            <div className="grid grid-cols-2 gap-6">
+              {/* Work type */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Work type
+                </label>
+                <select
+                    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={editWorkType}
+                    onChange={(e) => setEditWorkType(e.target.value)}
+                >
+                  <option value="Fulltime">Full-Time</option>
+                  <option value="Parttime">Part-Time</option>
+                  <option value="Contact">Per Contract</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Academic Assistantship">Academic Assistantship</option>
+                </select>
+              </div>
+
+              {/* Salary */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Salary
+                </label>
+                <input
+                    type="text"
+                    placeholder="Enter Salary"
+                    onChange={(e) => setEditSalary(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              {/* Work condition */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Work condition
+                </label>
+                <select
+                    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={editWorkCondition}
+                    onChange={(e) => setEditWorkCondition(e.target.value)}
+                >
+                  <option value="onsite">On-site</option>
+                  <option value="remote">Remote</option>
+                  <option value="hybrid">Hybrid</option>
+                </select>
+              </div>
+
+              {/* Experience */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Experience
+                </label>
+                <select
+                    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={editExperience}
+                    onChange={(e) => setEditExperience(e.target.value)}
+                >
+                  <option value="Not Required">Not Required</option>
+                  <option value="1 - 2 years">1 - 2 years</option>
+                  <option value="2 - 5 years">2 - 5 years</option>
+                  <option value="5 - 10 years">5 - 10 years</option>
+                  <option value="10 years or above">10 years or above</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Listing Affective Until
+              </label>
+              {/*<input*/}
+              {/*    type="datetime-local"*/}
+              {/*    value={editAffectiveUntil}*/}
+              {/*    onChange={(e) => setAffectiveUntil(e.target.value)}*/}
+              {/*    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"*/}
+              {/*/>*/}
+
+              <div className="flex space-x-4">
+                <input
+                    value={editAffectiveHours}
+                    placeholder="Hour"
+                    onChange={(e) => setAffectiveHours(e.target.value)}
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+                <input
+                    value={editAffectiveMinute}
+                    placeholder="Minute"
+                    onChange={(e) => setAffectiveMinute(e.target.value)}
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+                                <input
+                    value={editAffectiveDay}
+                    placeholder="Day"
+                    onChange={(e) => setAffectiveDay(e.target.value)}
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+                <input
+                    value={editAffectiveMonth}
+                    placeholder="Month"
+                    onChange={(e) => setAffectiveMonth(e.target.value)}
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+                                <input
+                    value={editAffectiveYear}
+                    placeholder="Year"
+                    onChange={(e) => setAffectiveYear(e.target.value)}
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+
+              </div>
+            </div>
+            {/* Role description Section */}
+            <div>
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Role description
+              </label>
+              <textarea
+                  rows="3"
+                  placeholder="Your title, profession or small biography"
+                  onChange={(e) => setEditRoleDescription(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></textarea>
+            </div>
           </div>
-          {/* Location */}
-          <div>
+
+          {/* Other detail Section */}
+          <div className="mb-6">
             <label className=" text-sm font-medium text-gray-700 mb-1">
-              Location
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your location"
-              onChange={(e) => setCompanyName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-6">
-            {/* Work condition */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Work condition
-              </label>
-              <select
-                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={industryID}
-                onChange={(e) => setIndustryID(e.target.value)}
-              >
-                <option value="onsite">On-site</option>
-                <option value="remote">Remote</option>
-                <option value="hybrid">Hybrid</option>
-              </select>
-            </div>
-
-            {/* Salary */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Salary
-              </label>
-              <select className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value={1}>1-10</option>
-                <option value={2}>11-50</option>
-                <option value={3}>51-100</option>
-                <option value={4}>100+</option>
-              </select>
-            </div>
-
-            {/* Work type */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Work type
-              </label>
-              <select className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="Fulltime">Full-Time</option>
-                <option value="Parttime">Part-Time</option>
-                <option value="Contact">Contact</option>
-                <option value="Internship">Internship</option>
-              </select>
-            </div>
-
-            {/* Experience */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Experience
-              </label>
-              <select className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="remote">None require</option>
-                <option value="onsite">1 - 2 years</option>
-                <option value="hybrid">2 - 5 years</option>
-                <option value="hybrid">5 - 10 years</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Role description Section */}
-          <div>
-            <label className=" text-sm font-medium text-gray-700 mb-1">
-              Role description
+              Additional Details
             </label>
             <textarea
-              rows="3"
-              placeholder="Your title, profession or small biography"
-              onChange={(e) => setCompanyOverview(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="3"
+                placeholder="Company advertising or benefit"
+                onChange={(e) => setEditDetail(e.target.value)}
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
           </div>
-        </div>
 
-        {/* Other detail Section */}
-        <div className="mb-6">
-          <label className=" text-sm font-medium text-gray-700 mb-1">
-            Other detail
-          </label>
-          <textarea
-            rows="3"
-            placeholder="Company advertising or benefit"
-            onChange={(e) => setCompanyOverview(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
-        </div>
+          {/*<div className="mt-3 mb-6 ">*/}
+          {/*  <div className="flex justify-between items-center">*/}
+          {/*    <h3 className="text-sm font-semibold">*/}
+          {/*      Qualification ({skills.length}/8)*/}
+          {/*    </h3>*/}
+          {/*    <button*/}
+          {/*        type="button"*/}
+          {/*        onClick={addSkill}*/}
+          {/*        className="text-orange-600 hover:underline text-sm"*/}
+          {/*    >*/}
+          {/*      + Add new*/}
+          {/*    </button>*/}
+          {/*  </div>*/}
+          {/*  {skills.map((skill, index) => (*/}
+          {/*      <input*/}
+          {/*          key={index}*/}
+          {/*          type="text"*/}
+          {/*          placeholder="What is your skill requirement..."*/}
+          {/*          value={skill}*/}
+          {/*          onChange={(e) => handleSkillChange(index, e.target.value)}*/}
+          {/*          className="w-full px-4 py-2 border rounded-md mt-2"*/}
+          {/*          maxLength={120}*/}
+          {/*      />*/}
+          {/*  ))}*/}
+          {/*</div>*/}
 
-        <div className="mt-3 mb-6 ">
-          <div className="flex justify-between items-center">
-            <h3 className="text-sm font-semibold">
-              Qualification ({skills.length}/8)
-            </h3>
+          {/* Qualification Section */}
+          <div className="mb-6">
+            <label className=" text-sm font-medium text-gray-700 mb-1">
+              Qualifications
+            </label>
+            <textarea
+                rows="3"
+                placeholder="Qualifications needed for the position"
+                onChange={(e) => setEditQualification(e.target.value)}
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ></textarea>
+          </div>
+
+          <div className="flex justify-end mt-4">
             <button
-              type="button"
-              onClick={addSkill}
-              className="text-orange-600 hover:underline text-sm"
+                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
+                onClick={handleCreateListing}
             >
-              + Add new
+              <a href="/Company" className="text-white">
+                Save Change
+              </a>
+            </button>
+            <button className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800 ">
+              <a href="/Company" className="text-white">
+                Cancel
+              </a>
             </button>
           </div>
-          {skills.map((skill, index) => (
-            <input
-              key={index}
-              type="text"
-              placeholder="What is your skill requirement..."
-              value={skill}
-              onChange={(e) => handleSkillChange(index, e.target.value)}
-              className="w-full px-4 py-2 border rounded-md mt-2"
-              maxLength={120}
-            />
-          ))}
+          {/* End the form this line */}
         </div>
-
-        <div className="flex justify-end mt-4">
-          <button
-            className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
-            onClick={handleCreateCompany}
-          >
-            <a href="/Company" className="text-white">
-              Save Change
-            </a>
-          </button>
-          <button className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800 ">
-            <a href="/Company" className="text-white">
-              Cancel
-            </a>
-          </button>
-        </div>
-        {/* End the form this line */}
+        <Footer />
       </div>
-      <Footer />
-    </div>
   );
 }
 
