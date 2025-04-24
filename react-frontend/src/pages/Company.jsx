@@ -117,7 +117,7 @@ function Company() {
             My Company ({companyList.length})
           </h2>
           <button className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-600">
-            <a href="/react-frontend/src/pages/CreateCompany" className="text-white">
+            <a href="/CreateCompany" className="text-white">
               Create Company
             </a>
           </button>

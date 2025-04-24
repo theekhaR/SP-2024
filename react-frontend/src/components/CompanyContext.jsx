@@ -28,7 +28,6 @@ export function CompanyProvider({ children }) {
             const storedSelectedCompany = JSON.parse(localStorage.getItem('selectedCompany'));
             if (!companyID) {
                 if (storedCompanyInfo && storedCompanyInfo.companyID === storedSelectedCompany) {
-                    console.log("Pulled from local");
                     setCompanyInfo(storedCompanyInfo);
                     setCompanyID(storedCompanyInfo.companyID);
                     setLoadingCompanyContext(false);
@@ -38,9 +37,8 @@ export function CompanyProvider({ children }) {
 
             else
             {
-                console.log("Fetch Company From Database "+companyID);
+                //console.log("Fetch Company From Database "+companyID);
                 if (companyID && userID) {
-                    console.log(companyID)
                     fetch(`http://localhost:5000/get_company?companyID=${companyID}`)
                         .then(res => res.json())
                         .then(data => {
@@ -68,10 +66,10 @@ export function CompanyProvider({ children }) {
         }
         , [companyID, userID]);
 
-    useEffect(() => {
-        console.log(companyInfo)
-        console.log(userCompanyData)
-    }, [companyInfo, userCompanyData]);
+    // useEffect(() => {
+    //     console.log(companyInfo)
+    //     console.log(userCompanyData)
+    // }, [companyInfo, userCompanyData]);
 
 
     // Load profile pic AFTER userID is set

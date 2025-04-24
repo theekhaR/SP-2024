@@ -73,7 +73,7 @@ function CompanyProfile() {
               <div className="grid grid-cols-2 gap-x-8 text-sm text-gray-700">
                 <div>
                   {companyInfo.industryName && (<p><strong>Industry:</strong> {companyInfo.industryName}</p>)}
-                  {companyInfo.industryName && (
+                  {companyInfo.companyWebsite && (
                       <a>
                         <strong>Website: </strong>
                         <a href={companyInfo.companyWebsite.startsWith('http') ? companyInfo.companyWebsite : `https://${companyInfo.companyWebsite}`}
