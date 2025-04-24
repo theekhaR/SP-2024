@@ -8,12 +8,18 @@ import { useCompanyContext } from "../components/CompanyContext.jsx";
 import { useUserContext } from "../components/UserContext.jsx";
 
 function CompanyListing() {
-
-  const { companyID, companyInfo, companyLogoURL, userCompanyData, loadingCompanyContext } = useCompanyContext();
+  const {
+    companyID,
+    companyInfo,
+    companyLogoURL,
+    userCompanyData,
+    loadingCompanyContext,
+  } = useCompanyContext();
   const { userID } = useUserContext();
   const [listingList, setListingList] = useState([]);
 
   useEffect(() => {
+    console.log(companyID);
     if (!companyID) return; // Avoid running if companyID is not ready
     getCompanyListings().then(setListingList);
   }, [companyID]);
@@ -80,13 +86,15 @@ function CompanyListing() {
       <div className="flex flex-row">
         <Sidebar />
 
-          <div className="flex-1 p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold">Listing ({listingList.length})</h1>
-              <button className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600">
-                <a href={`/createlisting`}>Create Listing</a>
-              </button>
-            </div>
+        <div className="flex-1 p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold">
+              Listing ({listingList.length})
+            </h1>
+            <button className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600">
+              <a href="/createListing">Create Listing</a>
+            </button>
+          </div>
 
           <div className="bg-white rounded shadow overflow-hidden">
             {/* HEADER ROW */}
