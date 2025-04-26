@@ -8,9 +8,6 @@ import { supabase } from "../supabaseClient.jsx";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import {useCompanyContext} from "../components/CompanyContext.jsx";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import {isToday, setHours, setMinutes} from "date-fns";
 
 function ListingEdit() {
   const { userID } = useUserContext();

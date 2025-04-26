@@ -40,6 +40,7 @@ from CRUDApi.companyMemberMappingAPI import companyMemberMappingAPI
 from CRUDApi.companyIndustryListAPI import companyIndustryListAPI
 from CRUDApi.companyListingMappingAPI import companyListingMappingAPI
 from CRUDApi.companyPermissionListAPI import companyPermissionListAPI
+from CRUDApi.listingApplicantMappingAPI import listingApplicantMappingAPI
 
 app.register_blueprint(userAPI)
 app.register_blueprint(companyAPI)
@@ -51,6 +52,7 @@ app.register_blueprint(companyMemberMappingAPI)
 app.register_blueprint(companyIndustryListAPI)
 app.register_blueprint(companyListingMappingAPI)
 app.register_blueprint(companyPermissionListAPI)
+app.register_blueprint(listingApplicantMappingAPI)
 
 if __name__ == "__main__":
     app.run(debug=True)

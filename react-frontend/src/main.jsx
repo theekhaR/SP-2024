@@ -70,7 +70,7 @@ const router = createBrowserRouter([
       },
       { path: "/userprofile", element: <UserProfile /> },
       { path: "/applicationstatus", element: <ApplicationStatus /> },
-      { path: "/manageapplication", element: <ManageApplication /> },
+      { path: "/manageapplication/:listingID", element: <ManageApplication /> },
     ],
   },
 ]);

@@ -22,7 +22,7 @@ def get_listings_of_company():
 
         listings = CompanyListingMapping.query.filter_by(CompanyID=companyID)
         listings_count = listings.count()
-
+#SQLalchemy
         if listings_count == 0:
             return jsonify({'error': 'This company does not exists or does not have a listing'}), 409
 

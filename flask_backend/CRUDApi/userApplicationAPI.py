@@ -100,3 +100,31 @@ def get_user_application():
         for listing in listings
     ]
     return jsonify(listings_json)
+
+
+
+@userApplicationAPI.route('/validate_company', methods=['GET'])
+def validate_company():
+    companyID = request.args.get('compnayID')
+    if not companyID:
+        return jsonify({'error': 'Missing required field userID'}), 400
+
+    queries = ListingApplicantMapping.query.filter_by(ListingID=listingID)
+    queries_count = queries.count()
+
+    if queries_count == 0:
+        return jsonify({'error': 'This listing does not exists or do not have an application'}), 409
+
+    applicants_json = [
+        {
+            "userFirstName": applicant.listing_mapping.UserFirstName,
+            "userLastName": applicant.listing_mapping.UserLastName,
+            "userEmail": applicant.listing_mapping.UserEmail,
+            "appliedOn": applicant.appliedOn,
+            "status": applicant.status,
+            "memo": applicant.memo,
+            "score": applicant.score,
+        }
+        for applicant in queries
+    ]
+    return jsonify(applicants_json)

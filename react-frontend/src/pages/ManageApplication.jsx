@@ -10,7 +10,9 @@ import { useParams } from 'react-router';
 function ManageApplication() {
 
     const [showMore, setShowMore] = useState(false);
-    const { listingID }= useParams()
+    const { listingID }= useParams();
+    const [ applicantListing, setApplicantListing ] = useState([]);
+
 
   async function getListingDetail() {
       try {
@@ -44,6 +46,45 @@ function ManageApplication() {
           return [];
       }
   }
+
+  async function getApplicantsList() {
+      try {
+          const response = await fetch(`http://localhost:5000/get_listing_application?listingID=${listingID}`, {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+
+          if (response.status === 200) {
+              const data = await response.json();
+
+              const applicants = data.map((applicant, index) => ({
+                  "userFirstName": applicant.userFirstName,
+                  "userLastName": applicant.userLastName,
+                  "userEmail": applicant.userEmail,
+                  "appliedOn": applicant.appliedOn,
+                  "status": applicant.status,
+                  "memo": applicant.memo,
+                  "score": applicant.score
+              }));
+              return applicants;
+          }
+
+          // Unexpected error
+          const data = await response.json();
+          alert(data.error);
+          return [];
+
+      } catch (error) {
+          console.error("Error checking user:", error);
+          return [];
+      }
+  }
+
+    useEffect(() => {
+        getApplicantsList().then(setApplicantListing)
+    }, []);
 
     return (
       <div className="bg-gray-100 min-h-screen">
@@ -170,7 +211,7 @@ function ManageApplication() {
                 <div>ACTION</div>
             </div>
 
-            {[1, 2, 3, 4, 5].map((_, i) => (
+            {applicantListing.map((applicant, i) => (
                 <div
                 key={i}
                 className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center py-4 border-b gap-2"
@@ -182,7 +223,7 @@ function ManageApplication() {
                     alt="avatar"
                     className="w-12 h-12 rounded-full object-cover"
                     />
-                    <div className="text-gray-800 font-medium">Markus Welden</div>
+                    <div className="text-gray-800 font-medium">{applicant.userFirstName}</div>
                 </div>
 
                 {/* Rating */}
