@@ -21,7 +21,33 @@ def get_all_listings():
         }
         for listing in listings
     ]
-    return jsonify(listings_list)
+    return jsonify(listings_list), 200
+
+@listingAPI.route('/get_default_listings', methods=['GET'])
+def get_default_listings():
+    try:
+        listings = Listing.query.all()
+        listings_list = [
+            {
+            'listingID': listing.ListingID,
+            'company': listing.companylistingmapping_mapping.company_mapping.CompanyName if listing.companylistingmapping_mapping.company_mapping.CompanyName else None,
+            'pic': listing.companylistingmapping_mapping.company_mapping.CompanyLogoURL,
+            'position': listing.Position,
+            'location': listing.Location,
+            'salary': listing.Salary,
+            'roleDescription': listing.RoleDescription,
+            'qualification': listing.Qualification,
+            'detail': listing.Detail,
+            'workType': listing.WorkType,
+            'workCondition': listing.WorkCondition,
+            'experience':listing.Experience
+            }
+            for listing in listings
+        ]
+        return jsonify(listings_list), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @listingAPI.route('/create_listing', methods=['POST'])
 def create_listing():

@@ -19,6 +19,7 @@ class Listing(db.Model):
     AffectiveUntil = db.Column(db.DateTime)
     Salary = db.Column(db.String(200))
     Experience = db.Column(db.String(200))
+    Location = db.Column(db.Text)
 
     from .companyListingMappingModel import CompanyListingMapping
 
