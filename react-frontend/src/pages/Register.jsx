@@ -32,12 +32,9 @@ function Register() {
   }, []);
 
   const checkIfUserExists = async (email) => {
-    //this function is needed because we also need to check database on neondb also
     try {
       const response = await fetch(
-        `http://localhost:5000/check_if_user_email_exists?userEmail=${encodeURIComponent(
-          email
-        )}`,
+        `http://localhost:5000/check_if_user_email_exists?userEmail=${email}`,
         {
           method: "GET",
           headers: {
