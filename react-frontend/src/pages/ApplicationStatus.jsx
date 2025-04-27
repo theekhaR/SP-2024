@@ -2,6 +2,8 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/footer";
 import L_navbar from "../components/L_navbar.jsx";
+import {useUserContext} from "../components/UserContext.jsx";
+
 
 function ApplicationStatus() {
   const appliedList = [
@@ -22,6 +24,7 @@ function ApplicationStatus() {
       rating: 4.8,
     },
   ];
+  const { userID } = useUserContext();
 
   return (
     <div>
