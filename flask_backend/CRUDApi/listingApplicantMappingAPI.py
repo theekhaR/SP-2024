@@ -18,10 +18,10 @@ def get_listing_application():
         return jsonify({'error': 'Missing required field userID'}), 400
 
     queries = ListingApplicantMapping.query.filter_by(ListingID=listingID)
-    queries_count = queries.count()
 
-    if queries_count == 0:
-        return jsonify({'error': 'This listing does not exists or do not have an application'}), 409
+    #queries_count = queries.count()   It will throw warning if there eis no applicants
+    # if queries_count == 0:
+    #     return jsonify({'error': 'This listing does not exists or do not have an application'}), 409
 
     applicants_json = [
         {

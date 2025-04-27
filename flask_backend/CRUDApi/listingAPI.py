@@ -114,3 +114,65 @@ def get_listing_detail():
 
 
     return jsonify(listing_json)
+
+@listingAPI.route('/delete_listing', methods=['DELETE'])
+def delete_listing():
+    try:
+        listingID = request.args.get('listingID')
+        if not listingID:
+            return jsonify({'error': 'Missing listingID'}), 400
+
+        result = db.session.query(Listing).filter(Listing.ListingID == listingID).first()
+        if not result:
+            return jsonify({'error': 'This listing does not exists'}), 409
+
+        db.session.delete(result)
+        db.session.commit()
+
+        return jsonify({'message': 'Listing entry deleted successfully'}), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@listingAPI.route('/edit_listing', methods=['PATCH'])
+def edit_listing():
+    try:
+        # Retrieve the data from the request body
+        data = request.get_json()
+
+        # Ensure 'listingID' is provided and valid
+        update_listingID = data.get('listingID')
+        subject_listing = Listing.query.filter_by(ListingID=update_listingID).first()
+
+        if not subject_listing:
+            return jsonify({'error': 'This listing does not exist'}), 409
+
+        # Set values for the listing's attributes only if provided
+        subject_listing.Position = data.get('position', subject_listing.Position)
+        subject_listing.WorkType = data.get('workType', subject_listing.WorkType)
+        subject_listing.WorkCondition = data.get('workCondition', subject_listing.WorkCondition)
+        subject_listing.RoleDescription = data.get('roleDescription', subject_listing.RoleDescription)
+        subject_listing.Detail = data.get('detail', subject_listing.Detail)
+        subject_listing.Qualification = data.get('qualification', subject_listing.Qualification)
+        subject_listing.ListingPicURL = data.get('listingPicURL', subject_listing.ListingPicURL)
+        subject_listing.Salary = data.get('salary', subject_listing.Salary)
+        subject_listing.Experience = data.get('experience', subject_listing.Experience)
+
+        # Handle updating AffectiveUntil with a default fallback if not provided
+        affectiveUntil = data.get('affectiveUntil')
+        date_string_with_timezone = affectiveUntil + '+0700'
+        if affectiveUntil:
+            subject_listing.AffectiveUntil = datetime.strptime(date_string_with_timezone, '%Y-%m-%dT%H:%M:%S%z')
+        else:
+            # Use current datetime + 7 days as the default
+            subject_listing.AffectiveUntil = subject_listing.AffectiveUntil
+
+        # Commit the updated data to the database
+        db.session.commit()
+
+        return jsonify({'message': 'Listing updated successfully'}), 200
+
+    except Exception as e:
+        # Print exception details for debugging
+        print("Exception occurred:", str(e))
+        return jsonify({'error': str(e)}), 500

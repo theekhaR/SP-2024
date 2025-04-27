@@ -107,7 +107,7 @@ function CreateListing() {
               </label>
               <input
                   type="text"
-                  placeholder="Enter company name"
+                  placeholder="Offering Position"
                   onChange={(e) => setEditPosition(e.target.value)}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -188,8 +188,8 @@ function CreateListing() {
                 >
                   <option value="Not Required">Not Required</option>
                   <option value="1 - 2 years">1 - 2 years</option>
-                  <option value="2 - 5 years">2 - 5 years</option>
-                  <option value="5 - 10 years">5 - 10 years</option>
+                  <option value="2 - 5 years">3 - 5 years</option>
+                  <option value="5 - 10 years">6 - 10 years</option>
                   <option value="10 years or above">10 years or above</option>
                 </select>
               </div>
@@ -247,7 +247,7 @@ function CreateListing() {
               </label>
               <textarea
                   rows="3"
-                  placeholder="Your title, profession or small biography"
+                  placeholder="Descriptive explanation of the role"
                   onChange={(e) => setEditRoleDescription(e.target.value)}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               ></textarea>
@@ -261,7 +261,6 @@ function CreateListing() {
             </label>
             <textarea
                 rows="3"
-                placeholder="Company advertising or benefit"
                 onChange={(e) => setEditDetail(e.target.value)}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>

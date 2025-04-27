@@ -6,65 +6,52 @@ import { useUserContext } from "../components/UserContext.jsx";
 
 import { supabase } from "../supabaseClient.jsx";
 import { v4 as uuidv4 } from "uuid";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useCompanyContext} from "../components/CompanyContext.jsx";
+import {useParams} from "react-router";
 
 function ListingEdit() {
   const { userID } = useUserContext();
   const { companyID, companyInfo, companyLogoURL, userCompanyData, loadingCompanyContext } = useCompanyContext();
-
-  const [ editPosition, setEditPosition ] = useState();
-  const [ editWorkType, setEditWorkType ] = useState();
-  const [ editWorkCondition, setEditWorkCondition ] = useState();
-  const [ editRoleDescription, setEditRoleDescription] = useState();
-  const [ editDetail, setEditDetail ] = useState();
-  const [ editQualification, setEditQualification ] = useState();
-  const [ editAffectiveUntil, setAffectiveUntil ] = useState();
-  const [ editAffectiveHours, setAffectiveHours ] = useState();
-  const [ editAffectiveMinute, setAffectiveMinute ] = useState();
-  const [ editAffectiveDay, setAffectiveDay ] = useState();
-  const [ editAffectiveMonth, setAffectiveMonth ] = useState();
-  const [ editAffectiveYear, setAffectiveYear ] = useState();
-  const [ editSalary, setEditSalary ] = useState();
-  const [ editExperience, setEditExperience ] = useState();
-
-  const [industryList, setIndustryList] = useState([]);
-
   const hiddenFileInput = useRef(null);
   const [fileName, setFileName] = useState("None");
-
   const navigate = useNavigate();
+  const { listingID }= useParams();
 
+  const [editListing, setEditListing] = useState({
+    position: '',
+    workType: '',
+    workCondition: '',
+    roleDescription: '',
+    detail: '',
+    qualification: '',
+    affectiveUntil: '',
+    salary: '',
+    experience: '',
+    affectiveHour: '',
+    affectiveMinute: '',
+    affectiveDay: '',
+    affectiveMonth: '',
+    affectiveYear: '',
+  });
 
-  useEffect(()=>{
-    console.log(editAffectiveUntil)
-  }, [editAffectiveUntil])
-  const handleCreateListing = async (event) => {
+  const handleEditListing = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/create_listing`, {
-        method: "POST",
+      const response = await fetch(`http://localhost:5000/edit_listing`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          "createdBy": userID,
-          "companyID": companyID,
-          "position": editPosition,
-          "workType": editWorkType,
-          "workCondition": editWorkCondition,
-          "roleDescription": editRoleDescription,
-          "detail": editDetail,
-          "qualification": editQualification,
-          "salary": editSalary,
-          "experience": editExperience,
-          "affectiveUntil": editAffectiveUntil
-        }),
+          listingID: listingID,
+        ...editListing  // Spread the fields directly into the body
+      }),
       });
 
-      if (response.status === 201) {
-        console.log("Listing Created");
+      if (response.status === 200) {
         navigate(`/companylisting`);
+        return;
       }
       const data = await response.json();
       alert(data.error);
@@ -72,6 +59,46 @@ function ListingEdit() {
       console.error("Error encountered:", error);
     }
   };
+
+  const getListing = async (event) => {
+    try {
+      const response = await fetch(`http://localhost:5000/get_listing_detail?listingID=${listingID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json(); // Moved inside try block
+
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      setEditListing({
+        position: data.position,
+        workType: data.workType,
+        workCondition: data.workCondition,
+        roleDescription: data.roleDescription,
+        detail: data.detail,
+        qualification: data.qualification,
+        affectiveUntil: data.affectiveUntil,
+        salary: data.salary,
+        experience: data.experience,
+        affectiveHour: new Date(data.affectiveUntil).getHours(),
+        affectiveMinute: new Date(data.affectiveUntil).getMinutes(),
+        affectiveDay: new Date(data.affectiveUntil).getDate(),
+        affectiveMonth: new Date(data.affectiveUntil).getMonth(),
+        affectiveYear: new Date(data.affectiveUntil).getFullYear(),
+      });
+
+    } catch (error) {
+      console.error("Error encountered:", error);
+    }
+  };
+
+  useEffect( () => {getListing()}, [])
 
   return (
       <div className="min-h-screen bg-gray-100">
@@ -87,8 +114,9 @@ function ListingEdit() {
               </label>
               <input
                   type="text"
-                  placeholder="Enter company name"
-                  onChange={(e) => setEditPosition(e.target.value)}
+                  placeholder="Position Name"
+                  value={editListing.position}
+                  onChange={(e) => setEditListing({...editListing, position: e.target.value})}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -114,8 +142,8 @@ function ListingEdit() {
                 </label>
                 <select
                     className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={editWorkType}
-                    onChange={(e) => setEditWorkType(e.target.value)}
+                    value={editListing.workType}
+                    onChange={(e) => setEditListing({...editListing, workType: e.target.value})}
                 >
                   <option value="Fulltime">Full-Time</option>
                   <option value="Parttime">Part-Time</option>
@@ -133,7 +161,8 @@ function ListingEdit() {
                 <input
                     type="text"
                     placeholder="Enter Salary"
-                    onChange={(e) => setEditSalary(e.target.value)}
+                    value={editListing.salary}
+                    onChange={(e) => setEditListing({...editListing, salary: e.target.value})}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -147,8 +176,8 @@ function ListingEdit() {
                 </label>
                 <select
                     className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={editWorkCondition}
-                    onChange={(e) => setEditWorkCondition(e.target.value)}
+                    value={editListing.workCondition}
+                    onChange={(e) => setEditListing({...editListing, workCondition: e.target.value})}
                 >
                   <option value="onsite">On-site</option>
                   <option value="remote">Remote</option>
@@ -163,13 +192,13 @@ function ListingEdit() {
                 </label>
                 <select
                     className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={editExperience}
-                    onChange={(e) => setEditExperience(e.target.value)}
+                    value={editListing.experience}
+                    onChange={(e) => setEditListing({...editListing, experience: e.target.value})}
                 >
                   <option value="Not Required">Not Required</option>
                   <option value="1 - 2 years">1 - 2 years</option>
-                  <option value="2 - 5 years">2 - 5 years</option>
-                  <option value="5 - 10 years">5 - 10 years</option>
+                  <option value="3 - 5 years">3 - 5 years</option>
+                  <option value="6 - 10 years">6 - 10 years</option>
                   <option value="10 years or above">10 years or above</option>
                 </select>
               </div>
@@ -188,33 +217,33 @@ function ListingEdit() {
 
               <div className="flex space-x-4">
                 <input
-                    value={editAffectiveHours}
+                    value={editListing.affectiveHour}
                     placeholder="Hour"
-                    onChange={(e) => setAffectiveHours(e.target.value)}
+                    onChange={(e) => setEditListing({...editListing, affectiveHour: e.target.value})}
                     className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
                 />
                 <input
-                    value={editAffectiveMinute}
+                    value={editListing.affectiveMinute}
                     placeholder="Minute"
-                    onChange={(e) => setAffectiveMinute(e.target.value)}
+                    onChange={(e) => setEditListing({...editListing, affectiveMinute: e.target.value})}
                     className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
                 />
                                 <input
-                    value={editAffectiveDay}
+                    value={editListing.affectiveDay}
                     placeholder="Day"
-                    onChange={(e) => setAffectiveDay(e.target.value)}
+                    onChange={(e) =>setEditListing({...editListing, affectiveDay: e.target.value})}
                     className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
                 />
                 <input
-                    value={editAffectiveMonth}
+                    value={editListing.affectiveMonth}
                     placeholder="Month"
-                    onChange={(e) => setAffectiveMonth(e.target.value)}
+                    onChange={(e) => setEditListing({...editListing, affectiveMonth: e.target.value})}
                     className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
                 />
                                 <input
-                    value={editAffectiveYear}
+                    value={editListing.affectiveYear}
                     placeholder="Year"
-                    onChange={(e) => setAffectiveYear(e.target.value)}
+                    onChange={(e) => setEditListing({...editListing, affectiveYear: e.target.value})}
                     className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
                 />
 
@@ -228,7 +257,8 @@ function ListingEdit() {
               <textarea
                   rows="3"
                   placeholder="Your title, profession or small biography"
-                  onChange={(e) => setEditRoleDescription(e.target.value)}
+                  value={editListing.roleDescription}
+                  onChange={(e) => setEditListing({...editListing, roleDescription: e.target.value})}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               ></textarea>
             </div>
@@ -242,7 +272,8 @@ function ListingEdit() {
             <textarea
                 rows="3"
                 placeholder="Company advertising or benefit"
-                onChange={(e) => setEditDetail(e.target.value)}
+                value={editListing.detail}
+                onChange={(e) => setEditListing({...editListing, detail: e.target.value})}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
           </div>
@@ -281,7 +312,8 @@ function ListingEdit() {
             <textarea
                 rows="3"
                 placeholder="Qualifications needed for the position"
-                onChange={(e) => setEditQualification(e.target.value)}
+                value={editListing.qualification}
+                onChange={(e) => setEditListing({...editListing, qualification: e.target.value})}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
           </div>
@@ -289,17 +321,14 @@ function ListingEdit() {
           <div className="flex justify-end mt-4">
             <button
                 className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
-                onClick={handleCreateListing}
+                onClick={handleEditListing}
             >
-              <a href="/Company" className="text-white">
-                Save Change
-              </a>
+              Save
             </button>
-            <button className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800 ">
-              <a href="/Company" className="text-white">
-                Cancel
-              </a>
-            </button>
+              <Link className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800 "
+              to={`/companylisting`}>
+                  Cancel
+              </Link>
           </div>
           {/* End the form this line */}
         </div>
