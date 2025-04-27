@@ -58,7 +58,7 @@ const router = createBrowserRouter([
       { path: "/createCompany", element: <CreateCompany /> },
       { path: "/createlisting", element: <CreateListing /> },
       { path: "/listing", element: <Listing /> },
-      { path: "/listingedit", element: <ListingEdit /> },
+      { path: "/listingedit/:listingID", element: <ListingEdit /> },
       { path: "/companymember", element: <CompanyMember /> },
       {
         path: "/message",
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
       },
       { path: "/userprofile", element: <UserProfile /> },
       { path: "/applicationstatus", element: <ApplicationStatus /> },
-      { path: "/manageapplication", element: <ManageApplication /> },
+      { path: "/manageapplication/:listingID", element: <ManageApplication /> },
     ],
   },
 ]);

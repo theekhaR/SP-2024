@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
-import Pic1 from "../assets/Location.png";
-import Pic2 from "../assets/Login.png";
-import Pic3 from "../assets/Tech.png";
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
 import { useUserContext } from "../components/UserContext.jsx";
 import { supabase } from "../supabaseClient.jsx";

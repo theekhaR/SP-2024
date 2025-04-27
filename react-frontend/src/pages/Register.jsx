@@ -31,42 +31,25 @@ function Register() {
     getSession();
   }, []);
 
-  const checkIfUserExists = async (email) => {
-    //this function is needed because we also need to check database on neondb also
-    try {
-      const response = await fetch(
-        `http://localhost:5000/check_if_user_email_exists?userEmail=${encodeURIComponent(
-          email
-        )}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  async function checkIfUserExists(email) {
+  try {
+    const response = await fetch(`http://localhost:5000/check_if_user_email_exists?userEmail=${encodeURIComponent(email)}`);
 
-      if (response.status === 409) {
-        const data = await response.json();
-        alert(data.error);
-        return false; // STOP: user exists
-      }
-
-      if (response.status === 200) {
-        // Proceed: user does not exist
-        return true;
-      }
-
-      // Unexpected error
-      //console.error("Unexpected response", response);
-      const data = await response.json();
-      alert(data.error);
+    if (response.status === 200) {
+      // No user exists with this email
       return false;
-    } catch (error) {
-      console.error("Error checking user:", error);
+    } else if (response.status === 409) {
+      // User exists
+      return true;
+    } else {
+      console.error("Unexpected response:", await response.json());
       return false;
     }
-  };
+  } catch (error) {
+    console.error("Error checking user:", error);
+    return false;
+  }
+}
 
   const handleRegisterUser = async (event) => {
     event.preventDefault();
@@ -77,12 +60,12 @@ function Register() {
       return;
     }
 
-    const emailNotExisted = await checkIfUserExists(emailState);
-    if (!emailNotExisted) {
-      //setMessage("Email Already Existed");
-      alert("Email Already Existed");
-      return;
-    }
+    checkIfUserExists(emailState).then((check) => {
+      if (check) {
+        alert("Email Already Existed");
+        return;
+      }
+    });
 
     const { data, error } = await supabase.auth.signUp({
       email: emailState,

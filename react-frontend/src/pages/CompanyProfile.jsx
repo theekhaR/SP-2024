@@ -2,20 +2,8 @@ import React, {useEffect} from "react";
 import Lnavbar from "../components/L_navbar";
 import Sidebar from "../components/sidebar";
 import Footer from "../components/footer";
-import BannerImg from "../assets/googel-banner.jpg";
-import CompanyLogo from "../assets/google-logo.png";
+import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg"
 
-// Affiliate logos
-import YoutubeLogo from "../assets/youtube-logo.jpg";
-import XLogo from "../assets/x-logo.jpg";
-import NestLogo from "../assets/nest-logo.png";
-import AdometryLogo from "../assets/adometry.png";
-
-// Support logos
-import UnicefLogo from "../assets/unicef-logog.png";
-import USAredLogo from "../assets/usared-logo.png";
-import WWFLogo from "../assets/wwf-logo.avif";
-import AmnestyLogo from "../assets/amnesty-logo.jpg";
 import {useCompanyContext} from "../components/CompanyContext.jsx";
 
 
@@ -55,7 +43,7 @@ function CompanyProfile() {
             <div className="flex justify-between items-start md:items-center flex-col md:flex-row gap-6">
               {/* Logo + Text Info */}
               <div className="flex gap-6">
-                <img src={companyLogoURL} alt="Company Logo" className="w-24 h-24 object-contain" />
+                <img src={companyLogoURL || MissingImagePlaceHolder} alt="Company Logo" className="w-24 h-24 object-contain" />
                 <div className="text-gray-700 text-sm space-y-1">
                   <h2 className="text-xl font-bold text-blue-800">{companyInfo.companyName}</h2>
 

@@ -166,17 +166,30 @@ def get_listing_detail():
 
     query_listing = Listing.query.filter_by(ListingID=listingID).first()
 
-    listing_json ={
-        'listingID': query_listing.CompanyID,
-        'createdBy': query_listing.CompanyName,
-        'companyID': query_listing.CompanyAbout,
-        'position': query_listing.CompanyOverview,
-        'companyLogoURL': query_listing.CompanyLogoURL,
-        'companyLocation': query_listing.CompanyLocation,
-        'industryName': query_listing.companyindustrylist_mapping.IndustryName if query_listing.companyindustrylist_mapping else None,
-        'createdBy': f"{query_listing.user_mapping.UserFirstName} {query_listing.user_mapping.UserLastName}"  if query_listing.user_mapping else None,
-        'createdOn': query_listing.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_listing.CreatedOn else None
+    if not query_listing:
+        return jsonify({'error': 'Listing not found'}), 404
+
+    listing_json = {
+        'listingID': query_listing.ListingID,
+        'companyName': query_listing.company_mapping.CompanyName if query_listing.company_mapping else None,
+        'companyID': query_listing.CompanyID,
+        'position': query_listing.Position,
+        'companyLogoURL': query_listing.company_mapping.CompanyLogoURL if query_listing.company_mapping else None,
+        'companyLocation': query_listing.company_mapping.CompanyLocation if query_listing.company_mapping else None,
+        'industryName': query_listing.company_mapping.companyindustrylist_mapping.IndustryName if query_listing.company_mapping.companyindustrylist_mapping.IndustryName else None,
+        'createdBy': f"{query_listing.user_mapping.UserFirstName} {query_listing.user_mapping.UserLastName}" if query_listing.user_mapping else None,
+        'createdOn': query_listing.CreatedOn.strftime('%Y-%m-%d %H:%M:%S') if query_listing.CreatedOn else None,
+        'workType': query_listing.WorkType if query_listing.WorkType else "Not Specified",
+        'workCondition': query_listing.WorkCondition if query_listing.WorkCondition else "Not Specified",
+        'roleDescription': query_listing.RoleDescription,
+        'detail': query_listing.Detail,
+        'qualification': query_listing.Qualification,
+        'listingPicURL': query_listing.ListingPicURL,
+        'salary': query_listing.Salary,
+        'experience': query_listing.Experience,
+        'affectiveUntil': query_listing.AffectiveUntil.strftime('%Y-%m-%dT%H:%M:%S%z') if query_listing.AffectiveUntil else None
     }
+
 
     return jsonify(listing_json)
 

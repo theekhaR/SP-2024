@@ -1,4 +1,5 @@
 /flask_backend/database.ini
+/flask_backend/.env
 
 # Python bytecode files
 *.pyc
@@ -38,3 +39,5 @@ flask_backend/venv/
 # Other common Python artifacts
 *.log
 *.sqlite
+
+.env

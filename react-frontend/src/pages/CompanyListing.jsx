@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
-import { useParams } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
-import { useCompanyContext } from "../components/CompanyContext.jsx";
-import { useUserContext } from "../components/UserContext.jsx";
+import {useCompanyContext} from "../components/CompanyContext.jsx";
+import {useUserContext} from "../components/UserContext.jsx";
 
 function CompanyListing() {
   const {
@@ -17,6 +17,7 @@ function CompanyListing() {
   } = useCompanyContext();
   const { userID } = useUserContext();
   const [listingList, setListingList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(companyID);
@@ -131,12 +132,17 @@ function CompanyListing() {
 
                 {/* ACTION COLUMN */}
                 <div className="flex justify-end space-x-2">
-                  <button className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 text-sm">
-                    Applicants
-                  </button>
-                  <button className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm">
+                  <Link
+                      to={`/manageapplication/${listing.listingID}`}
+                      className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 text-sm"
+                  >
+                    Check Out Applicant
+                  </Link>
+                  <Link
+                      to={`/listingedit/${listing.listingID}`}
+                      className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm">
                     Edit
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
