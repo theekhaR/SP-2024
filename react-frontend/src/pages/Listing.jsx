@@ -5,139 +5,101 @@ import L_navbar from "../components/L_navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDollarSign, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../supabaseClient";
+import axios from "axios";
 
 function Listing() {
-  // List varaible
-
-  const [allJobs, setAllJobs] = useState([]); //all fetch job
-  const [jobs, setJobs] = useState([]); //result from search
   const [selectedJob, setSelectedJob] = useState(null);
 
   // Search variable
   const [searchText, setSearchText] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
+  const [searchWorkType, setSearchWorkType] = useState("");
   const [searchWorkCondition, setSearchWorkCondition] = useState("");
   const [searchExperience, setSearchExperience] = useState("");
-  const [searchWorkType, setSearchWorkType] = useState("");
+  const [searchIndustry, setsearchIndustry] = useState("");
+  const [results, setResults] = useState([]);
 
-  async function getListings() {
-    // Fetch listing
+  useEffect(() => {
+    async function fetchDefault() {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/get_default_listings",
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Default Listings:", data);
+          setResults(data);
+        } else {
+          const errorData = await response.json();
+          console.error("Error fetching default listings:", errorData.error);
+        }
+      } catch (error) {
+        console.error("Failed to fetch default listings:", error.message);
+      }
+    }
+
+    fetchDefault();
+  }, []);
+
+  useEffect(() => {
+    if (results.length > 0) {
+      setSelectedJob(results[0]);
+    }
+  }, [results]);
+
+  const handleSearch = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5000//get_default_listings`,
-        {
+      // Check if all search fields are empty
+      const isAllEmpty =
+        !searchText.trim() &&
+        !searchIndustry.trim() &&
+        !searchLocation.trim() &&
+        !searchWorkType.trim() &&
+        !searchWorkCondition.trim() &&
+        !searchExperience.trim();
+
+      let response;
+
+      if (isAllEmpty) {
+        response = await fetch("http://localhost:5000/get_default_listings", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-        }
-      );
+        });
+      } else {
+        response = await axios.get("http://localhost:5000/search", {
+          params: {
+            searchText,
+            searchIndustry,
+            searchLocation,
+            searchWorkType,
+            searchWorkCondition,
+            searchExperience,
+          },
+        });
+      }
 
       if (response.status === 200) {
-        const data = await response.json();
-
-        const listings = data.map((listing, index) => ({
-          listingID: listing.listingID,
-          company: listing.company,
-          image_url: listing.pic,
-          position: listing.position,
-          location: listing.location,
-          salary: listing.salary,
-          description: listing.roleDescription,
-          qualification: listing.qualification,
-          detail: listing.detail,
-          workType: listing.workType,
-          workCondition: listing.workCondition,
-          experience: listing.experience,
-        }));
-        return listings;
+        const data = (await response.json?.()) || response.data;
+        console.log("Search Result:", data);
+        setResults(data);
+      } else {
+        const errorData = await response.json?.();
+        console.error("Error:", errorData?.error);
       }
-
-      // Unexpected error
-      const data = await response.json();
-      alert(data.error);
-      return [];
     } catch (error) {
-      console.error("Error checking user:", error);
-      return [];
-    }
-  }
-
-  useEffect(() => {
-    async function fetchJobs() {
-      const listings = await getListings();
-      setAllJobs(listings); // Save ALL
-      setJobs(listings); // Initially show all
-      if (listings.length > 0) {
-        setSelectedJob(listings[0]);
-      }
-    }
-    fetchJobs();
-  }, []);
-
-  // Test simple search logic => filter or joblist that fetch
-  function handleSearch() {
-    // Filter search
-    if (
-      searchText.trim() === "" &&
-      searchLocation === "" &&
-      searchWorkCondition === "" &&
-      searchExperience === ""
-    ) {
-      // If no input -> show all
-      setJobs(allJobs);
-      return;
-    }
-
-    const filteredJobs = allJobs.filter((job) => {
-      const matchesText =
-        job.position.toLowerCase().includes(searchText.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchText.toLowerCase());
-
-      const matchesLocation =
-        searchLocation === "" || job.location === searchLocation;
-
-      const matchesWorkType =
-        searchWorkType === "" || job.workType === searchWorkType;
-
-      const matchesWorkCondition =
-        searchWorkCondition === "" || job.workCondition === searchWorkCondition;
-
-      const matchesExperience =
-        searchExperience === "" || job.experience === searchExperience;
-
-      return (
-        matchesText &&
-        matchesLocation &&
-        matchesWorkType &&
-        matchesWorkCondition &&
-        matchesExperience
+      console.error(
+        "Search failed:",
+        error.response?.data?.error || error.message
       );
-    });
-
-    setJobs(filteredJobs);
-    // Full-text-search postgre Didn't test yet
-
-    // async function handleSearch() {
-
-    //   const { data, error } = await supabase
-    //     .from('listings')
-    //     .select('*')
-    //     .textSearch('search_vector', searchText, {
-    //       type: 'websearch',
-    //     })
-    //     .eq('location', searchLocation || null)
-    //     .eq('workCondition', searchWorkCondition || null)
-    //     .eq('experience', searchExperience || null);
-
-    //   if (error) {
-    //     console.error('Error fetching listings:', error);
-    //     return;
-    //   }
-
-    //   setJobs(data);
-    // }
-  }
+    }
+  };
 
   return (
     <div className="bg-gray-100 flex flex-col">
@@ -155,6 +117,18 @@ function Listing() {
           className="p-2 w-full rounded-md border border-gray-300"
         />
 
+        {/* Industry */}
+        <select
+          value={searchIndustry}
+          onChange={(e) => setsearchIndustry(e.target.value)}
+          className="p-2 w-full rounded-md border border-gray-300"
+        >
+          <option value="">All Industry</option>
+          <option value="Technology and IT">Technology and IT</option>
+          <option value="Food and Beverage">Food and Beverage</option>
+          <option value="Remote">Medical</option>
+        </select>
+
         {/* Location */}
         <select
           value={searchLocation}
@@ -164,7 +138,8 @@ function Listing() {
           <option value="">All Locations</option>
           <option value="Bangkok">Bangkok</option>
           <option value="Chiang Mai">Chiang Mai</option>
-          <option value="Remote">Remote</option>
+          <option value="Japan">Japan</option>
+          <option value="Songkhla">Songkhla</option>
         </select>
 
         {/* Work Type */}
@@ -228,9 +203,9 @@ function Listing() {
             </h2>
           </div>
           <div className="p-4">
-            {jobs.map((job) => (
+            {results.map((job) => (
               <div
-                key={job.listingID}
+                key={job.listingid}
                 className="p-3 border mb-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-4"
                 onClick={() => setSelectedJob(job)}
               >
@@ -262,7 +237,7 @@ function Listing() {
               </h2>
 
               <p className="font-bold">{selectedJob.company}</p>
-              <div className="flex gap-8 text-gray-600 text-base">
+              <div className="flex mt-3 gap-8 text-gray-600 text-base">
                 <div className="flex items-center gap-2">
                   <FontAwesomeIcon icon={faDollarSign} />
                   <p className="text-gray-600 text-base">
@@ -276,13 +251,15 @@ function Listing() {
               <p className="mt-6">{selectedJob.description}</p>
 
               <h2 className="text-xl font-bold mt-3 mb-3">Qualification:</h2>
-              <ul className="text-gray-600 space-y-2">
-                {/* {selectedJob.qualification.map((req, index) => (
+              <p className="mt-3 ">{selectedJob.qualification}</p>
+
+              {/* <ul className="text-gray-600 space-y-2">
+                {selectedJob.qualification.map((req, index) => (
                   <li key={index} className="flex items-center">
                     <span className="text-orange-500 mr-2">✔</span> {req}
                   </li>
-                ))} */}
-              </ul>
+                ))}
+              </ul> */}
               <h2 className="mt-5 text-xl font-bold mb-3">Other detail:</h2>
               <p className="mt-3">{selectedJob.detail}</p>
             </div>
@@ -303,13 +280,13 @@ function Listing() {
                   <strong>Position:</strong> {selectedJob.position}
                 </p>
                 <p>
-                  <strong>Work type:</strong> {selectedJob.workType}
+                  <strong>Work type:</strong> {selectedJob.worktype}
                 </p>
                 <p>
                   <strong>Salary:</strong> {selectedJob.salary}
                 </p>
                 <p>
-                  <strong>Work condition:</strong> {selectedJob.workCondition}
+                  <strong>Work condition:</strong> {selectedJob.workcondition}
                 </p>
                 <p>
                   <strong>Experience:</strong> {selectedJob.experience}
