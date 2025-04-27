@@ -89,6 +89,12 @@ function Listing() {
         const data = (await response.json?.()) || response.data;
         console.log("Search Result:", data);
         setResults(data);
+        setSearchText("");
+        setsearchIndustry("");
+        setSearchLocation("");
+        setSearchWorkType("");
+        setSearchWorkCondition("");
+        setSearchExperience("");
       } else {
         const errorData = await response.json?.();
         console.error("Error:", errorData?.error);

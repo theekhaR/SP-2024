@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from dataModel.__init__ import db
 
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
