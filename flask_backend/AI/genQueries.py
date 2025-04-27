@@ -156,17 +156,6 @@ def process_files_from_urls(urls: List[str], run_id: int) -> Dict[str, Dict[str,
         try:
             print(f"\n [{url}] Downloading file for Run {run_id}...")
 
-            # response = requests.get(url)
-            # response.raise_for_status()
-            #
-            # # 🛠 Save to a temp file
-            # with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-            #     tmp_file.write(response.content)
-            #     tmp_file_path = tmp_file.name
-            #
-            # print("🔍 Step 1: Extracting text...")
-            # text = extract_text_from_file(tmp_file_path)
-
             response = requests.get(url)
             response.raise_for_status()
             file_bytes = response.content
@@ -179,9 +168,9 @@ def process_files_from_urls(urls: List[str], run_id: int) -> Dict[str, Dict[str,
             print("Text extracted.")
 
             print("Step 1.5: Full extracted text:")
-            print("=" * 60)
-            print(text)
-            print("=" * 60)
+            # print("=" * 60)
+            # print(text)
+            # print("=" * 60)
 
             print("Step 2: Summarizing with Gemini...")
             summary = generate_summary(text)
@@ -193,9 +182,10 @@ def process_files_from_urls(urls: List[str], run_id: int) -> Dict[str, Dict[str,
             }
             print("Done with this file.")
 
+
         except Exception as e:
             print(f"❗ Failed to process {url}: {e}")
-
+    print(results)
     return results
 
 # ───── ROUGE Score ─────
@@ -227,20 +217,34 @@ def main():
 
     print("\n ROUGE Evaluation Between Runs:")
     for url in theUrl:
-        key1 = f"{url}_run1"
-        key2 = f"{url}_run2"
+        key1 = f"urlfile_{theUrl.index(url) + 1}_run1"
+        key2 = f"urlfile_{theUrl.index(url) + 1}_run2"
+
+        print(">>>>>>>"+key1)
 
         if key1 in data_run1 and key2 in data_run2:
             print(f"\n--- {url} ---")
             print(f"Summary Run 1:\n{data_run1[key1]['summary']}\n")
             print(f"Summary Run 2:\n{data_run2[key2]['summary']}\n")
 
-            rouge_scores = calculate_rouge(
+
+            rouge_scores_1 = calculate_rouge(
                 data_run1[key1]['summary'],
-                data_run2[key2]['summary']
+                data_run1[key1]['extracted_text']
             )
-            print("ROUGE Scores:")
-            for metric, score in rouge_scores.items():
+            print("ROUGE Scores: 1")
+            for metric, score in rouge_scores_1.items():
+                print(f"  {metric.upper()}:")
+                print(f"    precision: {score.precision:.4f}")
+                print(f"    recall:    {score.recall:.4f}")
+                print(f"    fmeasure:  {score.fmeasure:.4f}")
+
+            rouge_scores_2 = calculate_rouge(
+                data_run2[key2]['summary'],
+                data_run2[key2]['extracted_text']
+            )
+            print("ROUGE Scores: 2")
+            for metric, score in rouge_scores_2.items():
                 print(f"  {metric.upper()}:")
                 print(f"    precision: {score.precision:.4f}")
                 print(f"    recall:    {score.recall:.4f}")
