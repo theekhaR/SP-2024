@@ -11,7 +11,7 @@ from dataModel.listingApplicantMapping import ListingApplicantMapping
 userProfileAPI = blueprints.Blueprint('userProfileAPI', __name__)
 
 
-@userProfileAPI.route('/edit_user_profile', methods=['POST'])
+@userProfileAPI.route('/edit_user_profile', methods=['PATCH'])
 def edit_user_profile():
     try:
         data = request.get_json()
@@ -46,6 +46,34 @@ def edit_user_profile():
             subject_user.CV = data.get('CV')
         if 'portfolio' in data and (data.get('portfolio')):
             subject_user.portfolio = data.get('portfolio')
+
+        db.session.commit()
+        return jsonify({'message': 'UserProfile updated successfully', 'UserID': subject_user.UserID}), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@userProfileAPI.route('/update_portfolio', methods=['PATCH'])
+def update_portfolio():
+    try:
+        data = request.get_json()
+
+        # check if required field is included (OFTEN THE PRIMARY KEY)
+        if (not data or
+                'userID' not in data or not data.get('userID') or
+                'portfolio' not in data or not data.get('portfolio')):
+            return jsonify({'error': 'Missing userID'}), 400
+
+        update_userID = data.get('userID')
+        subject_user = UserProfile.query.filter_by(UserID=update_userID).first()
+
+        # Check if user exists
+        if not subject_user:
+            return jsonify({'error': 'This user does not exist'}), 409
+
+        #
+        if 'portfolio' in data and (data.get('portfolio')):
+            subject_user.Portfolio = data.get('portfolio')
 
         db.session.commit()
         return jsonify({'message': 'UserProfile updated successfully', 'UserID': subject_user.UserID}), 201

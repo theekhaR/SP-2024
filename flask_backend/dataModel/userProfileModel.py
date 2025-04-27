@@ -10,7 +10,7 @@ class UserProfile(db.Model):
     Phone = db.Column(db.String(100))
     About = db.Column(db.String(2000))
     CV = db.Column(db.String(200))
-    Portfolio = db.Column(db.String(200))
+    Portfolio = db.Column(db.ARRAY(db.Text))
 
     user_mapping = db.relationship('User', back_populates='userprofile_mapping')
 
