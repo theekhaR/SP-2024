@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import Footer from "../components/footer";
 import L_navbar from "../components/L_navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDollarSign, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDollarSign,
+  faLocationDot,
+  faSuitcase,
+  faIndustry,
+} from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../supabaseClient";
 import axios from "axios";
 
@@ -110,11 +115,114 @@ function Listing() {
   return (
     <div className="bg-gray-100 flex flex-col">
       <L_navbar />
-      {/* Search */}
-      <div className="p-8 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center">
-        {/* Row 1 */}
 
-        {/* Search Text */}
+      <div class=" p-6 grid grid-cols-1 gap-6 ">
+        <div class="flex flex-col md:flex-row">
+          <div class="">
+            <select
+              class="border p-2 rounded"
+              value={searchWorkType}
+              onChange={(e) => setSearchWorkType(e.target.value)}
+            >
+              <option value="">All Work Types</option>
+              <option value="Full-Time">Full-Time</option>
+              <option value="Part-Time">Part-Time</option>
+              <option value="Internship">Internship</option>
+              <option value="Contract">Contract</option>
+            </select>
+          </div>
+          <div class="pt-6 md:pt-0 md:pl-6">
+            <select
+              class="border p-2 rounded"
+              value={searchWorkCondition}
+              onChange={(e) => setSearchWorkCondition(e.target.value)}
+            >
+              <option value="">All Work Conditions</option>
+              <option value="Onsite">Onsite</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+            </select>
+          </div>
+          <div class="pt-6 md:pt-0 md:pl-6">
+            <select
+              class="border p-2 rounded"
+              value={searchExperience}
+              onChange={(e) => setSearchExperience(e.target.value)}
+            >
+              <option value="">All Experience Levels</option>
+              <option value="Not Required">Not Required</option>
+              <option value="1 - 2 years">1 - 2 years</option>
+              <option value="2 - 5 years">2 - 5 years</option>
+              <option value="5 - 10 years">5 - 10 years</option>
+              <option value="10 years or above">10 years or above</option>
+            </select>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Search Text */}
+          <div className="flex border rounded bg-white items-center p-2">
+            <FontAwesomeIcon
+              icon={faSuitcase}
+              className="text-orange-500 text-xl mr-4"
+            />
+            <input
+              type="text"
+              placeholder="Position or Company name"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="bg-white max-w-full focus:outline-none text-gray-700 w-full"
+            />
+          </div>
+
+          {/* Industry */}
+          <div className="flex border rounded bg-white items-center p-2">
+            <FontAwesomeIcon
+              icon={faIndustry}
+              className="text-orange-500 text-xl mr-4"
+            />
+
+            <select
+              value={searchIndustry}
+              onChange={(e) => setsearchIndustry(e.target.value)}
+              className="bg-white focus:outline-none text-gray-700 w-full"
+            >
+              <option value="">All Industry</option>
+              <option value="Technology and IT">Technology and IT</option>
+              <option value="Food and Beverage">Food and Beverage</option>
+              <option value="Remote">Medical</option>
+            </select>
+          </div>
+
+          {/* Location */}
+          <div className="flex border rounded bg-white items-center p-2">
+            <FontAwesomeIcon
+              icon={faLocationDot}
+              className="text-orange-500 text-xl mr-4"
+            />
+            <select
+              value={searchLocation}
+              onChange={(e) => setSearchLocation(e.target.value)}
+              className="bg-white focus:outline-none text-gray-700 w-full"
+            >
+              <option value="">All Locations</option>
+              <option value="Bangkok">Bangkok</option>
+              <option value="Chiang Mai">Chiang Mai</option>
+              <option value="Japan">Japan</option>
+              <option value="Songkhla">Songkhla</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <button
+            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg"
+            onClick={handleSearch}
+          >
+            Find Job
+          </button>
+        </div>
+      </div>
+
+      {/* <div className="p-8 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center">
         <input
           type="text"
           placeholder="Position or Company name"
@@ -123,7 +231,6 @@ function Listing() {
           className="p-2 w-full rounded-md border border-gray-300"
         />
 
-        {/* Industry */}
         <select
           value={searchIndustry}
           onChange={(e) => setsearchIndustry(e.target.value)}
@@ -135,7 +242,6 @@ function Listing() {
           <option value="Remote">Medical</option>
         </select>
 
-        {/* Location */}
         <select
           value={searchLocation}
           onChange={(e) => setSearchLocation(e.target.value)}
@@ -148,7 +254,6 @@ function Listing() {
           <option value="Songkhla">Songkhla</option>
         </select>
 
-        {/* Work Type */}
         <select
           value={searchWorkType}
           onChange={(e) => setSearchWorkType(e.target.value)}
@@ -161,7 +266,6 @@ function Listing() {
           <option value="Contract">Contract</option>
         </select>
 
-        {/* Work Condition */}
         <select
           value={searchWorkCondition}
           onChange={(e) => setSearchWorkCondition(e.target.value)}
@@ -173,9 +277,6 @@ function Listing() {
           <option value="Hybrid">Hybrid</option>
         </select>
 
-        {/* Row 2 */}
-
-        {/* Experience */}
         <select
           value={searchExperience}
           onChange={(e) => setSearchExperience(e.target.value)}
@@ -189,7 +290,6 @@ function Listing() {
           <option value="10 years or above">10 years or above</option>
         </select>
 
-        {/* Button:  */}
         <div className="md:col-span-3 flex justify-center mt-4">
           <button
             className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg"
@@ -198,7 +298,8 @@ function Listing() {
             Find Job
           </button>
         </div>
-      </div>
+      </div> */}
+
       {/* Filter */}
       <div className="flex h-screen">
         {/* Left - Job List */}
