@@ -36,28 +36,18 @@ function CreateListing() {
   const navigate = useNavigate();
 
   //Use on part skill and benefit
-  const [skills, setSkills] = useState([""]);
-  const [benifits, setBenifits] = useState([""]);
+  const [qualification, setQualification] = useState([""]);
 
-  const addSkill = () => {
-    if (skills.length < 8) setSkills([...skills, ""]);
+  const addQualification = () => {
+    if (qualification.length < 10) setQualification([...qualification, ""]);
   };
 
-  const addbenifit = () => {
-    if (benifits.length < 8) setBenifits([...benifits, ""]);
+  const handleQualificationChange = (index, value) => {
+    const newQualification = [...qualification];
+    newQualification[index] = value;
+    setQualification(newQualification);
   };
 
-  const handleSkillChange = (index, value) => {
-    const newSkills = [...skills];
-    newSkills[index] = value;
-    setSkills(newSkills);
-  };
-
-  const handleBenifitChange = (index, value) => {
-    const newBenifits = [...benitfits];
-    newBenifits[index] = value;
-    setBenifits(newBenifits);
-  };
 
   const handleCreateListing = async (event) => {
     event.preventDefault();
@@ -75,7 +65,7 @@ function CreateListing() {
           "workCondition": editWorkCondition,
           "roleDescription": editRoleDescription,
           "detail": editDetail,
-          "qualification": editQualification,
+          "qualification": qualification,
           "salary": editSalary,
           "experience": editExperience,
           "affectiveUntil": editAffectiveUntil
@@ -266,46 +256,33 @@ function CreateListing() {
             ></textarea>
           </div>
 
-          {/*<div className="mt-3 mb-6 ">*/}
-          {/*  <div className="flex justify-between items-center">*/}
-          {/*    <h3 className="text-sm font-semibold">*/}
-          {/*      Qualification ({skills.length}/8)*/}
-          {/*    </h3>*/}
-          {/*    <button*/}
-          {/*        type="button"*/}
-          {/*        onClick={addSkill}*/}
-          {/*        className="text-orange-600 hover:underline text-sm"*/}
-          {/*    >*/}
-          {/*      + Add new*/}
-          {/*    </button>*/}
-          {/*  </div>*/}
-          {/*  {skills.map((skill, index) => (*/}
-          {/*      <input*/}
-          {/*          key={index}*/}
-          {/*          type="text"*/}
-          {/*          placeholder="What is your skill requirement..."*/}
-          {/*          value={skill}*/}
-          {/*          onChange={(e) => handleSkillChange(index, e.target.value)}*/}
-          {/*          className="w-full px-4 py-2 border rounded-md mt-2"*/}
-          {/*          maxLength={120}*/}
-          {/*      />*/}
-          {/*  ))}*/}
-          {/*</div>*/}
-
           {/* Qualification Section */}
-          <div className="mb-6">
-            <label className=" text-sm font-medium text-gray-700 mb-1">
-              Qualifications
-            </label>
-            <textarea
-                rows="3"
-                placeholder="Qualifications needed for the position"
-                onChange={(e) => setEditQualification(e.target.value)}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            ></textarea>
-          </div>
+          <div className="mt-3 mb-6">
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-semibold">
+                Qualification ({qualification.length}/10)
+              </h3>
+              <button
+                  type="button"
+                  onClick={addQualification}
+                  className="text-orange-600 hover:underline text-sm"
+              >
+                + Add new
+              </button>
+            </div>
+            {qualification.map((each, index) => (
+                <input
+                    key={index}
+                    type="text"
+                    placeholder="What is your skill requirement..."
+                    value={each}
+                    onChange={(e) => handleQualificationChange(index, e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md mt-2"
+                    maxLength={120}
+                />
+            ))}
 
-          <div className="flex justify-end mt-4">
+            <div className="flex justify-end mt-4">
             <button
                 className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
                 onClick={handleCreateListing}
@@ -319,6 +296,7 @@ function CreateListing() {
                 Cancel
               </a>
             </button>
+          </div>
           </div>
           {/* End the form this line */}
         </div>

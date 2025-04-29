@@ -8,6 +8,8 @@ from dataModel.userFollowingModel import UserFollowing
 from dataModel.userProfileModel import UserProfile
 from dataModel.listingApplicantMapping import ListingApplicantMapping
 
+from AI.generativeUser import generateQueryFromURL
+
 userProfileAPI = blueprints.Blueprint('userProfileAPI', __name__)
 
 
@@ -74,6 +76,10 @@ def update_portfolio():
         #
         if 'portfolio' in data and (data.get('portfolio')):
             subject_user.Portfolio = data.get('portfolio')
+
+        summary = generateQueryFromURL(subject_user.Portfolio)
+        skill_list = [skill.strip() for skill in summary.split(',')]
+        subject_user.PortfolioSummary = skill_list
 
         db.session.commit()
         return jsonify({'message': 'UserProfile updated successfully', 'UserID': subject_user.UserID}), 201

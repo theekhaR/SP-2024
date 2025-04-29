@@ -13,13 +13,13 @@ class Listing(db.Model):
     WorkCondition = db.Column(db.Text)
     RoleDescription = db.Column(db.String(1000))
     Detail = db.Column(db.Text)
-    Qualification = db.Column(db.String(1000))
+    Qualification = db.Column(db.ARRAY(db.Text))
     ListingPicURL = db.Column(db.String(200))
     CreatedOn = db.Column(db.DateTime, default=datetime.now)
     AffectiveUntil = db.Column(db.DateTime)
     Salary = db.Column(db.String(200))
     Experience = db.Column(db.String(200))
-    Location = db.Column(db.Text)
+    GenerativeSummary = db.Column(db.ARRAY(db.Text))
 
     from .companyListingMappingModel import CompanyListingMapping
 
@@ -29,7 +29,9 @@ class Listing(db.Model):
     # uselist = False will return object as the object instead of a list
     # only use when it's a one to one. e.g. when the Mapping table can only map one A to one B, the A and mapping table relationship should be one-to-one
 
-    companylistingmapping_mapping = db.relationship('CompanyListingMapping', back_populates='listing_mapping', uselist=False)
+    companylistingmapping_mapping = db.relationship('CompanyListingMapping', back_populates='listing_mapping', uselist=False, cascade='all, delete-orphan',
+                                                    passive_deletes=True,
+                                                    single_parent=True)
     company_mapping = db.relationship('Company', back_populates='listing_mapping')
     user_mapping = db.relationship('User', back_populates='listing_mapping')
     userapplication_mapping = db.relationship('UserApplication', back_populates='listing_mapping')

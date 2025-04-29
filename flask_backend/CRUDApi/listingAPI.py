@@ -6,6 +6,8 @@ from dataModel.companyModel import Company
 from dataModel.companyListingMappingModel import CompanyListingMapping
 from dataModel.userModel import User
 from dateutil import parser
+
+from AI.generativeListing import generateSummaryOfListing
 from supabase_client import supabase
 import openai
 
@@ -96,6 +98,12 @@ def create_listing():
         existing_company = Company.query.filter_by(CompanyID=data['companyID']).first()
         if not existing_company:
             return jsonify({'error': 'Company not valid'}), 409
+
+        # Ensure qualification is a list
+        qualifications = data.get('qualification', [])
+        if not isinstance(qualifications, list):
+            return jsonify({'error': 'Qualification must be an array of text'}), 400
+
         
         # Set the text for embeddings
         # input_text = f"""
@@ -130,7 +138,7 @@ def create_listing():
             WorkCondition=data.get('workCondition') if data.get('workCondition') else "Not Specified",
             RoleDescription=data.get('roleDescription', ''),
             Detail=data.get('detail', False),
-            Qualification=data.get('qualification', ''),
+            Qualification=qualifications,
             ListingPicURL=data.get('listingPicURL', ''),
             Salary=data.get('salary', ''),
             Experience=data.get('experience', ''),
@@ -142,6 +150,21 @@ def create_listing():
 
         db.session.add(new_listing)
         db.session.flush()
+
+        parts = [
+            new_listing.Position or '',
+            new_listing.RoleDescription or '',
+            new_listing.Detail or '',
+            ', '.join(new_listing.Qualification) if new_listing.Qualification else '',
+        ]
+        all_text = '\n'.join(parts).strip()
+        print(all_text)
+        summary = generateSummaryOfListing(all_text)
+
+        summarized_list = [skill.strip() for skill in summary.split(',')]
+        position_text = new_listing.Position or ""
+        new_listing.GenerativeSummary = summarized_list
+
         # NOTE: this will actually insert the record in the database and set
         # new_group.id automatically. The session, however, is not committed yet!
 
@@ -207,6 +230,7 @@ def delete_listing():
         db.session.delete(result)
         db.session.commit()
 
+
         return jsonify({'message': 'Listing entry deleted successfully'}), 201
 
     except Exception as e:
@@ -221,9 +245,19 @@ def edit_listing():
         # Ensure 'listingID' is provided and valid
         update_listingID = data.get('listingID')
         subject_listing = Listing.query.filter_by(ListingID=update_listingID).first()
+        summary_fields_changed = False
 
         if not subject_listing:
             return jsonify({'error': 'This listing does not exist'}), 409
+
+        if 'position' in data and data['position'] != subject_listing.Position:
+            summary_fields_changed = True
+        if 'roleDescription' in data and data['roleDescription'] != subject_listing.RoleDescription:
+            summary_fields_changed = True
+        if 'detail' in data and data['detail'] != subject_listing.Detail:
+            summary_fields_changed = True
+        if 'qualification' in data and data['qualification'] != subject_listing.Qualification:
+            summary_fields_changed = True
 
         # Set values for the listing's attributes only if provided
         subject_listing.Position = data.get('position', subject_listing.Position)
@@ -244,6 +278,21 @@ def edit_listing():
         else:
             # Use current datetime + 7 days as the default
             subject_listing.AffectiveUntil = subject_listing.AffectiveUntil
+
+        if summary_fields_changed:
+            parts = [
+                subject_listing.Position or '',
+                subject_listing.RoleDescription or '',
+                subject_listing.Detail or '',
+                ', '.join(subject_listing.Qualification) if subject_listing.Qualification else '',
+            ]
+            all_text = '\n'.join(parts).strip()
+            print(all_text)
+            summary = generateSummaryOfListing(all_text)
+
+            summarized_list = [skill.strip() for skill in summary.split(',')]
+            position_text = subject_listing.Position or ""
+            subject_listing.GenerativeSummary = summarized_list
 
         # Commit the updated data to the database
         db.session.commit()

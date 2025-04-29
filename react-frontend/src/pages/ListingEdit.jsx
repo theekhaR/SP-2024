@@ -24,7 +24,7 @@ function ListingEdit() {
     workCondition: '',
     roleDescription: '',
     detail: '',
-    qualification: '',
+    qualification: [],
     affectiveUntil: '',
     salary: '',
     experience: '',
@@ -82,7 +82,7 @@ function ListingEdit() {
         workCondition: data.workCondition,
         roleDescription: data.roleDescription,
         detail: data.detail,
-        qualification: data.qualification,
+        qualification: data.qualification || [],
         affectiveUntil: data.affectiveUntil,
         salary: data.salary,
         experience: data.experience,
@@ -96,6 +96,33 @@ function ListingEdit() {
     } catch (error) {
       console.error("Error encountered:", error);
     }
+  };
+
+    // Handle adding a new qualification
+  const handleAddQualification = () => {
+    setEditListing((prev) => ({
+      ...prev,
+      qualification: [...prev.qualification, ''], // Add an empty string to the array for a new qualification
+    }));
+  };
+
+  // Handle removing a qualification
+  const handleRemoveQualification = (index) => {
+    const updatedQualifications = editListing.qualification.filter((_, i) => i !== index);
+    setEditListing((prev) => ({
+      ...prev,
+      qualification: updatedQualifications,
+    }));
+  };
+
+  // Handle changing a qualification
+  const handleQualificationChange = (index, value) => {
+    const updatedQualifications = [...editListing.qualification];
+    updatedQualifications[index] = value;
+    setEditListing((prev) => ({
+      ...prev,
+      qualification: updatedQualifications,
+    }));
   };
 
   useEffect( () => {getListing()}, [])
@@ -305,17 +332,35 @@ function ListingEdit() {
           {/*</div>*/}
 
           {/* Qualification Section */}
-          <div className="mb-6">
-            <label className=" text-sm font-medium text-gray-700 mb-1">
+                     <div className="mb-6">
+            <label className="text-sm font-medium text-gray-700 mb-1">
               Qualifications
             </label>
-            <textarea
-                rows="3"
-                placeholder="Qualifications needed for the position"
-                value={editListing.qualification}
-                onChange={(e) => setEditListing({...editListing, qualification: e.target.value})}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            ></textarea>
+            {editListing.qualification.map((qual, index) => (
+              <div key={index} className="flex items-center space-x-4">
+                <input
+                  type="text"
+                  value={qual}
+                  onChange={(e) => handleQualificationChange(index, e.target.value)}
+                  placeholder="Qualification"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveQualification(index)}
+                  className="text-red-600 hover:underline"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddQualification}
+              className="mt-2 text-blue-600 hover:underline"
+            >
+              + Add new qualification
+            </button>
           </div>
 
           <div className="flex justify-end mt-4">

@@ -7,8 +7,8 @@ class Company(db.Model):
 
     CompanyID = db.Column(db.String(36), primary_key=True)
     CompanyName = db.Column(db.String(100), nullable=False)
-    CompanyAbout = db.Column(db.String(1000), nullable=False)
-    CompanyOverview = db.Column(db.String(2000), nullable=False)
+    CompanyAbout = db.Column(db.Text)
+    CompanyOverview = db.Column(db.Text)
     CompanyLogoURL = db.Column(db.String(200))
     CompanyLocation = db.Column(db.String(200))
     IndustryID = db.Column(db.Integer, db.ForeignKey('SP2024-4.CompanyIndustryList.IndustryID'))

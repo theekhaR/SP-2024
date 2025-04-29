@@ -20,6 +20,7 @@ API_KEY = os.getenv('apikey')
 MODEL_NAME = "gemini-2.0-flash"
 ASSETS_FOLDER = "assets"
 SUPPORTED_EXTENSIONS = ('.pdf', '.png', '.jpg', '.jpeg')
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
 # ───── Initialize Gemini ─────
 genai.configure(api_key=API_KEY)
@@ -88,9 +89,8 @@ def generate_summary(text: str) -> str:
         prompt = f"""
                 From the resume text below, extract only the skills that are relevant and applicable for job applications.
                 These can include technical skills (e.g., programming, tools, frameworks), soft skills (e.g., leadership, teamwork), or language abilities.
-                Do NOT include education, job titles, certificates, or any personal background.
 
-                Return the skills as a clean bullet-point list.
+                Return the skills as a clean set of skills, separated by commas in CSV format.
 
                 Resume:
                 {text[:60000]}
@@ -152,6 +152,7 @@ def process_files_from_urls(urls: List[str], run_id: int) -> Dict[str, Dict[str,
         print(f"⚠️ No URLs provided.")
         return results
 
+    full_text = ''
     for idx, url in enumerate(urls):
         try:
             print(f"\n [{url}] Downloading file for Run {run_id}...")
@@ -171,22 +172,51 @@ def process_files_from_urls(urls: List[str], run_id: int) -> Dict[str, Dict[str,
             # print("=" * 60)
             # print(text)
             # print("=" * 60)
-
-            print("Step 2: Summarizing with Gemini...")
-            summary = generate_summary(text)
-            print("Summary generated.")
-
-            results[f"urlfile_{idx+1}_run{run_id}"] = {
-                "extracted_text": text,
-                "summary": summary
-            }
+            full_text = full_text + "======================" +text
             print("Done with this file.")
-
-
         except Exception as e:
             print(f"❗ Failed to process {url}: {e}")
+
+    print("Step 2: Summarizing with Gemini...")
+    summary = generate_summary(full_text)
+    print("Summary generated.")
+
+    results[f"urlfile_run{run_id}"] = {
+        "extracted_text": full_text,
+        "summary": summary
+    }
+
+
     print(results)
     return results
+
+def validate_csv_format(csv_text):
+    try:
+        reader = csv.reader(io.StringIO(csv_text))
+        rows = list(reader)
+
+        if not rows:
+            return False, "No rows found."
+
+        num_columns = len(rows[0])
+        for row in rows:
+            if len(row) != num_columns:
+                return False, f"Inconsistent number of columns: expected {num_columns}, got {len(row)}."
+        return True, "Valid CSV format."
+
+    except Exception as e:
+        return False, f"Parsing failed: {e}"
+
+
+# Example usage:
+csv_text = """
+Skill,Experience,Proficiency
+Python,5 years,Advanced
+Java,3 years,Intermediate
+"""
+
+is_valid, message = validate_csv_format(csv_text.strip())
+print(is_valid, message)
 
 # ───── ROUGE Score ─────
 def calculate_rouge(candidate: str, reference: str) -> Dict[str, Dict[str, float]]:
@@ -195,15 +225,6 @@ def calculate_rouge(candidate: str, reference: str) -> Dict[str, Dict[str, float
 
 # ───── Main Logic ─────
 def main():
-    # files = [
-    #     f for f in os.listdir(assets_path)
-    #     if os.path.isfile(os.path.join(assets_path, f)) and f.lower().endswith(SUPPORTED_EXTENSIONS)
-    # ]
-    #
-    # if not files:
-    #     print(f"No supported files found in {assets_path}")
-    #     print("Please add PDF or image files and try again.")
-    #     return
 
     theUrl = [
         "https://jvxogeiwtwcdrkdxqwjb.supabase.co/storage/v1/object/public/user-uploaded-data/1d92d345-de4f-408e-8495-525ce4353434/portfolio/6f3a6d5f-184d-4fd7-9eb7-2c95dbc42f07_Tulagarn-Sornprasit_CV(1).pdf"
@@ -249,6 +270,68 @@ def main():
                 print(f"    precision: {score.precision:.4f}")
                 print(f"    recall:    {score.recall:.4f}")
                 print(f"    fmeasure:  {score.fmeasure:.4f}")
+
+
+def generateQueryFromURL(URLList):
+
+    theUrl = URLList
+    data_run1 = process_files_from_urls(theUrl, run_id=1)
+    data_run2 = process_files_from_urls(theUrl, run_id=2)
+
+    if not data_run1 or not data_run2:
+        print("No data processed successfully in one or both runs.")
+        return {}
+
+    best_summaries = {}
+
+    print("\n ROUGE Evaluation Between Runs:")
+    for url in theUrl:
+        key1 = f"urlfile_run1"
+        key2 = f"urlfile_run2"
+
+        if key1 in data_run1 and key2 in data_run2:
+            print(f"\n--- {url} ---")
+            print(f"Summary Run 1:\n{data_run1[key1]['summary']}\n")
+            print(f"Summary Run 2:\n{data_run2[key2]['summary']}\n")
+
+
+            rouge_scores_1 = calculate_rouge(
+                data_run1[key1]['summary'],
+                data_run1[key1]['extracted_text']
+            )
+
+            rouge_scores_2 = calculate_rouge(
+                data_run2[key2]['summary'],
+                data_run2[key2]['extracted_text']
+            )
+
+            # Calculate average F-measure for both runs
+            avg_f1 = sum(score.fmeasure for score in rouge_scores_1.values()) / len(rouge_scores_1)
+            avg_f2 = sum(score.fmeasure for score in rouge_scores_2.values()) / len(rouge_scores_2)
+
+            print("ROUGE Scores: 1")
+            for metric, score in rouge_scores_1.items():
+                print(f"  {metric.upper()}:")
+                print(f"    precision: {score.precision:.4f}")
+                print(f"    recall:    {score.recall:.4f}")
+                print(f"    fmeasure:  {score.fmeasure:.4f}")
+
+            print("ROUGE Scores: 2")
+            for metric, score in rouge_scores_2.items():
+                print(f"  {metric.upper()}:")
+                print(f"    precision: {score.precision:.4f}")
+                print(f"    recall:    {score.recall:.4f}")
+                print(f"    fmeasure:  {score.fmeasure:.4f}")
+
+                # Select the better summary
+                if avg_f1 >= avg_f2:
+                    best_summaries = data_run1[key1]['summary']
+                else:
+                    best_summaries = data_run2[key2]['summary']
+
+        return best_summaries
+
+
 
 if __name__ == "__main__":
     main()
