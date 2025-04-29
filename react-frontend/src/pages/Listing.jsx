@@ -1,159 +1,305 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import LocationPic from "../assets/Location.png";
-import Navbar from "../components/Navbar";
-import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import L_navbar from "../components/L_navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faDollarSign,
+  faLocationDot,
+  faSuitcase,
+  faIndustry,
+} from "@fortawesome/free-solid-svg-icons";
+import { supabase } from "../supabaseClient";
+import axios from "axios";
 
 function Listing() {
-  const jobs = [
-    {
-      ListingID: 1,
-      title: "Software Engineer Intern (Mobile)",
-      company: "KBTG",
-      description:
-        "We are seeking a motivated Junior Frontend Developer to build responsive, user-friendly web applications using React and JavaScript....Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum, optio!",
-      image_url: "/images/Tech.png",
-      WorkCondition: "Hybrid - 2 days in office",
-      position: "Junior Developer",
-      Type: "Internship",
-      Salary: "2XXXX - 3XXXX฿",
-      experience: "None required",
-      location: "Bangkok, Thailand",
-      requirements: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
-      Benifit:
-        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
-    },
-    {
-      ListingID: 2,
-      title: "Web Developer Intern",
-      company: "Western Digital",
-      description: "A web development internship opportunity.",
-      image_url: "/images/Tech.png",
-      WorkCondition: "Work from home",
-      position: "Senior Developer",
-      Type: "Full-Time",
-      Salary: "3XXXX - 5XXXX฿",
-      experience: "2 years",
-      location: "Prachin Buri, Thailand",
-      requirements: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
-      Benifit:
-        "Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
-    },
-    {
-      ListingID: 3,
-      title: "Software Engineer Intern (Mobile)",
-      company: "KBTG",
-      description:
-        "We are seeking a motivated Junior Frontend Developer to build responsive, user-friendly web applications using React and JavaScript....Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum, optio!",
-      image_url: "/images/Tech.png",
-      WorkCondition: "Hybrid - 2 days in office",
-      position: "Junior Developer",
-      Type: "Internship",
-      Salary: "2XXXX - 3XXXX฿",
-      experience: "None required",
-      location: "Bangkok, Thailand",
-      requirements: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
-      Benifit:
-        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
-    },
-    {
-      ListingID: 4,
-      title: "Web Developer Intern",
-      company: "Western Digital",
-      description: "A web development internship opportunity.",
-      image_url: "/images/Tech.png",
-      WorkCondition: "Work from home",
-      position: "Senior Developer",
-      Type: "Full-Time",
-      Salary: "3XXXX - 5XXXX฿",
-      experience: "2 years",
-      location: "Prachin Buri, Thailand",
-      requirements: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
-      Benifit:
-        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
-    },
-    {
-      ListingID: 5,
-      title: "Software Engineer Intern (Mobile)",
-      company: "KBTG",
-      description:
-        "We are seeking a motivated Junior Frontend Developer to build responsive, user-friendly web applications using React and JavaScript....Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum, optio!",
-      image_url: "/images/Tech.png",
-      WorkCondition: "Hybrid - 2 days in office",
-      position: "Junior Developer",
-      Type: "Internship",
-      Salary: "2XXXX - 3XXXX฿",
-      experience: "None required",
-      location: "Bangkok, Thailand",
-      requirements: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
-      Benifit:
-        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
-    },
-    {
-      ListingID: 6,
-      title: "Web Developer Intern",
-      company: "Western Digital",
-      description: "A web development internship opportunity.",
-      image_url: "/images/Tech.png",
-      WorkCondition: "Work from home",
-      position: "Senior Developer",
-      Type: "Full-Time",
-      Salary: "3XXXX - 5XXXX฿",
-      experience: "2 years",
-      location: "Prachin Buri, Thailand",
-      requirements: [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, dignissimos?",
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, vero?",
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, totam.",
-      ],
-      Benifit:
-        " Join our team of innovators where every line of code has the power to change lives. At our IT company, we value creativity, collaboration, and cutting-edge technology. Be part of something meaningful — let's build the future together. Benefit 1.Enjoy hybrid or fully remote work, flexible hours, and a healthy work-life balance 2.Comprehensive health insurance, mental health support, and wellness programs to keep you at your best 3.Competitive salary with regular performance reviews, annual raises, and project-based bonuses",
-    },
-  ];
-  const [selectedJob, setSelectedJob] = useState(jobs[0]);
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  // Search variable
+  const [searchText, setSearchText] = useState("");
+  const [searchLocation, setSearchLocation] = useState("");
+  const [searchWorkType, setSearchWorkType] = useState("");
+  const [searchWorkCondition, setSearchWorkCondition] = useState("");
+  const [searchExperience, setSearchExperience] = useState("");
+  const [searchIndustry, setsearchIndustry] = useState("");
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    async function fetchDefault() {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/get_default_listings",
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Default Listings:", data);
+          setResults(data);
+        } else {
+          const errorData = await response.json();
+          console.error("Error fetching default listings:", errorData.error);
+        }
+      } catch (error) {
+        console.error("Failed to fetch default listings:", error.message);
+      }
+    }
+
+    fetchDefault();
+  }, []);
+
+  useEffect(() => {
+    if (results.length > 0) {
+      setSelectedJob(results[0]);
+    }
+  }, [results]);
+
+  const handleSearch = async () => {
+    try {
+      // Check if all search fields are empty
+      const isAllEmpty =
+        !searchText.trim() &&
+        !searchIndustry.trim() &&
+        !searchLocation.trim() &&
+        !searchWorkType.trim() &&
+        !searchWorkCondition.trim() &&
+        !searchExperience.trim();
+
+      let response;
+
+      if (isAllEmpty) {
+        response = await fetch("http://localhost:5000/get_default_listings", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } else {
+        response = await axios.get("http://localhost:5000/search", {
+          params: {
+            searchText,
+            searchIndustry,
+            searchLocation,
+            searchWorkType,
+            searchWorkCondition,
+            searchExperience,
+          },
+        });
+      }
+
+      if (response.status === 200) {
+        const data = (await response.json?.()) || response.data;
+        console.log("Search Result:", data);
+        setResults(data);
+        setSearchText("");
+        setsearchIndustry("");
+        setSearchLocation("");
+        setSearchWorkType("");
+        setSearchWorkCondition("");
+        setSearchExperience("");
+      } else {
+        const errorData = await response.json?.();
+        console.error("Error:", errorData?.error);
+      }
+    } catch (error) {
+      console.error(
+        "Search failed:",
+        error.response?.data?.error || error.message
+      );
+    }
+  };
 
   return (
     <div className="bg-gray-100 flex flex-col">
       <L_navbar />
-      {/* Search */}
-      <div className="p-8 rounded-lg flex flex-wrap gap-2 items-center justify-center">
+
+      <div class=" p-6 grid grid-cols-1 gap-6 ">
+        <div class="flex flex-col md:flex-row">
+          <div class="">
+            <select
+              class="border p-2 rounded"
+              value={searchWorkType}
+              onChange={(e) => setSearchWorkType(e.target.value)}
+            >
+              <option value="">All Work Types</option>
+              <option value="Full-Time">Full-Time</option>
+              <option value="Part-Time">Part-Time</option>
+              <option value="Internship">Internship</option>
+              <option value="Contract">Contract</option>
+            </select>
+          </div>
+          <div class="pt-6 md:pt-0 md:pl-6">
+            <select
+              class="border p-2 rounded"
+              value={searchWorkCondition}
+              onChange={(e) => setSearchWorkCondition(e.target.value)}
+            >
+              <option value="">All Work Conditions</option>
+              <option value="Onsite">Onsite</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+            </select>
+          </div>
+          <div class="pt-6 md:pt-0 md:pl-6">
+            <select
+              class="border p-2 rounded"
+              value={searchExperience}
+              onChange={(e) => setSearchExperience(e.target.value)}
+            >
+              <option value="">All Experience Levels</option>
+              <option value="Not Required">Not Required</option>
+              <option value="1 - 2 years">1 - 2 years</option>
+              <option value="2 - 5 years">2 - 5 years</option>
+              <option value="5 - 10 years">5 - 10 years</option>
+              <option value="10 years or above">10 years or above</option>
+            </select>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Search Text */}
+          <div className="flex border rounded bg-white items-center p-2">
+            <FontAwesomeIcon
+              icon={faSuitcase}
+              className="text-orange-500 text-xl mr-4"
+            />
+            <input
+              type="text"
+              placeholder="Position or Company name"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="bg-white max-w-full focus:outline-none text-gray-700 w-full"
+            />
+          </div>
+
+          {/* Industry */}
+          <div className="flex border rounded bg-white items-center p-2">
+            <FontAwesomeIcon
+              icon={faIndustry}
+              className="text-orange-500 text-xl mr-4"
+            />
+
+            <select
+              value={searchIndustry}
+              onChange={(e) => setsearchIndustry(e.target.value)}
+              className="bg-white focus:outline-none text-gray-700 w-full"
+            >
+              <option value="">All Industry</option>
+              <option value="Technology and IT">Technology and IT</option>
+              <option value="Food and Beverage">Food and Beverage</option>
+              <option value="Remote">Medical</option>
+            </select>
+          </div>
+
+          {/* Location */}
+          <div className="flex border rounded bg-white items-center p-2">
+            <FontAwesomeIcon
+              icon={faLocationDot}
+              className="text-orange-500 text-xl mr-4"
+            />
+            <select
+              value={searchLocation}
+              onChange={(e) => setSearchLocation(e.target.value)}
+              className="bg-white focus:outline-none text-gray-700 w-full"
+            >
+              <option value="">All Locations</option>
+              <option value="Bangkok">Bangkok</option>
+              <option value="Chiang Mai">Chiang Mai</option>
+              <option value="Japan">Japan</option>
+              <option value="Songkhla">Songkhla</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <button
+            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg"
+            onClick={handleSearch}
+          >
+            Find Job
+          </button>
+        </div>
+      </div>
+
+      {/* <div className="p-8 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center">
         <input
           type="text"
-          placeholder="Position or Companies name"
-          className="p-2 w-60 rounded-md border border-gray-300"
+          placeholder="Position or Company name"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="p-2 w-full rounded-md border border-gray-300"
         />
-        <select className="p-2 w-60 rounded-md border border-gray-300">
-          <option>Jobs field </option>
+
+        <select
+          value={searchIndustry}
+          onChange={(e) => setsearchIndustry(e.target.value)}
+          className="p-2 w-full rounded-md border border-gray-300"
+        >
+          <option value="">All Industry</option>
+          <option value="Technology and IT">Technology and IT</option>
+          <option value="Food and Beverage">Food and Beverage</option>
+          <option value="Remote">Medical</option>
         </select>
-        <select className="p-2 w-60 rounded-md border border-gray-300">
-          <option>Location </option>
+
+        <select
+          value={searchLocation}
+          onChange={(e) => setSearchLocation(e.target.value)}
+          className="p-2 w-full rounded-md border border-gray-300"
+        >
+          <option value="">All Locations</option>
+          <option value="Bangkok">Bangkok</option>
+          <option value="Chiang Mai">Chiang Mai</option>
+          <option value="Japan">Japan</option>
+          <option value="Songkhla">Songkhla</option>
         </select>
-        <button className="bg-orange-500 text-white px-4 py-2 rounded-md">
-          Find job
-        </button>
-      </div>
+
+        <select
+          value={searchWorkType}
+          onChange={(e) => setSearchWorkType(e.target.value)}
+          className="p-2 w-full rounded-md border border-gray-300"
+        >
+          <option value="">All Work Types</option>
+          <option value="Full-Time">Full-Time</option>
+          <option value="Part-Time">Part-Time</option>
+          <option value="Internship">Internship</option>
+          <option value="Contract">Contract</option>
+        </select>
+
+        <select
+          value={searchWorkCondition}
+          onChange={(e) => setSearchWorkCondition(e.target.value)}
+          className="p-2 w-full rounded-md border border-gray-300"
+        >
+          <option value="">All Work Conditions</option>
+          <option value="Onsite">Onsite</option>
+          <option value="Remote">Remote</option>
+          <option value="Hybrid">Hybrid</option>
+        </select>
+
+        <select
+          value={searchExperience}
+          onChange={(e) => setSearchExperience(e.target.value)}
+          className="p-2 w-full rounded-md border border-gray-300"
+        >
+          <option value="">All Experience Levels</option>
+          <option value="Not Required">Not Required</option>
+          <option value="1 - 2 years">1 - 2 years</option>
+          <option value="2 - 5 years">2 - 5 years</option>
+          <option value="5 - 10 years">5 - 10 years</option>
+          <option value="10 years or above">10 years or above</option>
+        </select>
+
+        <div className="md:col-span-3 flex justify-center mt-4">
+          <button
+            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg"
+            onClick={handleSearch}
+          >
+            Find Job
+          </button>
+        </div>
+      </div> */}
+
       {/* Filter */}
       <div className="flex h-screen">
         {/* Left - Job List */}
@@ -164,25 +310,25 @@ function Listing() {
             </h2>
           </div>
           <div className="p-4">
-            {jobs.map((job) => (
+            {results.map((job) => (
               <div
-                key={job.ListingID}
+                key={job.listingid}
                 className="p-3 border mb-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-4"
                 onClick={() => setSelectedJob(job)}
               >
                 {/* Job Image */}
                 <img
                   src={job.image_url}
-                  alt={job.title}
+                  alt={job.position}
                   className="w-16 h-16 object-cover rounded-md"
                 />
 
                 {/* Job Details */}
                 <div>
-                  <h3 className="font-medium">{job.title}</h3>
+                  <h3 className="font-medium">{job.position}</h3>
                   <p className="text-sm text-gray-600">{job.company}</p>
                   <p className="text-sm text-gray-600">{job.location}</p>
-                  <p className="text-sm text-gray-600">{job.Salary}</p>
+                  <p className="text-sm text-gray-600">{job.salary}</p>
                 </div>
               </div>
             ))}
@@ -194,33 +340,35 @@ function Listing() {
           {selectedJob && (
             <div>
               <h2 className="text-xl font-bold text-orange-500">
-                {selectedJob.title}
+                {selectedJob.position}
               </h2>
-              <div className="flex gap-8 text-gray-600 text-base">
-                <p className="font-bold">{selectedJob.company}</p>
-                <div className="flex items-center gap-1">
-                  <img
-                    src={LocationPic}
-                    alt="Illustration"
-                    className="w-5 h-5"
-                  />
+
+              <p className="font-bold">{selectedJob.company}</p>
+              <div className="flex mt-3 gap-8 text-gray-600 text-base">
+                <div className="flex items-center gap-2">
+                  <FontAwesomeIcon icon={faDollarSign} />
+                  <p className="text-gray-600 text-base">
+                    {selectedJob.salary}
+                  </p>
+                  <FontAwesomeIcon icon={faLocationDot} />
                   <p>{selectedJob.location}</p>
                 </div>
               </div>
-              <p className="text-gray-600 text-base">{selectedJob.Salary}</p>
 
               <p className="mt-6">{selectedJob.description}</p>
 
               <h2 className="text-xl font-bold mt-3 mb-3">Qualification:</h2>
-              <ul className="text-gray-600 space-y-2">
-                {selectedJob.requirements.map((req, index) => (
+              <p className="mt-3 ">{selectedJob.qualification}</p>
+
+              {/* <ul className="text-gray-600 space-y-2">
+                {selectedJob.qualification.map((req, index) => (
                   <li key={index} className="flex items-center">
                     <span className="text-orange-500 mr-2">✔</span> {req}
                   </li>
                 ))}
-              </ul>
+              </ul> */}
               <h2 className="mt-5 text-xl font-bold mb-3">Other detail:</h2>
-              <p className="mt-3">{selectedJob.Benifit}</p>
+              <p className="mt-3">{selectedJob.detail}</p>
             </div>
           )}
         </div>
@@ -239,13 +387,13 @@ function Listing() {
                   <strong>Position:</strong> {selectedJob.position}
                 </p>
                 <p>
-                  <strong>Work type:</strong> {selectedJob.Type}
+                  <strong>Work type:</strong> {selectedJob.worktype}
                 </p>
                 <p>
-                  <strong>Salary:</strong> {selectedJob.Salary}
+                  <strong>Salary:</strong> {selectedJob.salary}
                 </p>
                 <p>
-                  <strong>Work condition:</strong> {selectedJob.WorkCondition}
+                  <strong>Work condition:</strong> {selectedJob.workcondition}
                 </p>
                 <p>
                   <strong>Experience:</strong> {selectedJob.experience}

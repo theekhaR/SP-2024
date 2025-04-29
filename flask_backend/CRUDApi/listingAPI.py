@@ -6,10 +6,63 @@ from dataModel.companyModel import Company
 from dataModel.companyListingMappingModel import CompanyListingMapping
 from dataModel.userModel import User
 from dateutil import parser
+from supabase_client import supabase
+import openai
 
 from AI.generativeListing import generateSummaryOfListing
 
 listingAPI = blueprints.Blueprint('listingAPI', __name__)
+
+
+@listingAPI.route('/search', methods=['GET'])
+def search_listings():
+    search_text = request.args.get('searchText')
+    search_industry = request.args.get('searchIndustry')
+    search_location = request.args.get('searchLocation')
+    search_work_type = request.args.get('searchWorkType')
+    search_work_condition = request.args.get('searchWorkCondition')
+    search_experience = request.args.get('searchExperience')
+
+    response = supabase.rpc('search_listings', {
+        "search_text": search_text if search_text else None,
+        "search_industry": search_industry if search_industry else None,
+        "search_location": search_location if search_location else None,
+        "search_work_type": search_work_type if search_work_type else None,
+        "search_work_condition": search_work_condition if search_work_condition else None,
+        "search_experience": search_experience if search_experience else None,
+    }).execute()
+
+    if response.data is None:
+        return jsonify({'error': 'No data returned from database'}), 400
+
+    return jsonify(response.data)
+
+@listingAPI.route('/get_default_listings', methods=['GET'])
+def get_default_listings():
+    try:
+        listings = Listing.query.all()
+        listings_list = [
+            {
+            'listingID': listing.ListingID,
+            'company': listing.companylistingmapping_mapping.company_mapping.CompanyName if listing.companylistingmapping_mapping.company_mapping.CompanyName else None,
+            'image_url': listing.companylistingmapping_mapping.company_mapping.CompanyLogoURL,
+            'position': listing.Position,
+            'location': listing.Location,
+            'salary': listing.Salary,
+            'description': listing.RoleDescription,
+            'qualification': listing.Qualification,
+            'detail': listing.Detail,
+            'worktype': listing.WorkType,
+            'workcondition': listing.WorkCondition,
+            'experience':listing.Experience,
+            'industry':listing.companylistingmapping_mapping.company_mapping.companyindustrylist_mapping.IndustryName
+            }
+            for listing in listings
+        ]
+        return jsonify(listings_list), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @listingAPI.route('/get_all_listings', methods=['GET'])
 def get_all_listings():
@@ -23,7 +76,7 @@ def get_all_listings():
         }
         for listing in listings
     ]
-    return jsonify(listings_list)
+    return jsonify(listings_list), 200
 
 @listingAPI.route('/create_listing', methods=['POST'])
 def create_listing():
@@ -150,7 +203,6 @@ def delete_listing():
 
         db.session.delete(result)
         db.session.commit()
-
 
         return jsonify({'message': 'Listing entry deleted successfully'}), 201
 

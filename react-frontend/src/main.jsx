@@ -8,13 +8,13 @@ import "./index.css";
 import ApplicationStatus from "./pages/ApplicationStatus.jsx";
 import Bookmark from "./pages/Bookmark.jsx";
 import Company from "./pages/Company.jsx";
-import CompanyProfile from "./pages/CompanyProfile.jsx"
+import CompanyProfile from "./pages/CompanyProfile.jsx";
 import CompanyProfileEdit from "./pages/CompanyProfileEdit.jsx";
 import CompanyListing from "./pages/CompanyListing.jsx";
 import CreateCompany from "./pages/CreateCompany.jsx";
 import Home from "./pages/Home.jsx";
 import Listing from "./pages/Listing.jsx";
-import CreateListing from "./pages/createListing.jsx";
+import CreateListing from "./pages/CreateListing.jsx";
 import ListingEdit from "./pages/ListingEdit.jsx";
 import Login from "./pages/Login.jsx";
 import CompanyMember from "./pages/CompanyMember.jsx";

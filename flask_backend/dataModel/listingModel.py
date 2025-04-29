@@ -20,6 +20,7 @@ class Listing(db.Model):
     Salary = db.Column(db.String(200))
     Experience = db.Column(db.String(200))
     GenerativeSummary = db.Column(db.ARRAY(db.Text))
+    Location = db.Column(db.Text)
 
     from .companyListingMappingModel import CompanyListingMapping
 

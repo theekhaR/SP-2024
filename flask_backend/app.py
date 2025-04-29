@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from dataModel.__init__ import db
 
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
@@ -24,11 +25,14 @@ db_password = config['postgresql']['password']
 db_host = config['postgresql']['host']
 db_name = config['postgresql']['dbname']
 
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@{db_host}/{db_name}?sslmode=require'
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
+
 
 from CRUDApi.userAPI import userAPI
 from CRUDApi.companyAPI import companyAPI
