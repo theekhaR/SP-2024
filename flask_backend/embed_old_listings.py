@@ -4,7 +4,7 @@ import json
 import time
 
 # === CONFIGURATION ===
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = ""
 
 # === INITIALIZE OPENAI ===
 openai = OpenAI(api_key=OPENAI_API_KEY)
