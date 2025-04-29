@@ -9,11 +9,46 @@ from dateutil import parser
 
 from AI.generativeListing import generateSummaryOfListing
 from supabase_client import supabase
-import openai
+from openai import OpenAI
+from sqlalchemy.dialects.postgresql import ARRAY
 
 listingAPI = blueprints.Blueprint('listingAPI', __name__)
 
+# === CONFIGURATION ===
+OPENAI_API_KEY = "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"
 
+# === INITIALIZE OPENAI ===
+openai = OpenAI(api_key=OPENAI_API_KEY)
+
+def generate_embedding(text):
+    """Generate an embedding using OpenAI"""
+    response = openai.embeddings.create(
+        input=text,
+        model="text-embedding-ada-002"
+    )
+    return response.data[0].embedding
+
+@listingAPI.route('/matching', methods=['GET'])
+def match_jobs_by_skills():
+    user_id = request.args.get('userID')
+
+    if not user_id:
+        return jsonify({"error": "Missing userID parameter"}), 400
+
+    try:
+        response = supabase.rpc('match_jobs_by_skills', {
+            'user_id': user_id  
+        }).execute()
+
+        if response.error:
+            return jsonify({"error": response.error.message}), 500
+
+        return jsonify(response.data), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+        
+ 
 @listingAPI.route('/search', methods=['GET'])
 def search_listings():
     search_text = request.args.get('searchText')
@@ -105,35 +140,12 @@ def create_listing():
             return jsonify({'error': 'Qualification must be an array of text'}), 400
 
         
-        # Set the text for embeddings
-        # input_text = f"""
-        # Position: {data.get('position', '')}.
-        # Role Description: {data.get('roleDescription', '')}.
-        # Detail: {data.get('detail', '')}.
-        # Company: {existing_company.CompanyName if existing_company else ''}.
-        # Qualification: {data.get('qualification', '')}.
-        # """
-
-        # Embedding = None
-        # try:
-        #     openai.api_key = ''  
-
-        #     embedding_response = openai.Embedding.create(
-        #         model="text-embedding-ada-002",
-        #         input=input_text.strip()
-        #     )
-        #     Embedding = embedding_response['data'][0]['embedding']
-
-        # except Exception as embed_error:
-        #     print(f"Embedding created failed: {embed_error}")
-        #     Embedding = None
-
-    
         new_listing = Listing(
             ListingID=str(uuid.uuid4()),
             CreatedBy=data.get('createdBy' if data.get('createdBy') else None),
             CompanyID=data.get('companyID' if data.get('companyID') else None),
             Position=data.get('position' if data.get('position') else None),
+            Location=data.get('Location' if data.get('Location') else None),
             WorkType=data.get('workType') if data.get('workType') else "Not Specified",
             WorkCondition=data.get('workCondition') if data.get('workCondition') else "Not Specified",
             RoleDescription=data.get('roleDescription', ''),
@@ -164,6 +176,10 @@ def create_listing():
         summarized_list = [skill.strip() for skill in summary.split(',')]
         position_text = new_listing.Position or ""
         new_listing.GenerativeSummary = summarized_list
+
+        summary_text_for_embedding = '\n'.join(summarized_list)
+        embedding_vector = generate_embedding(summary_text_for_embedding)
+        new_listing.embedding = embedding_vector
 
         # NOTE: this will actually insert the record in the database and set
         # new_group.id automatically. The session, however, is not committed yet!
@@ -210,6 +226,7 @@ def get_listing_detail():
         'listingPicURL': query_listing.ListingPicURL,
         'salary': query_listing.Salary,
         'experience': query_listing.Experience,
+        'Location': query_listing.Location,
         'affectiveUntil': query_listing.AffectiveUntil.strftime('%Y-%m-%dT%H:%M:%S%z') if query_listing.AffectiveUntil else None
     }
 
@@ -293,6 +310,10 @@ def edit_listing():
             summarized_list = [skill.strip() for skill in summary.split(',')]
             position_text = subject_listing.Position or ""
             subject_listing.GenerativeSummary = summarized_list
+
+            summary_text_for_embedding = '\n'.join(summarized_list)
+            embedding_vector = generate_embedding(summary_text_for_embedding)
+            subject_listing.embedding = embedding_vector
 
         # Commit the updated data to the database
         db.session.commit()

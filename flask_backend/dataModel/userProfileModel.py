@@ -1,4 +1,5 @@
 from .__init__ import db
+from pgvector.sqlalchemy import Vector
 
 class UserProfile(db.Model):
     __tablename__ = 'UserProfile'
@@ -12,6 +13,7 @@ class UserProfile(db.Model):
     CV = db.Column(db.String(200))
     Portfolio = db.Column(db.ARRAY(db.Text))
     PortfolioSummary = db.Column(db.ARRAY(db.Text))
+    profile_embedding = db.Column(Vector(1536))
 
     user_mapping = db.relationship('User', back_populates='userprofile_mapping')
 

@@ -11,8 +11,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../supabaseClient";
 import axios from "axios";
+import { useUserContext } from "../components/UserContext.jsx";
 
 function Listing() {
+  const { userID } = useUserContext();
   const [selectedJob, setSelectedJob] = useState(null);
 
   // Search variable
@@ -27,29 +29,41 @@ function Listing() {
   useEffect(() => {
     async function fetchDefault() {
       try {
-        const response = await fetch(
-          "http://localhost:5000/get_default_listings",
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+        let response;
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Default Listings:", data);
-          setResults(data);
-        } else {
-          const errorData = await response.json();
-          console.error("Error fetching default listings:", errorData.error);
+        if (userID) {
+          response = await fetch("http://localhost:5000/get_matching_list", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userID }),
+          });
+          console.log("Step1");
+          if (!response.ok) {
+            console.warn("Matching list fetch failed using default listings");
+            response = await fetch(
+              "http://localhost:5000/get_default_listings",
+              {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+          }
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Listings:", data);
+            setResults(data);
+          } else {
+            const errorData = await response.json();
+            console.error("Error fetching listings:", errorData.error);
+          }
         }
       } catch (error) {
-        console.error("Failed to fetch default listings:", error.message);
+        console.error("Failed to fetch listings:", error.message);
       }
     }
 
     fetchDefault();
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
     if (results.length > 0) {
@@ -189,7 +203,8 @@ function Listing() {
               <option value="">All Industry</option>
               <option value="Technology and IT">Technology and IT</option>
               <option value="Food and Beverage">Food and Beverage</option>
-              <option value="Remote">Medical</option>
+              <option value="Medical">Medical</option>
+              <option value="Entertainment">Entertainment</option>
             </select>
           </div>
 
