@@ -3,11 +3,7 @@ from openai import OpenAI
 import json
 import time
 
-# === CONFIGURATION ===
-OPENAI_API_KEY = ""
 
-# === INITIALIZE OPENAI ===
-openai = OpenAI(api_key=OPENAI_API_KEY)
 
 # === FUNCTIONS ===
 
