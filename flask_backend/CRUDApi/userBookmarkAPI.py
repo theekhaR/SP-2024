@@ -39,7 +39,6 @@ def add_user_bookmark():
 def remove_user_bookmark():
     try:
         data = request.get_json()
-        print(data)
         if (not data
                 or 'userID' not in data or not data.get('userID')
                 or 'listingID' not in data or not data.get('listingID')):
@@ -72,8 +71,10 @@ def get_user_bookmark():
     listings_json = [
         {
             "listingID": listing.ListingID,
-            'listingName': listing.listing_mapping.Position if listing.listing_mapping.Position else None,
-            'companyName': listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyName if listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyName else None
+            'position': listing.listing_mapping.Position if listing.listing_mapping.Position else None,
+            'affectiveUntil': listing.listing_mapping.AffectiveUntil,
+            'companyName': listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyName if listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyName else None,
+            'companyLogoURL': listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyLogoURL if listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyLogoURL else None
         }
         for listing in listings
     ]

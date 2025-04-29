@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../supabaseClient";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 function Listing() {
   const [selectedJob, setSelectedJob] = useState(null);
@@ -116,11 +117,11 @@ function Listing() {
     <div className="bg-gray-100 flex flex-col">
       <L_navbar />
 
-      <div class=" p-6 grid grid-cols-1 gap-6 ">
-        <div class="flex flex-col md:flex-row">
-          <div class="">
+      <div className=" p-6 grid grid-cols-1 gap-6 ">
+        <div className="flex flex-col md:flex-row">
+          <div className="">
             <select
-              class="border p-2 rounded"
+              className="border p-2 rounded"
               value={searchWorkType}
               onChange={(e) => setSearchWorkType(e.target.value)}
             >
@@ -131,9 +132,9 @@ function Listing() {
               <option value="Contract">Contract</option>
             </select>
           </div>
-          <div class="pt-6 md:pt-0 md:pl-6">
+          <div className="pt-6 md:pt-0 md:pl-6">
             <select
-              class="border p-2 rounded"
+              className="border p-2 rounded"
               value={searchWorkCondition}
               onChange={(e) => setSearchWorkCondition(e.target.value)}
             >
@@ -143,9 +144,9 @@ function Listing() {
               <option value="Hybrid">Hybrid</option>
             </select>
           </div>
-          <div class="pt-6 md:pt-0 md:pl-6">
+          <div className="pt-6 md:pt-0 md:pl-6">
             <select
-              class="border p-2 rounded"
+              className="border p-2 rounded"
               value={searchExperience}
               onChange={(e) => setSearchExperience(e.target.value)}
             >
@@ -212,7 +213,7 @@ function Listing() {
             </select>
           </div>
         </div>
-        <div class="flex justify-center">
+        <div className="flex justify-center">
           <button
             className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg"
             onClick={handleSearch}
@@ -358,7 +359,12 @@ function Listing() {
               <p className="mt-6">{selectedJob.description}</p>
 
               <h2 className="text-xl font-bold mt-3 mb-3">Qualification:</h2>
-              <p className="mt-3 ">{selectedJob.qualification}</p>
+
+              {selectedJob.qualification.map((qual, index) => (
+                <div key={index} className="flex items-center space-x-4">
+                  ➤ {qual}
+                </div>
+            ))}
 
               {/* <ul className="text-gray-600 space-y-2">
                 {selectedJob.qualification.map((req, index) => (
@@ -403,13 +409,18 @@ function Listing() {
                 </p>
               </div>
               <div className="mt-6 space-y-3">
-                <button className="w-full bg-orange-500 text-white py-2 rounded-lg">
+                <button className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition">
                   Apply For Position
                 </button>
-                <button className="w-full border border-orange-500 text-orange-500 py-2 rounded-lg">
-                  Have A Conversation
-                </button>
-                <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg">
+
+                <Link
+                    to={`/companyprofileuser/${selectedJob.companyID}`}
+                    className="block w-full text-center border border-orange-500 text-orange-500 py-2 rounded-lg hover:bg-orange-50 transition"
+                >
+                  Check Company Profile
+                </Link>
+
+                <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-100 transition">
                   Add To Bookmark
                 </button>
               </div>

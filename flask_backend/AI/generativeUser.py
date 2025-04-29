@@ -88,7 +88,9 @@ def generate_summary(text: str) -> str:
     try:
         prompt = f"""
                 From the resume text below, extract only the skills that are relevant and applicable for job applications.
-                These can include technical skills (e.g., programming, tools, frameworks), soft skills (e.g., leadership, teamwork), or language abilities.
+                These can include technical skills (e.g., programming languages, tools, frameworks), soft skills 
+                (e.g., leadership, communication, teamwork), language proficiencies, certifications, domain knowledge 
+                (e.g., finance, healthcare), and relevant educational background.
 
                 Return the skills as a clean set of skills, separated by commas in CSV format.
 

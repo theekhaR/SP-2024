@@ -47,6 +47,7 @@ from CRUDApi.companyPermissionListAPI import companyPermissionListAPI
 from CRUDApi.listingApplicantMappingAPI import listingApplicantMappingAPI
 from CRUDApi.userProfileAPI import userProfileAPI
 from CRUDApi.aiAPI import aiAPI
+from CRUDApi.userFollowingAPI import userFollowingAPI
 from AI.generativeUser import generateQueryFromURL
 app.register_blueprint(userAPI)
 app.register_blueprint(companyAPI)
@@ -54,6 +55,7 @@ app.register_blueprint(listingAPI)
 app.register_blueprint(userApplicationAPI)
 app.register_blueprint(userBookmarkAPI)
 app.register_blueprint(userEducationAPI)
+app.register_blueprint(userFollowingAPI)
 app.register_blueprint(companyMemberMappingAPI)
 app.register_blueprint(companyIndustryListAPI)
 app.register_blueprint(companyListingMappingAPI)

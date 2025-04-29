@@ -45,8 +45,8 @@ function ListingEdit() {
         },
         body: JSON.stringify({
           listingID: listingID,
-        ...editListing  // Spread the fields directly into the body
-      }),
+          ...editListing  // Spread the fields directly into the body
+        }),
       });
 
       if (response.status === 200) {
@@ -98,7 +98,7 @@ function ListingEdit() {
     }
   };
 
-    // Handle adding a new qualification
+  // Handle adding a new qualification
   const handleAddQualification = () => {
     setEditListing((prev) => ({
       ...prev,
@@ -123,6 +123,28 @@ function ListingEdit() {
       ...prev,
       qualification: updatedQualifications,
     }));
+  };
+
+  const handleDeleteListing = async (event) => {
+    try {
+      const response = await fetch(`http://localhost:5000/delete_listing?listingID=${listingID}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json(); // Moved inside try block
+      if (data){
+        navigate("/companylisting")
+      }
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+    } catch (error) {
+      console.error("Error encountered:", error);
+    }
   };
 
   useEffect( () => {getListing()}, [])
@@ -255,7 +277,7 @@ function ListingEdit() {
                     onChange={(e) => setEditListing({...editListing, affectiveMinute: e.target.value})}
                     className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
                 />
-                                <input
+                <input
                     value={editListing.affectiveDay}
                     placeholder="Day"
                     onChange={(e) =>setEditListing({...editListing, affectiveDay: e.target.value})}
@@ -267,7 +289,7 @@ function ListingEdit() {
                     onChange={(e) => setEditListing({...editListing, affectiveMonth: e.target.value})}
                     className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
                 />
-                                <input
+                <input
                     value={editListing.affectiveYear}
                     placeholder="Year"
                     onChange={(e) => setEditListing({...editListing, affectiveYear: e.target.value})}
@@ -332,48 +354,61 @@ function ListingEdit() {
           {/*</div>*/}
 
           {/* Qualification Section */}
-                     <div className="mb-6">
+          <div className="mb-6">
             <label className="text-sm font-medium text-gray-700 mb-1">
               Qualifications
             </label>
             {editListing.qualification.map((qual, index) => (
-              <div key={index} className="flex items-center space-x-4">
-                <input
-                  type="text"
-                  value={qual}
-                  onChange={(e) => handleQualificationChange(index, e.target.value)}
-                  placeholder="Qualification"
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveQualification(index)}
-                  className="text-red-600 hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
+                <div key={index} className="flex items-center space-x-4">
+                  <input
+                      type="text"
+                      value={qual}
+                      onChange={(e) => handleQualificationChange(index, e.target.value)}
+                      placeholder="Qualification"
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                      type="button"
+                      onClick={() => handleRemoveQualification(index)}
+                      className="text-red-600 hover:underline"
+                  >
+                    Remove
+                  </button>
+                </div>
             ))}
             <button
-              type="button"
-              onClick={handleAddQualification}
-              className="mt-2 text-blue-600 hover:underline"
+                type="button"
+                onClick={handleAddQualification}
+                className="mt-2 text-blue-600 hover:underline"
             >
               + Add new qualification
             </button>
           </div>
 
-          <div className="flex justify-end mt-4">
+          <div className="flex justify-between mt-4">
+            {/* Left-aligned Delete button */}
             <button
-                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
-                onClick={handleEditListing}
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
+                onClick={handleDeleteListing}
             >
-              Save
+              Delete Listing
             </button>
-              <Link className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800 "
-              to={`/companylisting`}>
-                  Cancel
+
+            {/* Right-aligned Save and Cancel buttons */}
+            <div className="flex space-x-4">
+              <button
+                  className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800"
+                  onClick={handleEditListing}
+              >
+                Save
+              </button>
+              <Link
+                  className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800"
+                  to={`/companylisting`}
+              >
+                Cancel
               </Link>
+            </div>
           </div>
           {/* End the form this line */}
         </div>

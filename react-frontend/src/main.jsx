@@ -22,11 +22,13 @@ import Message from "./pages/Message.jsx";
 import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 import ManageApplication from "./pages/ManageApplication.jsx";
+import CompanyProfileUser from "./pages/CompanyProfileUser.jsx";
 
 // Components
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
 import { UserProvider } from "./components/UserContext.jsx";
 import { CompanyProvider } from "./components/CompanyContext.jsx";
+
 
 // Wrapping component defined inline
 function ContextWrapper() {
@@ -54,6 +56,7 @@ const router = createBrowserRouter([
       { path: "/company", element: <Company /> },
       { path: "/companyprofile", element: <CompanyProfile /> },
       { path: "/companyprofileedit", element: <CompanyProfileEdit /> },
+      { path: "/companyprofileuser/:companyID", element: <CompanyProfileUser /> },
       { path: "/companyListing", element: <CompanyListing /> },
       { path: "/createCompany", element: <CreateCompany /> },
       { path: "/createlisting", element: <CreateListing /> },

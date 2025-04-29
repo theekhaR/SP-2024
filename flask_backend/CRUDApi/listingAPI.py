@@ -55,7 +55,8 @@ def get_default_listings():
             'worktype': listing.WorkType,
             'workcondition': listing.WorkCondition,
             'experience':listing.Experience,
-            'industry':listing.companylistingmapping_mapping.company_mapping.companyindustrylist_mapping.IndustryName
+            'industry':listing.companylistingmapping_mapping.company_mapping.companyindustrylist_mapping.IndustryName,
+            'companyID': listing.companylistingmapping_mapping.company_mapping.CompanyID if listing.companylistingmapping_mapping.company_mapping.CompanyID else None,
             }
             for listing in listings
         ]
