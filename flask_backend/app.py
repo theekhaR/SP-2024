@@ -42,7 +42,8 @@ from CRUDApi.companyListingMappingAPI import companyListingMappingAPI
 from CRUDApi.companyPermissionListAPI import companyPermissionListAPI
 from CRUDApi.listingApplicantMappingAPI import listingApplicantMappingAPI
 from CRUDApi.userProfileAPI import userProfileAPI
-
+from CRUDApi.aiAPI import aiAPI
+from AI.generativeUser import generateQueryFromURL
 app.register_blueprint(userAPI)
 app.register_blueprint(companyAPI)
 app.register_blueprint(listingAPI)
@@ -55,6 +56,8 @@ app.register_blueprint(companyListingMappingAPI)
 app.register_blueprint(companyPermissionListAPI)
 app.register_blueprint(listingApplicantMappingAPI)
 app.register_blueprint(userProfileAPI)
+
+app.register_blueprint(aiAPI)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -228,6 +228,7 @@ function UserProfile() {
     setTimeout(async () => {
       await updatePortfolioURL(); // now fetch new URL after small delay
     }, 1000); // try with 1000ms (1 sec), tweak if needed
+    alert("Portfolio Uploaded");
   }
 
   async function removeAllItemInPortfolioFolder() {

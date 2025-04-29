@@ -7,6 +7,8 @@ from dataModel.companyListingMappingModel import CompanyListingMapping
 from dataModel.userModel import User
 from dateutil import parser
 
+from AI.generativeListing import generateSummaryOfListing
+
 listingAPI = blueprints.Blueprint('listingAPI', __name__)
 
 @listingAPI.route('/get_all_listings', methods=['GET'])
@@ -44,6 +46,11 @@ def create_listing():
         if not existing_company:
             return jsonify({'error': 'Company not valid'}), 409
 
+        # Ensure qualification is a list
+        qualifications = data.get('qualification', [])
+        if not isinstance(qualifications, list):
+            return jsonify({'error': 'Qualification must be an array of text'}), 400
+
         new_listing = Listing(
             ListingID=str(uuid.uuid4()),
             CreatedBy=data.get('createdBy' if data.get('createdBy') else None),
@@ -53,7 +60,7 @@ def create_listing():
             WorkCondition=data.get('workCondition') if data.get('workCondition') else "Not Specified",
             RoleDescription=data.get('roleDescription', ''),
             Detail=data.get('detail', False),
-            Qualification=data.get('qualification', ''),
+            Qualification=qualifications,
             ListingPicURL=data.get('listingPicURL', ''),
             Salary=data.get('salary', ''),
             Experience=data.get('experience', ''),
@@ -64,6 +71,21 @@ def create_listing():
 
         db.session.add(new_listing)
         db.session.flush()
+
+        parts = [
+            new_listing.Position or '',
+            new_listing.RoleDescription or '',
+            new_listing.Detail or '',
+            ', '.join(new_listing.Qualification) if new_listing.Qualification else '',
+        ]
+        all_text = '\n'.join(parts).strip()
+        print(all_text)
+        summary = generateSummaryOfListing(all_text)
+
+        summarized_list = [skill.strip() for skill in summary.split(',')]
+        position_text = new_listing.Position or ""
+        new_listing.GenerativeSummary = summarized_list
+
         # NOTE: this will actually insert the record in the database and set
         # new_group.id automatically. The session, however, is not committed yet!
 
@@ -129,6 +151,7 @@ def delete_listing():
         db.session.delete(result)
         db.session.commit()
 
+
         return jsonify({'message': 'Listing entry deleted successfully'}), 201
 
     except Exception as e:
@@ -167,6 +190,19 @@ def edit_listing():
             # Use current datetime + 7 days as the default
             subject_listing.AffectiveUntil = subject_listing.AffectiveUntil
 
+        parts = [
+            subject_listing.Position or '',
+            subject_listing.RoleDescription or '',
+            subject_listing.Detail or '',
+            ', '.join(subject_listing.Qualification) if subject_listing.Qualification else '',
+        ]
+        all_text = '\n'.join(parts).strip()
+        print(all_text)
+        summary = generateSummaryOfListing(all_text)
+
+        summarized_list = [skill.strip() for skill in summary.split(',')]
+        position_text = subject_listing.Position or ""
+        subject_listing.GenerativeSummary = summarized_list
         # Commit the updated data to the database
         db.session.commit()
 
