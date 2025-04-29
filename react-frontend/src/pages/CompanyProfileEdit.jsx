@@ -176,7 +176,7 @@ function CompanyProfileEdit() {
       setTimeout(async () => {
         await updateCompanyLogoURL(); // now fetch new URL after small delay
         window.location.reload()
-      }, 1000);
+      }, 3000);
     }
     if (error) {
       alert(error.message);

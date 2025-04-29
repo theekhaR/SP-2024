@@ -158,7 +158,7 @@ function CompanyMember() {
   }
 
 return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
       <Lnavbar />
       <div className="flex flex-row">
         <Sidebar />

@@ -84,7 +84,7 @@ function CreateListing() {
   };
 
   return (
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-gray-100 ">
         <Lnavbar />
         <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md mt-12">
           <h2 className="text-xl font-bold text-orange-500  mb-6">
