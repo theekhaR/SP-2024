@@ -166,9 +166,19 @@ def edit_listing():
         # Ensure 'listingID' is provided and valid
         update_listingID = data.get('listingID')
         subject_listing = Listing.query.filter_by(ListingID=update_listingID).first()
+        summary_fields_changed = False
 
         if not subject_listing:
             return jsonify({'error': 'This listing does not exist'}), 409
+
+        if 'position' in data and data['position'] != subject_listing.Position:
+            summary_fields_changed = True
+        if 'roleDescription' in data and data['roleDescription'] != subject_listing.RoleDescription:
+            summary_fields_changed = True
+        if 'detail' in data and data['detail'] != subject_listing.Detail:
+            summary_fields_changed = True
+        if 'qualification' in data and data['qualification'] != subject_listing.Qualification:
+            summary_fields_changed = True
 
         # Set values for the listing's attributes only if provided
         subject_listing.Position = data.get('position', subject_listing.Position)
@@ -190,19 +200,21 @@ def edit_listing():
             # Use current datetime + 7 days as the default
             subject_listing.AffectiveUntil = subject_listing.AffectiveUntil
 
-        parts = [
-            subject_listing.Position or '',
-            subject_listing.RoleDescription or '',
-            subject_listing.Detail or '',
-            ', '.join(subject_listing.Qualification) if subject_listing.Qualification else '',
-        ]
-        all_text = '\n'.join(parts).strip()
-        print(all_text)
-        summary = generateSummaryOfListing(all_text)
+        if summary_fields_changed:
+            parts = [
+                subject_listing.Position or '',
+                subject_listing.RoleDescription or '',
+                subject_listing.Detail or '',
+                ', '.join(subject_listing.Qualification) if subject_listing.Qualification else '',
+            ]
+            all_text = '\n'.join(parts).strip()
+            print(all_text)
+            summary = generateSummaryOfListing(all_text)
 
-        summarized_list = [skill.strip() for skill in summary.split(',')]
-        position_text = subject_listing.Position or ""
-        subject_listing.GenerativeSummary = summarized_list
+            summarized_list = [skill.strip() for skill in summary.split(',')]
+            position_text = subject_listing.Position or ""
+            subject_listing.GenerativeSummary = summarized_list
+
         # Commit the updated data to the database
         db.session.commit()
 
