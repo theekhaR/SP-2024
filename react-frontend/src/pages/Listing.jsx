@@ -61,12 +61,12 @@ function Listing() {
       try {
         const response = await fetch(
             "http://localhost:5000/get_default_listings",
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
 
         if (response.ok) {
@@ -93,16 +93,16 @@ function Listing() {
     }
   }, [results]);
 
-  const formatQualification = (qualification) => {
-    if (Array.isArray(qualification)) return qualification;
-    if (typeof qualification === "string") {
-      return qualification
-          .split(/,\s(?=[A-Z0-9])/)
-          .map((item) => item.trim())
-          .filter((item) => item !== "");
-    }
-    return [];
-  };
+      const formatQualification = (qualification) => {
+      if (Array.isArray(qualification)) return qualification;
+      if (typeof qualification === "string") {
+        return qualification
+            .split(/,\s(?=[A-Z0-9])/)
+            .map((item) => item.trim())
+            .filter((item) => item !== "");
+      }
+      return [];
+    };
 
   const handleSearch = async () => {
     try {
