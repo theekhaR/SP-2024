@@ -122,12 +122,6 @@ function ApplicationStatus() {
                   className="w-16 h-16 object-cover rounded"
                 />
                 <div>
-                  {/*<div className="flex items-center space-x-1 text-sm text-orange-500">*/}
-                  {/*  <span>★</span>*/}
-                  {/*  <span className="text-gray-700 font-medium">*/}
-                  {/*    {item.rating}*/}
-                  {/*  </span>*/}
-                  {/*</div>*/}
                   <div className="text-gray-900 font-semibold">
                     {item.position}
                   </div>

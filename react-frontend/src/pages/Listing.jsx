@@ -287,8 +287,8 @@ function Listing() {
               <option value="">All Experience Levels</option>
               <option value="Not Required">Not Required</option>
               <option value="1 - 2 years">1 - 2 years</option>
-              <option value="2 - 5 years">2 - 5 years</option>
-              <option value="5 - 10 years">5 - 10 years</option>
+              <option value="3 - 5 years">3 - 5 years</option>
+              <option value="6 - 10 years">6 - 10 years</option>
               <option value="10 years or above">10 years or above</option>
             </select>
           </div>
