@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../components/footer";
 import L_navbar from "../components/L_navbar.jsx";
-import {useUserContext} from "../components/UserContext.jsx";
+import { useUserContext } from "../components/UserContext.jsx";
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
 
 function Bookmark() {
-
   const { userID } = useUserContext();
 
   function getStatus(affectiveUntil) {
@@ -19,18 +18,18 @@ function Bookmark() {
     }
   }
 
-  const [ bookmarkList, setBookmarkList ] = useState([]);
+  const [bookmarkList, setBookmarkList] = useState([]);
 
   async function getUserBookmark() {
     try {
       const response = await fetch(
-          `http://localhost:5000/get_user_bookmark?userID=${userID}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+        `http://localhost:5000/get_user_bookmark?userID=${userID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       //console.log(response)
@@ -42,7 +41,7 @@ function Bookmark() {
           position: bookmark.position,
           companyName: bookmark.companyName,
           companyLogoURL: bookmark.companyLogoURL,
-          affectiveUntil: bookmark.affectiveUntil
+          affectiveUntil: bookmark.affectiveUntil,
         }));
 
         setBookmarkList(bookmarks); // render immediately
@@ -66,20 +65,20 @@ function Bookmark() {
 
   async function applyForListing(applyListingID) {
     try {
-      console.log(userID)
-      console.log(applyListingID)
+      console.log(userID);
+      console.log(applyListingID);
       const response = await fetch(
-          `http://localhost:5000/add_user_applicantion`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              "userID": userID,
-              "listingID": applyListingID
-            })
-          }
+        `http://localhost:5000/add_user_applicantion`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userID: userID,
+            listingID: applyListingID,
+          }),
+        }
       );
 
       //console.log(response)
@@ -95,17 +94,17 @@ function Bookmark() {
 
       //REMOVE BOOKMARK
       const response2 = await fetch(
-          `http://localhost:5000//remove_user_bookmark`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              "userID": userID,
-              "listingID": applyListingID
-            })
-          }
+        `http://localhost:5000//remove_user_bookmark`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userID: userID,
+            listingID: applyListingID,
+          }),
+        }
       );
 
       //console.log(response)
@@ -122,27 +121,26 @@ function Bookmark() {
       // Unexpected error
       alert(data2.error);
       return [];
-
     } catch (error) {
       console.error("Error checking user:", error);
       return [];
     }
   }
 
-    async function removeBookmark(removeListingID) {
+  async function removeBookmark(removeListingID) {
     try {
       const response = await fetch(
-          `http://localhost:5000//remove_user_bookmark`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              "userID": userID,
-              "listingID": removeListingID
-            })
-          }
+        `http://localhost:5000//remove_user_bookmark`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userID: userID,
+            listingID: removeListingID,
+          }),
+        }
       );
 
       //console.log(response)
@@ -166,9 +164,7 @@ function Bookmark() {
     }
   }
 
-
-
-    useEffect(() => {
+  useEffect(() => {
     if (!userID) return; // Avoid running if companyID is not ready
     getUserBookmark();
   }, [userID]);
@@ -183,7 +179,7 @@ function Bookmark() {
           {/* Header */}
           <div className="border-b px-6 py-4 flex justify-between font-medium text-gray-600">
             <span>LISTING</span>
-            <span>STATUS</span>
+            <span className="ml-20">STATUS</span>
             <span>ACTION</span>
           </div>
 
@@ -219,20 +215,24 @@ function Bookmark() {
                 {/* Action */}
                 <div className="flex items-center space-x-2">
                   {statusInfo.text === "Closed" ? (
-                      <button className="w-[144px] py-2 px-4 bg-orange-100 text-orange-500 rounded-lg font-semibold text-sm">
+                    <button className="w-[144px] py-2 px-4 bg-orange-100 text-orange-500 rounded-lg font-semibold text-sm">
+                      Remove
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2 px-4 rounded-lg"
+                        onClick={() => applyForListing(listing.listingID)}
+                      >
+                        Apply
+                      </button>
+                      <button
+                        className="p-2 rounded-lg bg-orange-100 text-orange-500"
+                        onClick={() => removeBookmark(listing.listingID)}
+                      >
                         Remove
                       </button>
-                  ) : (
-                      <>
-                        <button className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2 px-4 rounded-lg"
-                         onClick={() => applyForListing(listing.listingID)}>
-                          Apply
-                        </button>
-                        <button className="p-2 rounded-lg bg-orange-100 text-orange-500"
-                          onClick={() => removeBookmark(listing.listingID)}>
-                          Remove
-                        </button>
-                      </>
+                    </>
                   )}
                 </div>
               </div>
