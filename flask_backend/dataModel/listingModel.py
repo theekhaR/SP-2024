@@ -1,4 +1,5 @@
 from datetime import datetime
+from pgvector.sqlalchemy import Vector
 from .__init__ import db
 
 class Listing(db.Model):
@@ -21,6 +22,7 @@ class Listing(db.Model):
     Experience = db.Column(db.String(200))
     GenerativeSummary = db.Column(db.ARRAY(db.Text))
     Location = db.Column(db.Text)
+    embedding = db.Column(Vector(1536))
 
     from .companyListingMappingModel import CompanyListingMapping
 

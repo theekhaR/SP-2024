@@ -4,6 +4,8 @@ import os
 import cv2
 import pytesseract
 import fitz  # PyMuPDF
+import csv
+import io
 import google.generativeai as genai
 from typing import Dict
 import requests
@@ -26,14 +28,7 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel(MODEL_NAME)
 
-# ───── Ensure assets folder exists ─────
-current_dir = os.path.dirname(os.path.abspath(__file__))
-assets_path = os.path.join(current_dir, ASSETS_FOLDER)
-if not os.path.exists(assets_path):
-    os.makedirs(assets_path)
-    print(f" Created directory: {assets_path}")
-    print(" Please place your files in this directory and run the script again.")
-    exit()
+
 
 # ───── Text Extraction Functions ─────
 def extract_text_from_image(img_path: str) -> str:

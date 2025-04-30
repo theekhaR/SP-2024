@@ -9,8 +9,24 @@ from dataModel.userProfileModel import UserProfile
 from dataModel.listingApplicantMapping import ListingApplicantMapping
 
 from AI.generativeUser import generateQueryFromURL
+from openai import OpenAI
+from sqlalchemy.dialects.postgresql import ARRAY
 
 userProfileAPI = blueprints.Blueprint('userProfileAPI', __name__)
+
+# === CONFIGURATION ===
+OPENAI_API_KEY = "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"
+
+# === INITIALIZE OPENAI ===
+openai = OpenAI(api_key=OPENAI_API_KEY)
+
+def generate_embedding(text):
+    """Generate an embedding using OpenAI"""
+    response = openai.embeddings.create(
+        input=text,
+        model="text-embedding-ada-002"
+    )
+    return response.data[0].embedding
 
 
 @userProfileAPI.route('/edit_user_profile', methods=['PATCH'])
@@ -80,6 +96,10 @@ def update_portfolio():
         summary = generateQueryFromURL(subject_user.Portfolio)
         skill_list = [skill.strip() for skill in summary.split(',')]
         subject_user.PortfolioSummary = skill_list
+
+        summary_text_for_embedding = '\n'.join(skill_list)
+        embedding_vector = generate_embedding(summary_text_for_embedding)
+        subject_user.profile_embedding = embedding_vector
 
         db.session.commit()
         return jsonify({'message': 'UserProfile updated successfully', 'UserID': subject_user.UserID}), 201

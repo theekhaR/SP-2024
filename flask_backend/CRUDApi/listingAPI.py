@@ -6,13 +6,83 @@ from dataModel.companyModel import Company
 from dataModel.companyListingMappingModel import CompanyListingMapping
 from dataModel.userModel import User
 from dateutil import parser
+from AI.generativeListing import generateSummaryOfListing
 from supabase_client import supabase
-import openai
-
+from openai import OpenAI
+from sqlalchemy.dialects.postgresql import ARRAY
 from AI.generativeListing import generateSummaryOfListing
 
 listingAPI = blueprints.Blueprint('listingAPI', __name__)
 
+# === CONFIGURATION ===
+OPENAI_API_KEY = "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"
+
+# === INITIALIZE OPENAI ===
+openai = OpenAI(api_key=OPENAI_API_KEY)
+
+def generate_embedding(text):
+    """Generate an embedding using OpenAI"""
+    response = openai.embeddings.create(
+        input=text,
+        model="text-embedding-ada-002"
+    )
+    return response.data[0].embedding
+
+# @listingAPI.route('/check_user_id', methods=['POST'])
+# def check_user_id():
+#     data = request.get_json()
+#     user_id = data.get('userID')
+#     print("Received user ID:", user_id)
+#     return jsonify({'received': user_id}), 200
+
+@listingAPI.route('/matching', methods=['POST'])
+def match_jobs_by_skills():
+    data = request.get_json()
+    user_id = data.get('userID')
+
+    if not user_id:
+        return jsonify({"error": "Missing userID"}), 400
+
+    response = supabase.rpc('match_jobs_by_skills', {'user_id': user_id}).execute()
+
+    if not response.data:
+        # You can also check response.status_code if needed
+        return jsonify({'error': 'No data returned or user embedding not found'}), 500
+
+    return jsonify(response.data), 200
+
+
+
+    # print("Received user ID:", user_id)
+    # return jsonify({'received': user_id}), 200
+
+
+
+# @listingAPI.route('/matching', methods=['POST'])
+# def match_jobs_by_skills():
+#     data = request.get_json()
+#     user_id = data.get('user_id')  # match key in frontend
+
+#     print("Received user_id:", user_id)
+
+#     if not user_id:
+#         return jsonify({"error": "Missing user_id parameter"}), 400
+
+#     try:
+#         response = supabase.rpc('match_jobs_by_skills', {
+#             'user_id': user_id
+#         }).execute()
+
+#         print("Supabase RPC raw response:", response)
+
+#         if response.status_code != 200 or response.data is None:
+#             return jsonify({"error": "Supabase RPC failed"}), 500
+
+#         return jsonify(response.data), 200
+
+#     except Exception as e:
+#         print("Exception in /matching route:", str(e))
+#         return jsonify({'error': str(e)}), 500
 
 @listingAPI.route('/search', methods=['GET'])
 def search_listings():
@@ -105,11 +175,13 @@ def create_listing():
         if not isinstance(qualifications, list):
             return jsonify({'error': 'Qualification must be an array of text'}), 400
 
+
         new_listing = Listing(
             ListingID=str(uuid.uuid4()),
             CreatedBy=data.get('createdBy' if data.get('createdBy') else None),
             CompanyID=data.get('companyID' if data.get('companyID') else None),
             Position=data.get('position' if data.get('position') else None),
+            Location=data.get('Location' if data.get('Location') else None),
             WorkType=data.get('workType') if data.get('workType') else "Not Specified",
             WorkCondition=data.get('workCondition') if data.get('workCondition') else "Not Specified",
             RoleDescription=data.get('roleDescription', ''),
@@ -120,7 +192,8 @@ def create_listing():
             Experience=data.get('experience', ''),
             CreatedOn=datetime.now(),
             #AffectiveUntil=datetime.strptime(data.get('affectiveUntil'), '%Y-%m-%dT%H:%M:%S%z')
-            AffectiveUntil = datetime.strptime(data.get('affectiveUntil', (datetime.now(timezone.utc).astimezone() + timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%S%z')), '%Y-%m-%dT%H:%M:%S%z')
+            AffectiveUntil = datetime.strptime(data.get('affectiveUntil', (datetime.now(timezone.utc).astimezone() + timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%S%z')), '%Y-%m-%dT%H:%M:%S%z'),
+            # embedding = Embedding
         )
 
         db.session.add(new_listing)
@@ -139,6 +212,10 @@ def create_listing():
         summarized_list = [skill.strip() for skill in summary.split(',')]
         position_text = new_listing.Position or ""
         new_listing.GenerativeSummary = summarized_list
+
+        summary_text_for_embedding = '\n'.join(summarized_list)
+        embedding_vector = generate_embedding(summary_text_for_embedding)
+        new_listing.embedding = embedding_vector
 
         # NOTE: this will actually insert the record in the database and set
         # new_group.id automatically. The session, however, is not committed yet!
@@ -185,6 +262,7 @@ def get_listing_detail():
         'listingPicURL': query_listing.ListingPicURL,
         'salary': query_listing.Salary,
         'experience': query_listing.Experience,
+        'Location': query_listing.Location,
         'affectiveUntil': query_listing.AffectiveUntil.strftime('%Y-%m-%dT%H:%M:%S%z') if query_listing.AffectiveUntil else None
     }
 
@@ -204,6 +282,7 @@ def delete_listing():
 
         db.session.delete(result)
         db.session.commit()
+
 
         return jsonify({'message': 'Listing entry deleted successfully'}), 201
 
@@ -267,6 +346,10 @@ def edit_listing():
             summarized_list = [skill.strip() for skill in summary.split(',')]
             position_text = subject_listing.Position or ""
             subject_listing.GenerativeSummary = summarized_list
+
+            summary_text_for_embedding = '\n'.join(summarized_list)
+            embedding_vector = generate_embedding(summary_text_for_embedding)
+            subject_listing.embedding = embedding_vector
 
         # Commit the updated data to the database
         db.session.commit()

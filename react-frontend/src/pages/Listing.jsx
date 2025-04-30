@@ -11,9 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../supabaseClient";
 import axios from "axios";
+import { useUserContext } from "../components/UserContext.jsx";
 import {Link} from "react-router-dom";
 
 function Listing() {
+  const { userID } = useUserContext();
   const [selectedJob, setSelectedJob] = useState(null);
 
   // Search variable
@@ -26,31 +28,64 @@ function Listing() {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    async function fetchDefault() {
+    const MatchingSkill = async () => {
+      if (!userID) {
+        console.error("UserID is not available yet.");
+        return;
+      }
+
+      try {
+        // First try to get matching jobs
+        const response = await axios.post("http://localhost:5000/matching", {
+          userID: userID,
+        });
+
+        if (
+          response.status === 200 &&
+          response.data.length > 0 &&
+          Object.values(response.data[0]).some((val) => val !== null)
+        ) {
+          console.log("Backend matched jobs:", response.data);
+          setResults(response.data);
+        } else {
+          console.warn("No meaningful match, loading default listings...");
+          await fetchDefaultListings();
+        }
+      } catch (error) {
+        console.error("Error calling /matching:", error.message);
+        await fetchDefaultListings(); // Fallback on error
+      }
+    };
+
+    const fetchDefaultListings = async () => {
       try {
         const response = await fetch(
           "http://localhost:5000/get_default_listings",
           {
             method: "GET",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
         );
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Default Listings:", data);
+          console.log("Loaded default listings");
           setResults(data);
         } else {
           const errorData = await response.json();
-          console.error("Error fetching default listings:", errorData.error);
+          console.error("Failed to fetch default listings:", errorData.error);
         }
       } catch (error) {
-        console.error("Failed to fetch default listings:", error.message);
+        console.error("Error fetching default listings:", error.message);
       }
-    }
+    };
 
-    fetchDefault();
-  }, []);
+    if (userID) {
+      MatchingSkill();
+    }
+  }, [userID]);
 
   useEffect(() => {
     if (results.length > 0) {
@@ -72,13 +107,50 @@ function Listing() {
       let response;
 
       if (isAllEmpty) {
-        response = await fetch("http://localhost:5000/get_default_listings", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        // First try to get matching jobs
+        try {
+          response = await axios.post("http://localhost:5000/matching", {
+            userID: userID,
+          });
+
+          if (
+            response.status === 200 &&
+            response.data.length > 0 &&
+            Object.values(response.data[0]).some((val) => val !== null)
+          ) {
+            console.log("Matched jobs from backend:", response.data);
+            setResults(response.data);
+            return;
+          } else {
+            console.warn("No meaningful match, loading default listings...");
+          }
+        } catch (matchError) {
+          console.error(
+            "Matching failed, loading default listings...",
+            matchError.message
+          );
+        }
+
+        // Fallback to default listings if matching fails
+        const defaultResponse = await fetch(
+          "http://localhost:5000/get_default_listings",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (defaultResponse.ok) {
+          const defaultData = await defaultResponse.json();
+          setResults(defaultData);
+        } else {
+          const errorData = await defaultResponse.json();
+          console.error("Failed to fetch default listings:", errorData?.error);
+        }
       } else {
+        // Handle search with filters
         response = await axios.get("http://localhost:5000/search", {
           params: {
             searchText,
@@ -89,22 +161,21 @@ function Listing() {
             searchExperience,
           },
         });
+
+        if (response.status === 200) {
+          setResults(response.data);
+        } else {
+          console.error("Search failed with status:", response.status);
+        }
       }
 
-      if (response.status === 200) {
-        const data = (await response.json?.()) || response.data;
-        console.log("Search Result:", data);
-        setResults(data);
-        setSearchText("");
-        setsearchIndustry("");
-        setSearchLocation("");
-        setSearchWorkType("");
-        setSearchWorkCondition("");
-        setSearchExperience("");
-      } else {
-        const errorData = await response.json?.();
-        console.error("Error:", errorData?.error);
-      }
+      // Clear search fields after any search
+      setSearchText("");
+      setsearchIndustry("");
+      setSearchLocation("");
+      setSearchWorkType("");
+      setSearchWorkCondition("");
+      setSearchExperience("");
     } catch (error) {
       console.error(
         "Search failed:",
@@ -190,7 +261,8 @@ function Listing() {
               <option value="">All Industry</option>
               <option value="Technology and IT">Technology and IT</option>
               <option value="Food and Beverage">Food and Beverage</option>
-              <option value="Remote">Medical</option>
+              <option value="Medical">Medical</option>
+              <option value="Entertainment">Entertainment</option>
             </select>
           </div>
 
