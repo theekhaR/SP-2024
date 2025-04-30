@@ -7,6 +7,7 @@ import Footer from "../components/footer";
 import SoftwareProfilePic from "../assets/manageapp_softwareprofile.jpg";
 import { useParams } from "react-router";
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
+import { Link } from "react-router-dom";
 
 function ManageApplication() {
   const [showMore, setShowMore] = useState(false);
@@ -314,10 +315,14 @@ function ManageApplication() {
                 </div>
 
                 {/* View Button */}
-                <div className="text-center">
-                  <button className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition">
+                <div>
+                  <Link
+                    className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition"
+                    to={`/portfolioview/${applicant.userID}`}
+                  >
                     View
-                  </button>
+                  </Link>
+                  <div className="flex justify-center mt-6"></div>
                 </div>
 
                 {/* Action */}

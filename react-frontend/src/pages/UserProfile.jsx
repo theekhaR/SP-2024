@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useUserContext } from "../components/UserContext.jsx";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function UserProfile() {
   const { userID } = useUserContext();
@@ -260,9 +260,8 @@ function UserProfile() {
 
     setTimeout(async () => {
       await updatePortfolioURL(); // now fetch new URL after small delay
-    }, 1000); // try with 1000ms (1 sec), tweak if needed
+    }, 3000); // try with 1000ms (1 sec), tweak if needed
     alert("Portfolio Uploaded");
-    navigate(`/listing`);
   }
 
   async function removeAllItemInPortfolioFolder() {
@@ -586,6 +585,15 @@ function UserProfile() {
                 </div>
             )}
           </div>
+
+          <div className="flex justify-center mt-6">
+            <Link
+                      to={`/portfolioview/${userID}`}
+                      className="w-64 text-center bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition"
+                  >
+                    Check Current Portfolio & CV
+                  </Link>
+                                </div>
 
           <div className="flex flex-col space-y-4">
             <h2 className="text-xl font-bold text-gray-800">Upload Portfolio</h2>

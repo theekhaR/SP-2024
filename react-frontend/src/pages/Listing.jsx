@@ -93,6 +93,17 @@ function Listing() {
     }
   }, [results]);
 
+  const formatQualification = (qualification) => {
+    if (Array.isArray(qualification)) return qualification;
+    if (typeof qualification === "string") {
+      return qualification
+        .split(/,\s(?=[A-Z0-9])/)
+        .map((item) => item.trim())
+        .filter((item) => item !== "");
+    }
+    return [];
+  };
+
   const handleSearch = async () => {
     try {
       // Check if all search fields are empty
@@ -181,6 +192,32 @@ function Listing() {
         "Search failed:",
         error.response?.data?.error || error.message
       );
+    }
+  };
+
+  const handleApplyListing = async (selectlistingID, selectuserID) => {
+    try {
+      console.log("IN FUNCTION, userID:", selectuserID);
+      console.log("IN FUNCTION, listingID:", selectlistingID);
+      const response = await fetch(
+        `http://localhost:5000/add_user_applicantion`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            listingID: selectlistingID,
+            userID: selectuserID,
+          }),
+        }
+      );
+      if (response.status === 201) {
+        alert("Applied for the listing");
+        return;
+      }
+    } catch (error) {
+      console.error("Error applying for listing:", error);
     }
   };
 
@@ -307,14 +344,18 @@ function Listing() {
           <div className="p-4">
             {results.map((job) => (
               <div
-                key={job.listingid}
+                key={job.listingID}
                 className="p-3 border mb-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-4"
-                onClick={() => setSelectedJob(job)}
+                onClick={() =>
+                  setSelectedJob({
+                    ...job,
+                    qualification: formatQualification(job.qualification),
+                  })
+                }
               >
                 {/* Job Image */}
                 <img
                   src={job.companyLogoURL}
-                  alt={job.position}
                   className="w-16 h-16 object-cover rounded-md"
                 />
 
@@ -353,14 +394,18 @@ function Listing() {
               <p className="mt-6">{selectedJob.description}</p>
 
               <h2 className="text-xl font-bold mt-3 mb-3">Qualification:</h2>
-              <p className="mt-3">{selectedJob.qualification}</p>
 
-              {/* {selectedJob.qualification.map((qual, index) => (
-                <div key={index} className="flex items-center space-x-4">
-                  ➤ {qual}
+              {Array.isArray(selectedJob?.qualification) ? (
+                selectedJob.qualification.map((qual, index) => (
+                  <div key={index} className="flex items-center space-x-4">
+                    ➤ {qual}
+                  </div>
+                ))
+              ) : (
+                <div className="text-sm text-gray-500">
+                  No qualifications listed.
                 </div>
-            ))} */}
-
+              )}
               {/* <ul className="text-gray-600 space-y-2">
                 {selectedJob.qualification.map((req, index) => (
                   <li key={index} className="flex items-center">
@@ -404,7 +449,12 @@ function Listing() {
                 </p>
               </div>
               <div className="mt-6 space-y-3">
-                <button className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition">
+                <button
+                  className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition"
+                  onClick={() =>
+                    handleApplyListing(selectedJob.listingID, userID)
+                  }
+                >
                   Apply For Position
                 </button>
 

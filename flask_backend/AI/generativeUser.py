@@ -322,8 +322,10 @@ def generateQueryFromURL(URLList):
 
                 # Select the better summary
                 if avg_f1 >= avg_f2:
+                    print("RUN 1 IS SELECTED")
                     best_summaries = data_run1[key1]['summary']
                 else:
+                    print("RUN 2 IS SELECTED")
                     best_summaries = data_run2[key2]['summary']
 
         return best_summaries

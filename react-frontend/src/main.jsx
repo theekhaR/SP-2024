@@ -28,16 +28,19 @@ import CompanyProfileUser from "./pages/CompanyProfileUser.jsx";
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
 import { UserProvider } from "./components/UserContext.jsx";
 import { CompanyProvider } from "./components/CompanyContext.jsx";
+import PortfolioView from "./pages/PortfolioView.jsx";
 
 
 // Wrapping component defined inline
 function ContextWrapper() {
   return (
-    <UserProvider>
-      <CompanyProvider>
-        <Outlet />
-      </CompanyProvider>
-    </UserProvider>
+      <UserProvider>
+        <ProtectedRouteWrapper>
+          <CompanyProvider>
+            <Outlet />
+          </CompanyProvider>
+        </ProtectedRouteWrapper>
+      </UserProvider>
   );
 }
 
@@ -63,24 +66,17 @@ const router = createBrowserRouter([
       { path: "/listing", element: <Listing /> },
       { path: "/listingedit/:listingID", element: <ListingEdit /> },
       { path: "/companymember", element: <CompanyMember /> },
-      {
-        path: "/message",
-        element: (
-          <ProtectedRouteWrapper>
-            <Message />
-          </ProtectedRouteWrapper>
-        ),
-      },
       { path: "/userprofile", element: <UserProfile /> },
       { path: "/applicationstatus", element: <ApplicationStatus /> },
       { path: "/manageapplication/:listingID", element: <ManageApplication /> },
+      { path: "/portfolioview/:userID", element: <PortfolioView /> },
     ],
   },
 ]);
 
 // Render
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
 );
