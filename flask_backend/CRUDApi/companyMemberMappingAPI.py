@@ -177,3 +177,23 @@ def edit_member_detail():
     db.session.commit()
     return jsonify({'message': 'User updated successfully'}), 201
 
+@companyMemberMappingAPI.route('/delete_member', methods=['DELETE'])
+def delete_member():
+
+    data = request.get_json()
+
+    if (not data or
+            'userID' not in data or not data.get('userID') or
+            'companyID' not in data or not data.get('companyID')):
+        return jsonify({'error': 'Missing userID or companyID'}), 400
+
+    subject_query = CompanyMemberMapping.query.filter_by(UserID=data.get('userID'), CompanyID=data.get('companyID')).first()
+
+    if not subject_query:
+        return jsonify({'error': 'This relation does not exists'}), 409
+
+    db.session.delete(subject_query)
+    db.session.commit()
+
+    return jsonify({'message': 'User updated successfully'}), 201
+

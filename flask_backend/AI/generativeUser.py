@@ -18,14 +18,14 @@ from rouge_score import rouge_scorer
 
 # ───── Configuration ─────
 load_dotenv()
-API_KEY = os.getenv('apikey')
+GEMINI_API_KEY = os.getenv('apikey')
 MODEL_NAME = "gemini-2.0-flash"
 ASSETS_FOLDER = "assets"
 SUPPORTED_EXTENSIONS = ('.pdf', '.png', '.jpg', '.jpeg')
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
 # ───── Initialize Gemini ─────
-genai.configure(api_key=API_KEY)
+genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel(MODEL_NAME)
 
 
