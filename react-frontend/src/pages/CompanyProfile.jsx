@@ -25,10 +25,10 @@ function CompanyProfile() {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <Lnavbar />
 
-      <div className="flex">
+      <div className="flex flex-1 flex-row">
         <Sidebar />
 
         <div className="flex-1 p-8">

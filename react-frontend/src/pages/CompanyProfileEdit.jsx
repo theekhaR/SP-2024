@@ -106,7 +106,7 @@ function CompanyProfileEdit() {
     }
   }
 
-    async function updateCompanyLogoURL() {
+  async function updateCompanyLogoURL() {
     try {
       const { data: imageList, error } = await supabase.storage
           .from('company-media')
@@ -135,13 +135,13 @@ function CompanyProfileEdit() {
           })
         });
 
-      //   if (response.ok) {
-      //     //setProfileImageURL(publicUrl); // Update the state after successful update
-      //     alert("Updated profile URL");
-      //   }
-      // } else {
-      //   //setprofileExistBoolean(false);
-         }
+        //   if (response.ok) {
+        //     //setProfileImageURL(publicUrl); // Update the state after successful update
+        //     alert("Updated profile URL");
+        //   }
+        // } else {
+        //   //setprofileExistBoolean(false);
+      }
     } catch (error) {
       console.error("Error updating profile URL:", error);
     }
@@ -203,250 +203,252 @@ function CompanyProfileEdit() {
 
 
   return (
-      <div className="min-h-screen bg-gray-100">
+      <div className="flex flex-col min-h-screen bg-gray-100">
         <Lnavbar />
-        <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md mt-12">
-          <h2 className="text-xl font-bold text-orange-500  mb-6">
-            Create New Company
-          </h2>
+        <div className="flex-grow">
+          <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md mt-12">
+            <h2 className="text-xl font-bold text-orange-500  mb-6">
+              Create New Company
+            </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* LEFT: Form Section */}
-            <div className="md:col-span-2 space-y-4">
-              <div>
-                <label className=" text-sm font-medium text-gray-700 mb-1">
-                  Company Name
-                </label>
-                <input
-                    type="text"
-                    defaultValue={companyInfo.companyName}
-                    onChange={(e) => setEditCompanyName(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* LEFT: Form Section */}
+              <div className="md:col-span-2 space-y-4">
+                <div>
+                  <label className=" text-sm font-medium text-gray-700 mb-1">
+                    Company Name
+                  </label>
+                  <input
+                      type="text"
+                      defaultValue={companyInfo.companyName}
+                      onChange={(e) => setEditCompanyName(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-1">
+                    Industry
+                  </label>
+                  <select className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          value={companyInfo.industryID}
+                          onChange={(e) => setEditIndustryID(e.target.value)}>
+                    {industryList.map((industry) => (
+                        <option key={industry.id} value={industry.id}>
+                          {industry.name}
+                        </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className=" text-sm font-medium text-gray-700 mb-1">
+                    Location
+                  </label>
+                  <input
+                      type="text"
+                      defaultValue={companyInfo.companyLocation}
+                      onChange={(e) => setEditCompanyLocation(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className=" text-sm font-medium text-gray-700 mb-1">
+                    About Us - Who we are and why we exist.
+                  </label>
+                  <input
+                      type="text"
+                      defaultValue={companyInfo.companyAbout}
+                      onChange={(e) => setEditCompanyAbout(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className=" text-sm font-medium text-gray-700 mb-1">
+                    Overview - What we do and how we operate.
+                  </label>
+                  <textarea
+                      rows="3"
+                      defaultValue={companyInfo.companyOverview}
+                      onChange={(e) => setEditCompanyOverview(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  ></textarea>
+                </div>
+              </div>
+
+              {/* RIGHT: Image Upload */}
+              <div className="flex flex-col items-center text-center bg-gray-100 px-4 py-4 md:p-4 rounded-md space-y-2">
+                <img
+                    src={companyInfo.companyLogoURL}
+                    alt="Company Logo"
+                    className="w-6/12 h-6/12 object-cover rounded-md mt-16 mb-12"
                 />
-              </div>
+                <input type="file" className="hidden" id="upload" />
 
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-1">
-                  Industry
-                </label>
-                <select className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={companyInfo.industryID}
-                        onChange={(e) => setEditIndustryID(e.target.value)}>
-                  {industryList.map((industry) => (
-                      <option key={industry.id} value={industry.id}>
-                        {industry.name}
-                      </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className=" text-sm font-medium text-gray-700 mb-1">
-                  Location
-                </label>
+                {/* Upload Image button */}
+                {/*This is the real button*/}
                 <input
-                    type="text"
-                    defaultValue={companyInfo.companyLocation}
-                    onChange={(e) => setEditCompanyLocation(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="file"
+                    id="upload-photo"
+                    onChange={(e) => handleChange(e)}
+                    ref={hiddenFileInput}
+                    style={{ display: "none" }} // Make the file input element invisible
                 />
-              </div>
 
-              <div>
-                <label className=" text-sm font-medium text-gray-700 mb-1">
-                  About Us - Who we are and why we exist.
-                </label>
-                <input
-                    type="text"
-                    defaultValue={companyInfo.companyAbout}
-                    onChange={(e) => setEditCompanyAbout(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className=" text-sm font-medium text-gray-700 mb-1">
-                  Overview - What we do and how we operate.
-                </label>
-                <textarea
-                    rows="3"
-                    defaultValue={companyInfo.companyOverview}
-                    onChange={(e) => setEditCompanyOverview(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                ></textarea>
+                {/*This is the fake (pretty) button*/}
+                <button
+                    //htmlFor="upload-photo"
+                    className="mt-5 text-sm text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded"
+                    onClick={handleClick}
+                >
+                  Choose Photo
+                </button>
+                {newLogoImage ? (
+                    <label
+                        //htmlFor="upload-photo"
+                        className="px-3 py-1 bg-orange-600 text-white rounded-md hover:bg-orange-800 transition"
+                        onClick={uploadCompanyLogo}
+                    >
+                      Upload Photo
+                    </label>
+                ) : (
+                    <label
+                        //htmlFor="upload-photo"
+                        className="mt-5 text-sm text-white bg-orange-500 hover:bg-gray-800 px-4 py-2 rounded"
+                    >
+                      No Image To Upload
+                    </label>
+                )}<span>The page will reload after uploading.</span><span>Beware of losing progress</span>
               </div>
             </div>
 
-            {/* RIGHT: Image Upload */}
-            <div className="flex flex-col items-center text-center bg-gray-100 px-4 py-4 md:p-4 rounded-md space-y-2">
-              <img
-                  src={companyInfo.companyLogoURL}
-                  alt="Company Logo"
-                  className="w-6/12 h-6/12 object-cover rounded-md mt-16 mb-12"
-              />
-              <input type="file" className="hidden" id="upload" />
+            <h2 className="text-xl font-bold text-orange-500 mt-6 mb-3">
+              Company social profile
+            </h2>
 
-                            {/* Upload Image button */}
-              {/*This is the real button*/}
-              <input
-                type="file"
-                id="upload-photo"
-                onChange={(e) => handleChange(e)}
-                ref={hiddenFileInput}
-                style={{ display: "none" }} // Make the file input element invisible
-              />
+            <div className="mb-3">
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Company Website
+              </label>
+              <div className="flex items-center border rounded-md overflow-hidden w-full focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">
+                <div className="px-4">
+                  <FontAwesomeIcon
+                      icon={faGlobe}
+                      className="text-orange-500 text-lg"
+                  />
+                </div>
+                <div className="h-6 w-px bg-gray-200 mr-2" />
+                <input
+                    type="text"
+                    defaultValue={companyInfo.companyWebsite}
+                    onChange={(e) => setEditCompanyWebsite(e.target.value)}
+                    className="w-full px-4 py-2 border placeholder:text-gray-400 focus:outline-none"
+                />
+              </div>
 
-              {/*This is the fake (pretty) button*/}
+              <strong className=" text-sm font-medium text-gray-700 mb-1">
+                Company Email
+              </strong>
+              <div className="flex items-center border rounded-md overflow-hidden w-full focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">
+                <div className="px-4">
+                  <FontAwesomeIcon
+                      icon={faGlobe}
+                      className="text-orange-500 text-lg"
+                  />
+                </div>
+                <div className="h-6 w-px bg-gray-200 mr-2" />
+                <input
+                    type="text"
+                    defaultValue={companyInfo.companyEmail}
+                    onChange={(e) => setEditCompanyEmail(e.target.value)}
+                    className="w-full px-4 py-2 border placeholder:text-gray-400 focus:outline-none"
+                />
+              </div>
+
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Company Phone Number
+              </label>
+              <div className="flex items-center border rounded-md overflow-hidden w-full focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">
+                <div className="px-4">
+                  <FontAwesomeIcon
+                      icon={faGlobe}
+                      className="text-orange-500 text-lg"
+                  />
+                </div>
+                <div className="h-6 w-px bg-gray-200 mr-2" />
+                <input
+                    type="text"
+                    defaultValue={companyInfo.companyPhone}
+                    onChange={(e) => setEditCompanyPhone(e.target.value)}
+                    className="w-full px-4 py-2 border placeholder:text-gray-400 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Social Media Inputs - Kept as-is for now */}
+            {/*<div className="grid grid-cols-3 gap-4">*/}
+            {/*  {[*/}
+            {/*    {*/}
+            {/*      label: "LinkedIn",*/}
+            {/*      icon: faLinkedinIn,*/}
+            {/*      placeholder: "LinkedIn url",*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      label: "Facebook",*/}
+            {/*      icon: faFacebookF,*/}
+            {/*      placeholder: "Facebook url",*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      label: "Instagram",*/}
+            {/*      icon: faInstagram,*/}
+            {/*      placeholder: "Instagram url",*/}
+            {/*    },*/}
+            {/*    { label: "Youtube", icon: faYoutube, placeholder: "Youtube url" },*/}
+            {/*    { label: "Tiktok", icon: faTiktok, placeholder: "Tiktok url" },*/}
+            {/*  ].map((item, i) => (*/}
+            {/*      <div key={i}>*/}
+            {/*        <label className="text-sm font-medium text-gray-700 mb-1 block">*/}
+            {/*          {item.label}*/}
+            {/*        </label>*/}
+            {/*        <div className="flex items-center border rounded-md overflow-hidden w-full max-w-md focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">*/}
+            {/*          <div className="px-4">*/}
+            {/*            <FontAwesomeIcon*/}
+            {/*                icon={item.icon}*/}
+            {/*                className="text-orange-500 text-lg"*/}
+            {/*            />*/}
+            {/*          </div>*/}
+            {/*          <div className="h-6 w-px bg-gray-200 mr-2" />*/}
+            {/*          <input*/}
+            {/*              type="text"*/}
+            {/*              placeholder={item.placeholder}*/}
+            {/*              className="flex-1 py-2 pr-4 text-gray-500 placeholder:text-gray-400 focus:outline-none"*/}
+            {/*          />*/}
+            {/*        </div>*/}
+            {/*      </div>*/}
+            {/*  ))}*/}
+            {/*</div>*/}
+
+            <div className="flex justify-end mt-4">
               <button
-                //htmlFor="upload-photo"
-                className="mt-5 text-sm text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded"
-                onClick={handleClick}
+                  className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    await updateCompany();
+                  }}
               >
-                Choose Photo
+                Save Change
               </button>
-              {newLogoImage ? (
-                <label
-                  //htmlFor="upload-photo"
-                   className="px-3 py-1 bg-orange-600 text-white rounded-md hover:bg-orange-800 transition"
-                  onClick={uploadCompanyLogo}
-                >
-                  Upload Photo
-                </label>
-              ) : (
-                <label
-                  //htmlFor="upload-photo"
-                  className="mt-5 text-sm text-white bg-orange-500 hover:bg-gray-800 px-4 py-2 rounded"
-                >
-                  No Image To Upload
-                </label>
-              )}<span>The page will reload after uploading.</span><span>Beware of losing progress</span>
+              <button className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800">
+                <a href="/CompanyProfile" className="text-white">
+                  Cancel
+                </a>
+              </button>
             </div>
           </div>
-
-          <h2 className="text-xl font-bold text-orange-500 mt-6 mb-3">
-            Company social profile
-          </h2>
-
-          <div className="mb-3">
-            <label className=" text-sm font-medium text-gray-700 mb-1">
-              Company Website
-            </label>
-            <div className="flex items-center border rounded-md overflow-hidden w-full focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">
-              <div className="px-4">
-                <FontAwesomeIcon
-                    icon={faGlobe}
-                    className="text-orange-500 text-lg"
-                />
-              </div>
-              <div className="h-6 w-px bg-gray-200 mr-2" />
-              <input
-                  type="text"
-                  defaultValue={companyInfo.companyWebsite}
-                  onChange={(e) => setEditCompanyWebsite(e.target.value)}
-                  className="w-full px-4 py-2 border placeholder:text-gray-400 focus:outline-none"
-              />
-            </div>
-
-            <strong className=" text-sm font-medium text-gray-700 mb-1">
-              Company Email
-            </strong>
-            <div className="flex items-center border rounded-md overflow-hidden w-full focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">
-              <div className="px-4">
-                <FontAwesomeIcon
-                    icon={faGlobe}
-                    className="text-orange-500 text-lg"
-                />
-              </div>
-              <div className="h-6 w-px bg-gray-200 mr-2" />
-              <input
-                  type="text"
-                  defaultValue={companyInfo.companyEmail}
-                  onChange={(e) => setEditCompanyEmail(e.target.value)}
-                  className="w-full px-4 py-2 border placeholder:text-gray-400 focus:outline-none"
-              />
-            </div>
-
-            <label className=" text-sm font-medium text-gray-700 mb-1">
-              Company Phone Number
-            </label>
-            <div className="flex items-center border rounded-md overflow-hidden w-full focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">
-              <div className="px-4">
-                <FontAwesomeIcon
-                    icon={faGlobe}
-                    className="text-orange-500 text-lg"
-                />
-              </div>
-              <div className="h-6 w-px bg-gray-200 mr-2" />
-              <input
-                  type="text"
-                  defaultValue={companyInfo.companyPhone}
-                  onChange={(e) => setEditCompanyPhone(e.target.value)}
-                  className="w-full px-4 py-2 border placeholder:text-gray-400 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          {/* Social Media Inputs - Kept as-is for now */}
-          {/*<div className="grid grid-cols-3 gap-4">*/}
-          {/*  {[*/}
-          {/*    {*/}
-          {/*      label: "LinkedIn",*/}
-          {/*      icon: faLinkedinIn,*/}
-          {/*      placeholder: "LinkedIn url",*/}
-          {/*    },*/}
-          {/*    {*/}
-          {/*      label: "Facebook",*/}
-          {/*      icon: faFacebookF,*/}
-          {/*      placeholder: "Facebook url",*/}
-          {/*    },*/}
-          {/*    {*/}
-          {/*      label: "Instagram",*/}
-          {/*      icon: faInstagram,*/}
-          {/*      placeholder: "Instagram url",*/}
-          {/*    },*/}
-          {/*    { label: "Youtube", icon: faYoutube, placeholder: "Youtube url" },*/}
-          {/*    { label: "Tiktok", icon: faTiktok, placeholder: "Tiktok url" },*/}
-          {/*  ].map((item, i) => (*/}
-          {/*      <div key={i}>*/}
-          {/*        <label className="text-sm font-medium text-gray-700 mb-1 block">*/}
-          {/*          {item.label}*/}
-          {/*        </label>*/}
-          {/*        <div className="flex items-center border rounded-md overflow-hidden w-full max-w-md focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">*/}
-          {/*          <div className="px-4">*/}
-          {/*            <FontAwesomeIcon*/}
-          {/*                icon={item.icon}*/}
-          {/*                className="text-orange-500 text-lg"*/}
-          {/*            />*/}
-          {/*          </div>*/}
-          {/*          <div className="h-6 w-px bg-gray-200 mr-2" />*/}
-          {/*          <input*/}
-          {/*              type="text"*/}
-          {/*              placeholder={item.placeholder}*/}
-          {/*              className="flex-1 py-2 pr-4 text-gray-500 placeholder:text-gray-400 focus:outline-none"*/}
-          {/*          />*/}
-          {/*        </div>*/}
-          {/*      </div>*/}
-          {/*  ))}*/}
-          {/*</div>*/}
-
-          <div className="flex justify-end mt-4">
-            <button
-                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  await updateCompany();
-                }}
-            >
-              Save Change
-            </button>
-            <button className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800">
-              <a href="/CompanyProfile" className="text-white">
-                Cancel
-              </a>
-            </button>
-          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
   );
 }

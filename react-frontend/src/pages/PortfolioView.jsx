@@ -7,8 +7,7 @@ import {useUserContext} from "../components/UserContext.jsx";
 
 function PortfolioView() {
 
-    const { companyID }= useParams();
-    const { userID } = useUserContext();
+    const { userID }= useParams();
     const [ userData, setUserData] =useState([]);
 
     useEffect(() => {
@@ -32,10 +31,10 @@ function PortfolioView() {
     }
 
     return (
-        <div className="bg-gray-100 min-h-screen">
+        <div className="flex flex-col min-h-screen bg-gray-100">
             <Lnavbar />
 
-            <div className="flex">
+            <div className="flex-grow">
 
                 <div className="w-full px-4 space-y-12">
                     {/* Portfolio Section */}

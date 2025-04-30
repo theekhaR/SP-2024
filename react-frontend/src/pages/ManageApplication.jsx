@@ -335,7 +335,6 @@ function ManageApplication() {
                     >
                       <option>Not Processed</option>
                       <option>Processing</option>
-                      <option>On-hold</option>
                       <option>Interview Schedule</option>
                       <option>Rejected</option>
                     </select>

@@ -568,7 +568,7 @@ function UserProfile() {
           <div className="flex flex-col space-y-2">
             <h2 className="text-xl font-bold text-gray-800">User Skill</h2>
 
-            {userProfileEdit.portfolioSummary.length === 0 ? (
+            {!userProfileEdit.portfolioSummary || userProfileEdit.portfolioSummary.length === 0 ? (
                 <h1 className="text-sm text-center text-gray-500">
                   Upload Portfolio to get the list of skills
                 </h1>
@@ -588,12 +588,12 @@ function UserProfile() {
 
           <div className="flex justify-center mt-6">
             <Link
-                      to={`/portfolioview/${userID}`}
-                      className="w-64 text-center bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition"
-                  >
-                    Check Current Portfolio & CV
-                  </Link>
-                                </div>
+                to={`/portfolioview/${userID}`}
+                className="w-64 text-center bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition"
+            >
+              Check Current Portfolio & CV
+            </Link>
+          </div>
 
           <div className="flex flex-col space-y-4">
             <h2 className="text-xl font-bold text-gray-800">Upload Portfolio</h2>
@@ -623,10 +623,8 @@ function UserProfile() {
                 <span className="text-orange-700 font-medium">Upload File</span>
               </button>
 
-              {portfolioFile.length === 0 ? (
-                  <label
-                      className="mt-5 text-sm text-white bg-orange-500 hover:bg-gray-800 px-4 py-2 rounded"
-                  >
+              {(portfolioFile?.length ?? 0) === 0 ? (
+                  <label className="mt-5 text-sm text-white bg-orange-500 hover:bg-gray-800 px-4 py-2 rounded">
                     No File To Upload
                   </label>
               ) : (
