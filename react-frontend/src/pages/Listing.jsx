@@ -89,7 +89,12 @@ function Listing() {
 
   useEffect(() => {
     if (results.length > 0) {
-      setSelectedJob(results[0]);
+      const job = results[0];
+      const formattedJob = {
+        ...job,
+        qualification: formatQualification(job.qualification),
+      };
+      setSelectedJob(formattedJob);
     }
   }, [results]);
 
