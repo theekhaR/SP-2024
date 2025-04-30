@@ -7,6 +7,7 @@ import Footer from "../components/footer";
 import SoftwareProfilePic from "../assets/manageapp_softwareprofile.jpg";
 import { useParams } from 'react-router';
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
+import {Link} from "react-router-dom";
 
 function ManageApplication() {
 
@@ -129,13 +130,13 @@ function ManageApplication() {
         getListingDetail().then(setCurrentListing)
     }, []);
 
-        useEffect(() => {
+    useEffect(() => {
         console.log(currentListing)
     }, [currentListing]);
 
     if (!currentListing) {
-    return <div>Loading...</div>;
-}
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -288,9 +289,12 @@ function ManageApplication() {
 
                                 {/* View Button */}
                                 <div>
-                                    <button className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition">
+                                    <Link className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition"
+                                    to={`/portfolioview/${applicant.userID}`}>
                                         View
-                                    </button>
+                                    </Link>
+                                    <div className="flex justify-center mt-6">
+                                    </div>
                                 </div>
 
                                 {/* Action */}

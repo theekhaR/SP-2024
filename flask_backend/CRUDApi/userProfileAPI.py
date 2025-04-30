@@ -11,11 +11,15 @@ from dataModel.listingApplicantMapping import ListingApplicantMapping
 from AI.generativeUser import generateQueryFromURL
 from openai import OpenAI
 from sqlalchemy.dialects.postgresql import ARRAY
+from flask.cli import load_dotenv
+import os
 
 userProfileAPI = blueprints.Blueprint('userProfileAPI', __name__)
 
 # === CONFIGURATION ===
-OPENAI_API_KEY = "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"
+load_dotenv()
+OPENAI_API_KEY = os.getenv('openai_key')
+#OPENAI_API_KEY =
 
 # === INITIALIZE OPENAI ===
 openai = OpenAI(api_key=OPENAI_API_KEY)
@@ -26,6 +30,7 @@ def generate_embedding(text):
         input=text,
         model="text-embedding-ada-002"
     )
+    print("\ngenerated embedding")
     return response.data[0].embedding
 
 
@@ -85,6 +90,9 @@ def update_portfolio():
         update_userID = data.get('userID')
         subject_user = UserProfile.query.filter_by(UserID=update_userID).first()
 
+        print("=======================================\n")
+        print(data.get('portfolio'))
+        print("=======================================\n")
         # Check if user exists
         if not subject_user:
             return jsonify({'error': 'This user does not exist'}), 409
@@ -96,6 +104,7 @@ def update_portfolio():
         summary = generateQueryFromURL(subject_user.Portfolio)
         skill_list = [skill.strip() for skill in summary.split(',')]
         subject_user.PortfolioSummary = skill_list
+        print(subject_user.PortfolioSummary)
 
         summary_text_for_embedding = '\n'.join(skill_list)
         embedding_vector = generate_embedding(summary_text_for_embedding)
@@ -127,5 +136,25 @@ def get_user_profile():
             "portfolio": profile.Portfolio,
             "portfolioSummary": profile.PortfolioSummary
         }
+
+    return jsonify(profile_json)
+
+@userProfileAPI.route('/get_portfolio', methods=['GET'])
+def get_portfolio():
+    user_id = request.args.get('userID')
+    if not user_id:
+        return jsonify({'error': 'Missing required field userID'}), 400
+
+    profile = UserProfile.query.filter_by(UserID=user_id).first()
+
+    if not profile:
+        return jsonify({'error': 'This user does not exists or do not have a following'}), 409
+
+    profile_json = {
+            "CV": profile.CV,
+            "portfolio": profile.Portfolio,
+        }
+
+    print(profile_json)
 
     return jsonify(profile_json)

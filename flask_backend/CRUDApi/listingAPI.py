@@ -1,3 +1,5 @@
+import os
+
 from flask import blueprints , jsonify, request
 from datetime import datetime, timedelta, timezone
 import uuid
@@ -11,11 +13,14 @@ from supabase_client import supabase
 from openai import OpenAI
 from sqlalchemy.dialects.postgresql import ARRAY
 from AI.generativeListing import generateSummaryOfListing
+from flask.cli import load_dotenv
 
 listingAPI = blueprints.Blueprint('listingAPI', __name__)
 
 # === CONFIGURATION ===
-OPENAI_API_KEY = "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"
+load_dotenv()
+OPENAI_API_KEY = os.getenv('openai_key')
+#OPENAI_API_KEY =
 
 # === INITIALIZE OPENAI ===
 openai = OpenAI(api_key=OPENAI_API_KEY)
@@ -48,6 +53,8 @@ def match_jobs_by_skills():
     if not response.data:
         # You can also check response.status_code if needed
         return jsonify({'error': 'No data returned or user embedding not found'}), 500
+
+    print(response.data)
 
     return jsonify(response.data), 200
 
