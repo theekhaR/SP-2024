@@ -26,34 +26,6 @@ function Listing() {
   const [searchIndustry, setsearchIndustry] = useState("");
   const [results, setResults] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchDefaultListings = async () => {
-  //     try {
-  //       const response = await fetch(
-  //           "http://localhost:5000/get_default_listings",
-  //           {
-  //             method: "GET",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //           }
-  //       );
-
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         setResults(data);
-  //       } else {
-  //         const errorData = await response.json();
-  //         console.error("Failed to fetch default listings:", errorData.error);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching default listings:", error.message);
-  //     }
-  //   };
-
-  //   // fetchDefaultListings();
-  // }, []);
-
   useEffect(() => {
     const MatchingSkill = async () => {
       if (!userID) {
