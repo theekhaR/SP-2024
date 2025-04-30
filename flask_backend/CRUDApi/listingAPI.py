@@ -28,26 +28,61 @@ def generate_embedding(text):
     )
     return response.data[0].embedding
 
-@listingAPI.route('/matching', methods=['GET'])
+# @listingAPI.route('/check_user_id', methods=['POST'])
+# def check_user_id():
+#     data = request.get_json()
+#     user_id = data.get('userID')
+#     print("Received user ID:", user_id)
+#     return jsonify({'received': user_id}), 200
+
+@listingAPI.route('/matching', methods=['POST'])
 def match_jobs_by_skills():
-    user_id = request.args.get('userID')
+    data = request.get_json()
+    user_id = data.get('userID')
 
     if not user_id:
-        return jsonify({"error": "Missing userID parameter"}), 400
+        return jsonify({"error": "Missing userID"}), 400
 
-    try:
-        response = supabase.rpc('match_jobs_by_skills', {
-            'user_id': user_id  
-        }).execute()
+    response = supabase.rpc('match_jobs_by_skills', {'user_id': user_id}).execute()
 
-        if response.error:
-            return jsonify({"error": response.error.message}), 500
+    if not response.data:
+        # You can also check response.status_code if needed
+        return jsonify({'error': 'No data returned or user embedding not found'}), 500
 
-        return jsonify(response.data), 200
+    return jsonify(response.data), 200
+    
 
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-        
+
+    # print("Received user ID:", user_id)
+    # return jsonify({'received': user_id}), 200
+
+
+
+# @listingAPI.route('/matching', methods=['POST'])
+# def match_jobs_by_skills():
+#     data = request.get_json()
+#     user_id = data.get('user_id')  # match key in frontend
+
+#     print("Received user_id:", user_id)
+
+#     if not user_id:
+#         return jsonify({"error": "Missing user_id parameter"}), 400
+
+#     try:
+#         response = supabase.rpc('match_jobs_by_skills', {
+#             'user_id': user_id
+#         }).execute()
+
+#         print("Supabase RPC raw response:", response)
+
+#         if response.status_code != 200 or response.data is None:
+#             return jsonify({"error": "Supabase RPC failed"}), 500
+
+#         return jsonify(response.data), 200
+
+#     except Exception as e:
+#         print("Exception in /matching route:", str(e))
+#         return jsonify({'error': str(e)}), 500
  
 @listingAPI.route('/search', methods=['GET'])
 def search_listings():
