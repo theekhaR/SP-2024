@@ -83,7 +83,6 @@ function CompanyMember() {
       // Unexpected error
       const data = await response.json();
       alert(data.error);
-      return [];
     } catch (e) {
       console.log(e);
     }
@@ -118,7 +117,6 @@ function CompanyMember() {
       if (response.status === 201) {
         setEditId(null);
         window.location.reload();
-        return;
       }
 
       // Unexpected error
@@ -187,10 +185,8 @@ function CompanyMember() {
       // Unexpected error
       const data = await response.json();
       alert(data.error);
-      return [];
     } catch (error) {
       console.error("Error checking user:", error);
-      return [];
     }
   }
 
@@ -316,11 +312,11 @@ function CompanyMember() {
             ))}
           </div>
 
-          <div className="flex justify-center mt-6">
-            <button className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">
-              View All ({memberList.length})
-            </button>
-          </div>
+          {/*<div className="flex justify-center mt-6">*/}
+          {/*  <button className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">*/}
+          {/*    View All ({memberList.length})*/}
+          {/*  </button>*/}
+          {/*</div>*/}
         </div>
       </div>
 

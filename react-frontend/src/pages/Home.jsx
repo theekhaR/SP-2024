@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/footer"
+import {Link} from "react-router-dom";
 
 const token = localStorage.getItem("token");
 const Home = () => {
@@ -19,12 +20,14 @@ const Home = () => {
               for your organization.
             </p>
             <div className="flex flex-col items-center gap-4 lg:flex-row">
-              <button className="flex items-center py-4 text-sm font-bold text-white px-7 bg-slate-800 hover:bg-slate-700 focus:ring-4 focus:ring-blue-200 transition duration-300 rounded-xl">
+              <Link className="flex items-center py-4 text-sm font-bold text-white px-7 bg-slate-800 hover:bg-slate-700 focus:ring-4 focus:ring-blue-200 transition duration-300 rounded-xl"
+              to={`/listing`}>
                 Find Jobs Now
-              </button>
-              <button className="flex items-center py-4 text-sm font-bold text-white px-7 bg-[#cf5c2e] hover:bg-[#d96a3d] focus:ring-4 focus:ring-orange-200 transition duration-300 rounded-xl">
+              </Link>
+              <Link className="flex items-center py-4 text-sm font-bold text-white px-7 bg-[#cf5c2e] hover:bg-[#d96a3d] focus:ring-4 focus:ring-orange-200 transition duration-300 rounded-xl"
+              to={`/company`}>
                 Hire Top Talent
-              </button>
+              </Link>
             </div>
           </div>
           <div className="items-center justify-end hidden col-span-1 md:flex">

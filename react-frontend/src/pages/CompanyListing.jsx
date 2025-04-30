@@ -114,11 +114,6 @@ function CompanyListing() {
               >
                 {/* NAME COLUMN (image + position) */}
                 <div className="flex items-center  space-x-4">
-                  <img
-                    src={listing.image_url || MissingImagePlaceHolder}
-                    alt="Image"
-                    className="w-12 h-12 object-contain"
-                  />
                   <div className="font-medium text-gray-800">
                     {listing.position}
                   </div>
