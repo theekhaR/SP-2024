@@ -34,7 +34,9 @@ def add_user_applicantion():
 
         new_listingapplicantmapping_entry = ListingApplicantMapping(
             ListingID=data.get('listingID'),
-            UserID=data.get('userID')
+            UserID=data.get('userID'),
+            AppliedOn=datetime.now(),
+            Status="Not Processed"
         )
         db.session.add(new_listingapplicantmapping_entry)
         db.session.commit()
