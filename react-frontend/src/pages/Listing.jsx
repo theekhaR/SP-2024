@@ -61,12 +61,12 @@ function Listing() {
       try {
         const response = await fetch(
             "http://localhost:5000/get_default_listings",
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
 
         if (response.ok) {
@@ -93,16 +93,16 @@ function Listing() {
     }
   }, [results]);
 
-  const formatQualification = (qualification) => {
-    if (Array.isArray(qualification)) return qualification;
-    if (typeof qualification === "string") {
-      return qualification
-          .split(/,\s(?=[A-Z0-9])/)
-          .map((item) => item.trim())
-          .filter((item) => item !== "");
-    }
-    return [];
-  };
+      const formatQualification = (qualification) => {
+      if (Array.isArray(qualification)) return qualification;
+      if (typeof qualification === "string") {
+        return qualification
+            .split(/,\s(?=[A-Z0-9])/)
+            .map((item) => item.trim())
+            .filter((item) => item !== "");
+      }
+      return [];
+    };
 
   const handleSearch = async () => {
     try {
@@ -211,6 +211,28 @@ function Listing() {
       });
       if (response.status === 201) {
         alert("Applied for the listing")
+        return;
+      }
+
+    } catch (error) {
+      console.error("Error applying for listing:", error);
+    }
+  }
+
+    const handleApplyBookmark = async (selectlistingID, selectuserID) => {
+    try {
+      const response = await fetch(`http://localhost:5000/add_user_bookmark`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          listingID: selectlistingID,
+          userID: selectuserID,
+        }),
+      });
+      if (response.status === 201) {
+        alert("Added to bookmark")
         return;
       }
 
@@ -460,7 +482,8 @@ function Listing() {
                     </Link>
 
                     <button
-                        className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-100 transition">
+                        className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-100 transition"
+                    onClick={() => handleApplyBookmark(selectedJob.listingID, userID)}>
                       Add To Bookmark
                     </button>
                   </div>
