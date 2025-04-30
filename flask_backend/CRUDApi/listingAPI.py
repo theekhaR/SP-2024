@@ -237,7 +237,8 @@ def get_listing_detail():
         'salary': query_listing.Salary,
         'experience': query_listing.Experience,
         'Location': query_listing.Location,
-        'affectiveUntil': query_listing.AffectiveUntil.strftime('%Y-%m-%dT%H:%M:%S%z') if query_listing.AffectiveUntil else None
+        'affectiveUntil': query_listing.AffectiveUntil.strftime('%Y-%m-%dT%H:%M:%S%z') if query_listing.AffectiveUntil else None,
+        'generativeSummary': query_listing.GenerativeSummary,
     }
 
 
