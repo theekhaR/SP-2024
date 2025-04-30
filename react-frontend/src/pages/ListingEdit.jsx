@@ -70,13 +70,13 @@ function ListingEdit() {
   const getListing = async (event) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/get_listing_detail?listingID=${listingID}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+          `http://localhost:5000/get_listing_detail?listingID=${listingID}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
       );
 
       const data = await response.json(); // Moved inside try block
@@ -102,6 +102,7 @@ function ListingEdit() {
         affectiveDay: new Date(data.affectiveUntil).getDate(),
         affectiveMonth: new Date(data.affectiveUntil).getMonth(),
         affectiveYear: new Date(data.affectiveUntil).getFullYear(),
+        generativeSummary: data.generativeSummary
       });
     } catch (error) {
       console.error("Error encountered:", error);
@@ -119,7 +120,7 @@ function ListingEdit() {
   // Handle removing a qualification
   const handleRemoveQualification = (index) => {
     const updatedQualifications = editListing.qualification.filter(
-      (_, i) => i !== index
+        (_, i) => i !== index
     );
     setEditListing((prev) => ({
       ...prev,
@@ -164,290 +165,310 @@ function ListingEdit() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Lnavbar />
-      <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md mt-12">
-        <h2 className="text-xl font-bold text-orange-500  mb-6">
-          Create Listing
-        </h2>
-        <div className="md:col-span-2 space-y-4">
-          <div>
-            <label className=" text-sm font-medium text-gray-700 mb-1">
-              Position
-            </label>
-            <input
-              type="text"
-              placeholder="Position Name"
-              value={editListing.position}
-              onChange={(e) =>
-                setEditListing({ ...editListing, position: e.target.value })
-              }
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          {/* Location */}
-          <div>
-            <label className=" text-sm font-medium text-gray-700 mb-1">
-              Location
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your location"
-              value={editListing.Location}
-              onChange={(e) =>
-                setEditListing({ ...editListing, Location: e.target.value })
-              }
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-6">
-            {/* Work type */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Work type
-              </label>
-              <select
-                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={editListing.workType}
-                onChange={(e) =>
-                  setEditListing({ ...editListing, workType: e.target.value })
-                }
-              >
-                <option value="Full-time">Full-Time</option>
-                <option value="Part-time">Part-Time</option>
-                <option value="Contact">Contract</option>
-                <option value="Internship">Internship</option>
-                <option value="Academic Assistantship">
-                  Academic Assistantship
-                </option>
-              </select>
-            </div>
-
-            {/* Salary */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Salary
+      <div className="min-h-screen bg-gray-100">
+        <Lnavbar />
+        <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md mt-12">
+          <h2 className="text-xl font-bold text-orange-500  mb-6">
+            Create Listing
+          </h2>
+          <div className="md:col-span-2 space-y-4">
+            <div>
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Position
               </label>
               <input
-                type="text"
-                placeholder="Enter Salary"
-                value={editListing.salary}
-                onChange={(e) =>
-                  setEditListing({ ...editListing, salary: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="text"
+                  placeholder="Position Name"
+                  value={editListing.position}
+                  onChange={(e) =>
+                      setEditListing({ ...editListing, position: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-6">
-            {/* Work condition */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Work condition
+            {/* Location */}
+            <div>
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Location
               </label>
-              <select
-                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={editListing.workCondition}
-                onChange={(e) =>
-                  setEditListing({
-                    ...editListing,
-                    workCondition: e.target.value,
-                  })
-                }
-              >
-                <option value="On-site">On-site</option>
-                <option value="Remote">Remote</option>
-                <option value="Hybrid">Hybrid</option>
-              </select>
+              <input
+                  type="text"
+                  placeholder="Enter your location"
+                  value={editListing.Location}
+                  onChange={(e) =>
+                      setEditListing({ ...editListing, Location: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
 
-            {/* Experience */}
+            <div className="grid grid-cols-2 gap-6">
+              {/* Work type */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Work type
+                </label>
+                <select
+                    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={editListing.workType}
+                    onChange={(e) =>
+                        setEditListing({ ...editListing, workType: e.target.value })
+                    }
+                >
+                  <option value="Full-time">Full-Time</option>
+                  <option value="Part-time">Part-Time</option>
+                  <option value="Contact">Contract</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Academic Assistantship">
+                    Academic Assistantship
+                  </option>
+                </select>
+              </div>
+
+              {/* Salary */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Salary
+                </label>
+                <input
+                    type="text"
+                    placeholder="Enter Salary"
+                    value={editListing.salary}
+                    onChange={(e) =>
+                        setEditListing({ ...editListing, salary: e.target.value })
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              {/* Work condition */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Work condition
+                </label>
+                <select
+                    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={editListing.workCondition}
+                    onChange={(e) =>
+                        setEditListing({
+                          ...editListing,
+                          workCondition: e.target.value,
+                        })
+                    }
+                >
+                  <option value="On-site">On-site</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Hybrid">Hybrid</option>
+                </select>
+              </div>
+
+              {/* Experience */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Experience
+                </label>
+                <select
+                    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={editListing.experience}
+                    onChange={(e) =>
+                        setEditListing({ ...editListing, experience: e.target.value })
+                    }
+                >
+                  <option value="Not Required">Not Required</option>
+                  <option value="1 - 2 years">1 - 2 years</option>
+                  <option value="3 - 5 years">3 - 5 years</option>
+                  <option value="6 - 10 years">6 - 10 years</option>
+                  <option value="10 years or above">10 years or above</option>
+                </select>
+              </div>
+            </div>
+
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Experience
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Listing Affective Until
               </label>
-              <select
-                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={editListing.experience}
-                onChange={(e) =>
-                  setEditListing({ ...editListing, experience: e.target.value })
-                }
-              >
-                <option value="Not Required">Not Required</option>
-                <option value="1 - 2 years">1 - 2 years</option>
-                <option value="3 - 5 years">3 - 5 years</option>
-                <option value="6 - 10 years">6 - 10 years</option>
-                <option value="10 years or above">10 years or above</option>
-              </select>
+              {/*<input*/}
+              {/*    type="datetime-local"*/}
+              {/*    value={editAffectiveUntil}*/}
+              {/*    onChange={(e) => setAffectiveUntil(e.target.value)}*/}
+              {/*    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"*/}
+              {/*/>*/}
+
+              <div className="flex space-x-4">
+                <input
+                    value={editListing.affectiveHour}
+                    placeholder="Hour"
+                    onChange={(e) =>
+                        setEditListing({
+                          ...editListing,
+                          affectiveHour: e.target.value,
+                        })
+                    }
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+                <input
+                    value={editListing.affectiveMinute}
+                    placeholder="Minute"
+                    onChange={(e) =>
+                        setEditListing({
+                          ...editListing,
+                          affectiveMinute: e.target.value,
+                        })
+                    }
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+                <input
+                    value={editListing.affectiveDay}
+                    placeholder="Day"
+                    onChange={(e) =>
+                        setEditListing({
+                          ...editListing,
+                          affectiveDay: e.target.value,
+                        })
+                    }
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+                <input
+                    value={editListing.affectiveMonth}
+                    placeholder="Month"
+                    onChange={(e) =>
+                        setEditListing({
+                          ...editListing,
+                          affectiveMonth: e.target.value,
+                        })
+                    }
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+                <input
+                    value={editListing.affectiveYear}
+                    placeholder="Year"
+                    onChange={(e) =>
+                        setEditListing({
+                          ...editListing,
+                          affectiveYear: e.target.value,
+                        })
+                    }
+                    className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
+                />
+              </div>
+            </div>
+            {/* Role description Section */}
+            <div>
+              <label className=" text-sm font-medium text-gray-700 mb-1">
+                Role description
+              </label>
+              <textarea
+                  rows="3"
+                  placeholder="Your title, profession or small biography"
+                  value={editListing.roleDescription}
+                  onChange={(e) =>
+                      setEditListing({
+                        ...editListing,
+                        roleDescription: e.target.value,
+                      })
+                  }
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              ></textarea>
             </div>
           </div>
 
-          <div className="flex flex-col">
+          {/* Other detail Section */}
+          <div className="mb-6">
             <label className=" text-sm font-medium text-gray-700 mb-1">
-              Listing Affective Until
-            </label>
-            {/*<input*/}
-            {/*    type="datetime-local"*/}
-            {/*    value={editAffectiveUntil}*/}
-            {/*    onChange={(e) => setAffectiveUntil(e.target.value)}*/}
-            {/*    className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"*/}
-            {/*/>*/}
-
-            <div className="flex space-x-4">
-              <input
-                value={editListing.affectiveHour}
-                placeholder="Hour"
-                onChange={(e) =>
-                  setEditListing({
-                    ...editListing,
-                    affectiveHour: e.target.value,
-                  })
-                }
-                className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
-              />
-              <input
-                value={editListing.affectiveMinute}
-                placeholder="Minute"
-                onChange={(e) =>
-                  setEditListing({
-                    ...editListing,
-                    affectiveMinute: e.target.value,
-                  })
-                }
-                className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
-              />
-              <input
-                value={editListing.affectiveDay}
-                placeholder="Day"
-                onChange={(e) =>
-                  setEditListing({
-                    ...editListing,
-                    affectiveDay: e.target.value,
-                  })
-                }
-                className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
-              />
-              <input
-                value={editListing.affectiveMonth}
-                placeholder="Month"
-                onChange={(e) =>
-                  setEditListing({
-                    ...editListing,
-                    affectiveMonth: e.target.value,
-                  })
-                }
-                className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
-              />
-              <input
-                value={editListing.affectiveYear}
-                placeholder="Year"
-                onChange={(e) =>
-                  setEditListing({
-                    ...editListing,
-                    affectiveYear: e.target.value,
-                  })
-                }
-                className="px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-20"
-              />
-            </div>
-          </div>
-          {/* Role description Section */}
-          <div>
-            <label className=" text-sm font-medium text-gray-700 mb-1">
-              Role description
+              Additional Details
             </label>
             <textarea
-              rows="3"
-              placeholder="Your title, profession or small biography"
-              value={editListing.roleDescription}
-              onChange={(e) =>
-                setEditListing({
-                  ...editListing,
-                  roleDescription: e.target.value,
-                })
-              }
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows="3"
+                placeholder="Company advertising or benefit"
+                value={editListing.detail}
+                onChange={(e) =>
+                    setEditListing({ ...editListing, detail: e.target.value })
+                }
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
           </div>
-        </div>
 
-        {/* Other detail Section */}
-        <div className="mb-6">
-          <label className=" text-sm font-medium text-gray-700 mb-1">
-            Additional Details
-          </label>
-          <textarea
-            rows="3"
-            placeholder="Company advertising or benefit"
-            value={editListing.detail}
-            onChange={(e) =>
-              setEditListing({ ...editListing, detail: e.target.value })
-            }
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
-        </div>
+          {/*<div className="mt-3 mb-6 ">*/}
+          {/*  <div className="flex justify-between items-center">*/}
+          {/*    <h3 className="text-sm font-semibold">*/}
+          {/*      Qualification ({skills.length}/8)*/}
+          {/*    </h3>*/}
+          {/*    <button*/}
+          {/*        type="button"*/}
+          {/*        onClick={addSkill}*/}
+          {/*        className="text-orange-600 hover:underline text-sm"*/}
+          {/*    >*/}
+          {/*      + Add new*/}
+          {/*    </button>*/}
+          {/*  </div>*/}
+          {/*  {skills.map((skill, index) => (*/}
+          {/*      <input*/}
+          {/*          key={index}*/}
+          {/*          type="text"*/}
+          {/*          placeholder="What is your skill requirement..."*/}
+          {/*          value={skill}*/}
+          {/*          onChange={(e) => handleSkillChange(index, e.target.value)}*/}
+          {/*          className="w-full px-4 py-2 border rounded-md mt-2"*/}
+          {/*          maxLength={120}*/}
+          {/*      />*/}
+          {/*  ))}*/}
+          {/*</div>*/}
 
-        {/*<div className="mt-3 mb-6 ">*/}
-        {/*  <div className="flex justify-between items-center">*/}
-        {/*    <h3 className="text-sm font-semibold">*/}
-        {/*      Qualification ({skills.length}/8)*/}
-        {/*    </h3>*/}
-        {/*    <button*/}
-        {/*        type="button"*/}
-        {/*        onClick={addSkill}*/}
-        {/*        className="text-orange-600 hover:underline text-sm"*/}
-        {/*    >*/}
-        {/*      + Add new*/}
-        {/*    </button>*/}
-        {/*  </div>*/}
-        {/*  {skills.map((skill, index) => (*/}
-        {/*      <input*/}
-        {/*          key={index}*/}
-        {/*          type="text"*/}
-        {/*          placeholder="What is your skill requirement..."*/}
-        {/*          value={skill}*/}
-        {/*          onChange={(e) => handleSkillChange(index, e.target.value)}*/}
-        {/*          className="w-full px-4 py-2 border rounded-md mt-2"*/}
-        {/*          maxLength={120}*/}
-        {/*      />*/}
-        {/*  ))}*/}
-        {/*</div>*/}
-
-        {/* Qualification Section */}
-        <div className="mb-6">
-          <label className="text-sm font-medium text-gray-700 mb-1">
-            Qualifications
-          </label>
-          {editListing.qualification.map((qual, index) => (
-            <div key={index} className="flex items-center space-x-4">
-              <input
-                type="text"
-                value={qual}
-                onChange={(e) =>
-                  handleQualificationChange(index, e.target.value)
-                }
-                placeholder="Qualification"
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
+          {/* Qualification Section */}
+          <div className="mb-6">
+            <label className="text-sm font-medium text-gray-700 mb-1">
+              Qualifications
+            </label>
+            {editListing.qualification.map((qual, index) => (
+                <div key={index} className="flex items-center space-x-4">
+                  <input
+                      type="text"
+                      value={qual}
+                      onChange={(e) =>
+                          handleQualificationChange(index, e.target.value)
+                      }
+                      placeholder="Qualification"
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                      type="button"
+                      onClick={() => handleRemoveQualification(index)}
+                      className="text-red-600 hover:underline"
+                  >
+                    Remove
+                  </button>
+                </div>
+            ))}
+            <button
                 type="button"
-                onClick={() => handleRemoveQualification(index)}
-                className="text-red-600 hover:underline"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleAddQualification}
-            className="mt-2 text-blue-600 hover:underline"
-          >
-            + Add new qualification
-          </button>
-        </div>
+                onClick={handleAddQualification}
+                className="mt-2 text-blue-600 hover:underline"
+            >
+              + Add new qualification
+            </button>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <h2 className="text-xl font-bold text-gray-800">Generated Listing Requirement Summary</h2>
+
+            {!editListing.generativeSummary || editListing.generativeSummary.length === 0 ? (
+                <h1 className="text-sm text-center text-gray-500">
+                  There is no AI summary available at the moment.
+                </h1>
+            ) : (
+                <div className="flex flex-wrap gap-2">
+                  {editListing.generativeSummary.map((skill, index) => (
+                      <span
+                          key={index}
+                          className="px-3 py-1 text-sm bg-orange-500 text-white rounded-full"
+                      >
+                        {skill}
+                        </span>
+                  ))}
+                </div>
+            )}
+          </div>
           <div className="flex justify-between mt-4">
             {/* Left-aligned Delete button */}
             <button
@@ -474,6 +495,7 @@ function ListingEdit() {
             </div>
           </div>
           {/* End the form this line */}
+
         </div>
         <Footer />
       </div>
