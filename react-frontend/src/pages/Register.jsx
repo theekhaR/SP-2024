@@ -60,12 +60,6 @@ function Register() {
       return;
     }
 
-    checkIfUserExists(emailState).then((check) => {
-      if (check) {
-        alert("Email Already Existed");
-        return;
-      }
-    });
 
     const { data, error } = await supabase.auth.signUp({
       email: emailState,
@@ -98,7 +92,7 @@ function Register() {
           upsert: false,
         });
       if (create_folder_data) {
-        alert(create_folder_data.path);
+        //alert(create_folder_data.path);
       }
       if (error) {
         alert(error.message);

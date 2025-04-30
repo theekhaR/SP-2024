@@ -102,8 +102,8 @@ function L_navbar() {
                 </li>
                 <li>
                   <a
-                    href="#"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
+                    href="/login"
                   >
                     Logout
                   </a>

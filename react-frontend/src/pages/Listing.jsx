@@ -226,6 +226,27 @@ function Listing() {
     }
   };
 
+  const handleApplyBookmark = async (selectlistingID, selectuserID) => {
+    try {
+      const response = await fetch(`http://localhost:5000/add_user_bookmark`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          listingID: selectlistingID,
+          userID: selectuserID,
+        }),
+      });
+      if (response.status === 201) {
+        alert("Added to bookmark");
+        return;
+      }
+    } catch (error) {
+      console.error("Error applying for listing:", error);
+    }
+  };
+
   return (
     <div className="bg-gray-100 flex flex-col">
       <L_navbar />
@@ -470,7 +491,12 @@ function Listing() {
                   Check Company Profile
                 </Link>
 
-                <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-100 transition">
+                <button
+                  className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-100 transition"
+                  onClick={() =>
+                    handleApplyBookmark(selectedJob.listingID, userID)
+                  }
+                >
                   Add To Bookmark
                 </button>
               </div>

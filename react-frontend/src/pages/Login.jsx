@@ -37,8 +37,6 @@ function Login() {
     }
 
     if (data) {
-      console.log(data.session.user.email);
-      alert("Login Successfully");
       setEmail("");
       setPassword("");
       window.location.reload();
