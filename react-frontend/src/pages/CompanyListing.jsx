@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MissingImagePlaceHolder from "../assets/MissingImagePlaceholder.jpg";
-import {useCompanyContext} from "../components/CompanyContext.jsx";
-import {useUserContext} from "../components/UserContext.jsx";
+import { useCompanyContext } from "../components/CompanyContext.jsx";
+import { useUserContext } from "../components/UserContext.jsx";
 
 function CompanyListing() {
   const {
@@ -99,9 +99,9 @@ function CompanyListing() {
 
           <div className="bg-white rounded shadow overflow-hidden">
             {/* HEADER ROW */}
-            <div className="grid grid-cols-[2fr_1fr_1fr_auto] px-6 py-4 bg-gray-50 font-semibold text-gray-600 text-sm">
+            <div className="grid grid-cols-[1fr_1fr_1fr_auto] px-6 py-4 bg-gray-50 font-semibold text-gray-600 text-sm">
               <div>Name</div>
-              <div>CreatedOn</div>
+              <div className="ml-14">CreatedOn</div>
               <div>AffectiveUntil</div>
               <div className="text-right">Action</div>
             </div>
@@ -110,10 +110,10 @@ function CompanyListing() {
             {listingList.map((listing, index) => (
               <div
                 key={listing.listingID}
-                className="grid grid-cols-[2fr_1fr_1fr_auto] items-center px-6 py-4 border-t hover:bg-gray-50 text-sm"
+                className="grid grid-cols-[1fr_1fr_1fr_auto] items-center px-6 py-4 border-t hover:bg-gray-50 text-sm"
               >
                 {/* NAME COLUMN (image + position) */}
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center  space-x-4">
                   <img
                     src={listing.image_url || MissingImagePlaceHolder}
                     alt="Image"
@@ -125,22 +125,27 @@ function CompanyListing() {
                 </div>
 
                 {/* CREATED ON COLUMN */}
-                <div className="text-gray-700">{listing.createdOn}</div>
+                <div className="text-center text-gray-700">
+                  {listing.createdOn}
+                </div>
 
                 {/* AFFECTIVE UNTIL COLUMN */}
-                <div className="text-gray-700">{listing.affectiveUntil}</div>
+                <div className="text-center text-gray-700">
+                  {listing.affectiveUntil}
+                </div>
 
                 {/* ACTION COLUMN */}
                 <div className="flex justify-end space-x-2">
                   <Link
-                      to={`/manageapplication/${listing.listingID}`}
-                      className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 text-sm"
+                    to={`/manageapplication/${listing.listingID}`}
+                    className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 text-sm"
                   >
                     Check Out Applicant
                   </Link>
                   <Link
-                      to={`/listingedit/${listing.listingID}`}
-                      className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm">
+                    to={`/listingedit/${listing.listingID}`}
+                    className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 text-sm"
+                  >
                     Edit
                   </Link>
                 </div>

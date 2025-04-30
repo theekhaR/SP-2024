@@ -12,7 +12,7 @@ import {
 import { supabase } from "../supabaseClient";
 import axios from "axios";
 import { useUserContext } from "../components/UserContext.jsx";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Listing() {
   const { userID } = useUserContext();
@@ -295,84 +295,6 @@ function Listing() {
         </div>
       </div>
 
-      {/* <div className="p-8 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center">
-        <input
-          type="text"
-          placeholder="Position or Company name"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          className="p-2 w-full rounded-md border border-gray-300"
-        />
-
-        <select
-          value={searchIndustry}
-          onChange={(e) => setsearchIndustry(e.target.value)}
-          className="p-2 w-full rounded-md border border-gray-300"
-        >
-          <option value="">All Industry</option>
-          <option value="Technology and IT">Technology and IT</option>
-          <option value="Food and Beverage">Food and Beverage</option>
-          <option value="Remote">Medical</option>
-        </select>
-
-        <select
-          value={searchLocation}
-          onChange={(e) => setSearchLocation(e.target.value)}
-          className="p-2 w-full rounded-md border border-gray-300"
-        >
-          <option value="">All Locations</option>
-          <option value="Bangkok">Bangkok</option>
-          <option value="Chiang Mai">Chiang Mai</option>
-          <option value="Japan">Japan</option>
-          <option value="Songkhla">Songkhla</option>
-        </select>
-
-        <select
-          value={searchWorkType}
-          onChange={(e) => setSearchWorkType(e.target.value)}
-          className="p-2 w-full rounded-md border border-gray-300"
-        >
-          <option value="">All Work Types</option>
-          <option value="Full-Time">Full-Time</option>
-          <option value="Part-Time">Part-Time</option>
-          <option value="Internship">Internship</option>
-          <option value="Contract">Contract</option>
-        </select>
-
-        <select
-          value={searchWorkCondition}
-          onChange={(e) => setSearchWorkCondition(e.target.value)}
-          className="p-2 w-full rounded-md border border-gray-300"
-        >
-          <option value="">All Work Conditions</option>
-          <option value="Onsite">Onsite</option>
-          <option value="Remote">Remote</option>
-          <option value="Hybrid">Hybrid</option>
-        </select>
-
-        <select
-          value={searchExperience}
-          onChange={(e) => setSearchExperience(e.target.value)}
-          className="p-2 w-full rounded-md border border-gray-300"
-        >
-          <option value="">All Experience Levels</option>
-          <option value="Not Required">Not Required</option>
-          <option value="1 - 2 years">1 - 2 years</option>
-          <option value="2 - 5 years">2 - 5 years</option>
-          <option value="5 - 10 years">5 - 10 years</option>
-          <option value="10 years or above">10 years or above</option>
-        </select>
-
-        <div className="md:col-span-3 flex justify-center mt-4">
-          <button
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md text-lg"
-            onClick={handleSearch}
-          >
-            Find Job
-          </button>
-        </div>
-      </div> */}
-
       {/* Filter */}
       <div className="flex h-screen">
         {/* Left - Job List */}
@@ -391,7 +313,7 @@ function Listing() {
               >
                 {/* Job Image */}
                 <img
-                  src={job.image_url}
+                  src={job.companyLogoURL}
                   alt={job.position}
                   className="w-16 h-16 object-cover rounded-md"
                 />
@@ -399,7 +321,7 @@ function Listing() {
                 {/* Job Details */}
                 <div>
                   <h3 className="font-medium">{job.position}</h3>
-                  <p className="text-sm text-gray-600">{job.company}</p>
+                  <p className="text-sm text-gray-600">{job.companyName}</p>
                   <p className="text-sm text-gray-600">{job.location}</p>
                   <p className="text-sm text-gray-600">{job.salary}</p>
                 </div>
@@ -416,7 +338,7 @@ function Listing() {
                 {selectedJob.position}
               </h2>
 
-              <p className="font-bold">{selectedJob.company}</p>
+              <p className="font-bold">{selectedJob.companyName}</p>
               <div className="flex mt-3 gap-8 text-gray-600 text-base">
                 <div className="flex items-center gap-2">
                   <FontAwesomeIcon icon={faDollarSign} />
@@ -431,12 +353,13 @@ function Listing() {
               <p className="mt-6">{selectedJob.description}</p>
 
               <h2 className="text-xl font-bold mt-3 mb-3">Qualification:</h2>
+              <p className="mt-3">{selectedJob.qualification}</p>
 
-              {selectedJob.qualification.map((qual, index) => (
+              {/* {selectedJob.qualification.map((qual, index) => (
                 <div key={index} className="flex items-center space-x-4">
                   ➤ {qual}
                 </div>
-            ))}
+            ))} */}
 
               {/* <ul className="text-gray-600 space-y-2">
                 {selectedJob.qualification.map((req, index) => (
@@ -465,13 +388,13 @@ function Listing() {
                   <strong>Position:</strong> {selectedJob.position}
                 </p>
                 <p>
-                  <strong>Work type:</strong> {selectedJob.worktype}
+                  <strong>Work type:</strong> {selectedJob.workType}
                 </p>
                 <p>
                   <strong>Salary:</strong> {selectedJob.salary}
                 </p>
                 <p>
-                  <strong>Work condition:</strong> {selectedJob.workcondition}
+                  <strong>Work condition:</strong> {selectedJob.workCondition}
                 </p>
                 <p>
                   <strong>Experience:</strong> {selectedJob.experience}
@@ -486,8 +409,8 @@ function Listing() {
                 </button>
 
                 <Link
-                    to={`/companyprofileuser/${selectedJob.companyID}`}
-                    className="block w-full text-center border border-orange-500 text-orange-500 py-2 rounded-lg hover:bg-orange-50 transition"
+                  to={`/companyprofileuser/${selectedJob.companyID}`}
+                  className="block w-full text-center border border-orange-500 text-orange-500 py-2 rounded-lg hover:bg-orange-50 transition"
                 >
                   Check Company Profile
                 </Link>

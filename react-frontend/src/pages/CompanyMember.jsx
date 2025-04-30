@@ -1,31 +1,39 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Lnavbar from "../components/L_navbar";
 import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
-import {useCompanyContext} from "../components/CompanyContext.jsx";
-import {useUserContext} from "../components/UserContext.jsx";
+import { useCompanyContext } from "../components/CompanyContext.jsx";
+import { useUserContext } from "../components/UserContext.jsx";
 
 function CompanyMember() {
-
-  const { companyID, companyInfo, companyLogoURL, userCompanyData, loadingCompanyContext } = useCompanyContext();
+  const {
+    companyID,
+    companyInfo,
+    companyLogoURL,
+    userCompanyData,
+    loadingCompanyContext,
+  } = useCompanyContext();
   const { userID } = useUserContext();
-  const [ memberList, setMemberList ] = useState([]);
-  const [ permissionList, setPermissionList ] = useState([]);
+  const [memberList, setMemberList] = useState([]);
+  const [permissionList, setPermissionList] = useState([]);
 
   useEffect(() => {
-    if(!companyID) return;
+    if (!companyID) return;
     getCompanyMember().then(setMemberList);
     getPermissionList().then(setPermissionList);
   }, [companyID]);
 
-  async function getCompanyMember(){
+  async function getCompanyMember() {
     try {
-      const response = await fetch(`http://localhost:5000/get_company_member?companyID=${companyID}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `http://localhost:5000/get_company_member?companyID=${companyID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -45,28 +53,29 @@ function CompanyMember() {
       const data = await response.json();
       alert(data.error);
       return [];
-
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error checking user:", error);
       return [];
     }
   }
 
-  const [ memberToBeAdded, setMemberToBeAdded ] = useState("");
+  const [memberToBeAdded, setMemberToBeAdded] = useState("");
 
-  async function addNewCompanyMember(){
+  async function addNewCompanyMember() {
     try {
-      const response = await fetch(`http://localhost:5000/add_new_member_to_company_using_email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          userEmail: memberToBeAdded,
-          companyID: companyID,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:5000/add_new_member_to_company_using_email`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userEmail: memberToBeAdded,
+            companyID: companyID,
+          }),
+        }
+      );
 
       if (response.status === 201) {
         window.location.reload();
@@ -75,9 +84,9 @@ function CompanyMember() {
       const data = await response.json();
       alert(data.error);
       return [];
-
+    } catch (e) {
+      console.log(e);
     }
-    catch (e) {console.log(e)}
   }
 
   const [editId, setEditId] = useState(null);
@@ -90,9 +99,8 @@ function CompanyMember() {
     setEditPermission(member.permission);
   };
 
-
   async function handleSave() {
-    console.log("EditID: "+editId);
+    console.log("EditID: " + editId);
     try {
       const response = await fetch(`http://localhost:5000/edit_member_detail`, {
         method: "PATCH",
@@ -100,10 +108,10 @@ function CompanyMember() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          "userID": editId,
-          "companyID": companyID,
-          "role": editRole,
-          "permissionID": editPermission
+          userID: editId,
+          companyID: companyID,
+          role: editRole,
+          permissionID: editPermission,
         }),
       });
 
@@ -119,7 +127,7 @@ function CompanyMember() {
     } catch (error) {
       console.error("Error checking user:", error);
     }
-  };
+  }
 
   const handleCancel = () => {
     setEditId(null);
@@ -127,12 +135,15 @@ function CompanyMember() {
 
   async function getPermissionList() {
     try {
-      const response = await fetch(`http://localhost:5000/get_company_permission_list?companyID=${companyID}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5000/get_company_permission_list?companyID=${companyID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
         const data = await response.json();
@@ -157,7 +168,7 @@ function CompanyMember() {
     }
   }
 
-return (
+  return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <Lnavbar />
       <div className="flex flex-row">
@@ -174,8 +185,10 @@ return (
                 className="p-2 w-80 rounded-md border border-gray-300"
                 onChange={(e) => setMemberToBeAdded(e.target.value)}
               />
-              <button className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600"
-                      onClick={addNewCompanyMember}>
+              <button
+                className="bg-orange-500 text-white px-5 py-2 rounded hover:bg-orange-600"
+                onClick={addNewCompanyMember}
+              >
                 Add new member
               </button>
             </div>
@@ -183,19 +196,20 @@ return (
 
           <div className="bg-white rounded shadow overflow-hidden">
             <div className="grid grid-cols-4 px-6 py-4 bg-gray-50 font-semibold text-gray-600 text-sm">
-              <div>Name</div>
-              <div>Role</div>
-              <div>Permission</div>
+              <div className="text-left">Name</div>
+              <div className="text-center">Role</div>
+              <div className="text-center">Permission</div>
               <div className="text-right">Action</div>
             </div>
 
+            {/* Rows */}
             {memberList.map((member) => (
               <div
                 key={member.userID}
                 className="grid grid-cols-4 items-center px-6 py-4 border-t hover:bg-gray-50"
               >
                 {/* Name + Image */}
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4 text-left">
                   <img
                     src={member.image_url}
                     alt="Profile"
@@ -205,7 +219,7 @@ return (
                 </div>
 
                 {/* Role */}
-                <div className="text-gray-800 font-medium">
+                <div className="text-center text-gray-800 font-medium">
                   {editId === member.userID ? (
                     <input
                       type="text"
@@ -219,7 +233,7 @@ return (
                 </div>
 
                 {/* Permission */}
-                <div className="text-gray-800 font-medium">
+                <div className="text-center text-gray-800 font-medium">
                   {editId === member.userID ? (
                     <select
                       value={editPermission}
@@ -241,7 +255,7 @@ return (
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-end space-x-2">
+                <div className="flex  justify-end space-x-2">
                   {editId === member.userID ? (
                     <>
                       <button

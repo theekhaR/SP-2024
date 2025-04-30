@@ -15,7 +15,7 @@ function Company() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(companyList)
+    console.log(companyList);
     if (userID) {
       getCompanyList();
     }
@@ -24,13 +24,13 @@ function Company() {
   async function getCompanyList() {
     try {
       const response = await fetch(
-          `http://localhost:5000/get_company_of_a_user?userID=${userID}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+        `http://localhost:5000/get_company_of_a_user?userID=${userID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       //console.log(response)
@@ -82,90 +82,90 @@ function Company() {
   }
 
   return (
-      <div className="flex flex-col min-h-screen bg-gray-100">
-        <Lnavbar />
-        <div className="flex-1 flex justify-center">
-          <div className="w-full max-w-7xl py-10 px-4">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">
-                My Company ({companyList.length})
-              </h2>
-              <button className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-600">
-                <a href="/CreateCompany" className="text-white">
-                  Create Company
-                </a>
-              </button>
-            </div>
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <Lnavbar />
+      <div className="flex-1 flex justify-center">
+        <div className="w-full max-w-7xl py-10 px-4">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">
+              My Company ({companyList.length})
+            </h2>
+            <button className="bg-orange-600 px-4 py-2 rounded hover:bg-orange-600">
+              <a href="/CreateCompany" className="text-white">
+                Create Company
+              </a>
+            </button>
+          </div>
 
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <table className="min-w-full table-auto">
-                <thead className="bg-white text-left text-gray-600 border-b">
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="min-w-full table-auto">
+              <thead className="bg-white text-left text-gray-600 border-b">
                 <tr>
                   <th className="px-6 py-3">Name</th>
                   <th className="px-6 py-3">Role</th>
                   <th className="px-6 py-3">Action</th>
                 </tr>
-                </thead>
-                <tbody>
+              </thead>
+              <tbody>
                 {Array.isArray(companyList) &&
-                    companyList.map((company) => (
-                        <tr key={company.id} className="border-b">
-                          <td className="px-6 py-4 flex items-center space-x-4">
-                            <img
-                                src={company.image_url || MissingImagePlaceHolder}
-                                alt="Invalid"
-                                className="font-semibold h-12 w-12 object-contain"
-                            />
-                            <span>{company.name}</span>
-                          </td>
-                          <td className="px-6 py-4">
-                      <span className="font-medium text-green-600">
-                        {company.role}
-                      </span>
-                          </td>
-                          <td className="px-6 py-4 space-x-2">
-                            {/*<button className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700">*/}
-                            {/*  <a href={`/companylisting/${company.id}`}>View</a>*/}
-                            {/*</button>*/}
-                            <button
-                                onClick={() => {
-                                  setCompanyID(company.id); // Set context first
-                                  navigate("/companylisting"); // Then navigate
-                                }}
-                                className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700"
-                            >
-                              View
-                            </button>
-                            <button
-                                className={`px-4 py-1 rounded ${
-                                    company.role === "Administrator"
-                                        ? "bg-orange-600 text-white hover:bg-orange-700"
-                                        : "bg-[#F9AD95] text-white cursor-not-allowed"
-                                }`}
-                                disabled={company.role !== "Administrator"}
-                                onClick={() => {
-                                  setCompanyID(company.id); // Set context first
-                                  navigate("/companyprofileedit"); // Then navigate
-                                }}
-                            >
-                              Edit
-                            </button>
-                          </td>
-                        </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+                  companyList.map((company) => (
+                    <tr key={company.id} className="border-b">
+                      <td className="px-6 py-4 flex items-center space-x-4">
+                        <img
+                          src={company.image_url || MissingImagePlaceHolder}
+                          alt="Invalid"
+                          className="font-semibold h-12 w-12 object-contain"
+                        />
+                        <span>{company.name}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="font-medium text-green-600">
+                          {company.role}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 space-x-2">
+                        {/*<button className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700">*/}
+                        {/*  <a href={`/companylisting/${company.id}`}>View</a>*/}
+                        {/*</button>*/}
+                        <button
+                          onClick={() => {
+                            setCompanyID(company.id); // Set context first
+                            navigate("/companylisting"); // Then navigate
+                          }}
+                          className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700"
+                        >
+                          View
+                        </button>
+                        <button
+                          className={`px-4 py-1 rounded ${
+                            company.role === "Administrator"
+                              ? "bg-orange-600 text-white hover:bg-orange-700"
+                              : "bg-[#F9AD95] text-white cursor-not-allowed"
+                          }`}
+                          disabled={company.role !== "Administrator"}
+                          onClick={() => {
+                            setCompanyID(company.id); // Set context first
+                            navigate("/companyprofileedit"); // Then navigate
+                          }}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
 
-            <div className="flex justify-center mt-6">
-              <button className="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700">
-                View All ({companyList.length})
-              </button>
-            </div>
+          <div className="flex justify-center mt-6">
+            <button className="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700">
+              View All ({companyList.length})
+            </button>
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
+    </div>
   );
 }
 
