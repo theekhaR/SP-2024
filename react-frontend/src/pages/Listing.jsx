@@ -60,7 +60,7 @@ function Listing() {
     const fetchDefaultListings = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/get_default_listings",
+            "http://localhost:5000/get_default_listings",
           {
             method: "GET",
             headers: {
@@ -92,6 +92,17 @@ function Listing() {
       setSelectedJob(results[0]);
     }
   }, [results]);
+
+      const formatQualification = (qualification) => {
+      if (Array.isArray(qualification)) return qualification;
+      if (typeof qualification === "string") {
+        return qualification
+            .split(/,\s(?=[A-Z0-9])/)
+            .map((item) => item.trim())
+            .filter((item) => item !== "");
+      }
+      return [];
+    };
 
   const handleSearch = async () => {
     try {
@@ -384,15 +395,20 @@ function Listing() {
           </div>
           <div className="p-4">
             {results.map((job) => (
-              <div
-                key={job.listingid}
-                className="p-3 border mb-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-4"
-                onClick={() => setSelectedJob(job)}
-              >
-                {/* Job Image */}
-                <img
-                  src={job.image_url}
-                  alt={job.position}
+                <div
+                    key={job.listingid}
+                    className="p-3 border mb-2 cursor-pointer hover:bg-gray-100 flex items-center space-x-4"
+                    onClick={() =>
+                        setSelectedJob({
+                          ...job,
+                          qualification: formatQualification(job.qualification),
+                        })
+                    }
+                >
+                  {/* Job Image */}
+                  <img
+                      src={job.image_url}
+                      alt={job.position}
                   className="w-16 h-16 object-cover rounded-md"
                 />
 
@@ -432,12 +448,15 @@ function Listing() {
 
               <h2 className="text-xl font-bold mt-3 mb-3">Qualification:</h2>
 
-              {selectedJob.qualification.map((qual, index) => (
-                <div key={index} className="flex items-center space-x-4">
-                  ➤ {qual}
-                </div>
-            ))}
-
+              {Array.isArray(selectedJob?.qualification) ? (
+                  selectedJob.qualification.map((qual, index) => (
+                      <div key={index} className="flex items-center space-x-4">
+                        ➤ {qual}
+                      </div>
+                  ))
+              ) : (
+                  <div className="text-sm text-gray-500">No qualifications listed.</div>
+              )}
               {/* <ul className="text-gray-600 space-y-2">
                 {selectedJob.qualification.map((req, index) => (
                   <li key={index} className="flex items-center">
