@@ -117,7 +117,7 @@ def add_new_member_to_company_using_email():
         new_companymembermapping = CompanyMemberMapping(
             CompanyID=data.get('companyID'),
             UserID=userID, #because userID was fetched from the query of getUser above
-            Role=data.get('role') if data.get('role') else None,
+            Role=data.get('role') if data.get('role') else 'Default',
             PermissionID=1, #1 is default
         )
         db.session.add(new_companymembermapping)
