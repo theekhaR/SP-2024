@@ -58,39 +58,6 @@ def match_jobs_by_skills():
 
     return jsonify(response.data), 200
 
-
-
-    # print("Received user ID:", user_id)
-    # return jsonify({'received': user_id}), 200
-
-
-
-# @listingAPI.route('/matching', methods=['POST'])
-# def match_jobs_by_skills():
-#     data = request.get_json()
-#     user_id = data.get('user_id')  # match key in frontend
-
-#     print("Received user_id:", user_id)
-
-#     if not user_id:
-#         return jsonify({"error": "Missing user_id parameter"}), 400
-
-#     try:
-#         response = supabase.rpc('match_jobs_by_skills', {
-#             'user_id': user_id
-#         }).execute()
-
-#         print("Supabase RPC raw response:", response)
-
-#         if response.status_code != 200 or response.data is None:
-#             return jsonify({"error": "Supabase RPC failed"}), 500
-
-#         return jsonify(response.data), 200
-
-#     except Exception as e:
-#         print("Exception in /matching route:", str(e))
-#         return jsonify({'error': str(e)}), 500
-
 @listingAPI.route('/search', methods=['GET'])
 def search_listings():
     search_text = request.args.get('searchText')

@@ -5,15 +5,18 @@ import fitz  # PyMuPDF
 import google.generativeai as genai
 from typing import Dict
 from rouge_score import rouge_scorer
+from flask.cli import load_dotenv
 
 # ───── Configuration ─────
-API_KEY = ""
+
 MODEL_NAME = "gemini-2.0-flash"
 ASSETS_FOLDER = "assets"
 SUPPORTED_EXTENSIONS = ('.pdf', '.png', '.jpg', '.jpeg')
 
 # ───── Initialize Gemini ─────
-genai.configure(api_key=API_KEY)
+load_dotenv()
+GEMINI_API_KEY = os.getenv('apikey')
+genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel(MODEL_NAME)
 
 

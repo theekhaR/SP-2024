@@ -129,6 +129,32 @@ function CompanyMember() {
     }
   }
 
+  async function handleKick(deleteID) {
+    console.log("EditID: " + editId);
+    try {
+      const response = await fetch(`http://localhost:5000/delete_member`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userID: deleteID,
+          companyID: companyID,
+        }),
+      });
+
+      if (response.status === 201) {
+        alert("Member Deleted")
+        window.location.reload();
+      }
+      // Unexpected error
+      const data = await response.json();
+      alert(data.error);
+    } catch (error) {
+      console.error("Error checking user:", error);
+    }
+  }
+
   const handleCancel = () => {
     setEditId(null);
   };
@@ -279,7 +305,8 @@ function CompanyMember() {
                       >
                         Manage
                       </button>
-                      <button className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-800 text-sm">
+                      <button className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-800 text-sm"
+                      onClick={() => handleKick(member.userID)}>
                         Kick
                       </button>
                     </>
