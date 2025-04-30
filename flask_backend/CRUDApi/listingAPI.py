@@ -6,11 +6,11 @@ from dataModel.companyModel import Company
 from dataModel.companyListingMappingModel import CompanyListingMapping
 from dataModel.userModel import User
 from dateutil import parser
-
 from AI.generativeListing import generateSummaryOfListing
 from supabase_client import supabase
 from openai import OpenAI
 from sqlalchemy.dialects.postgresql import ARRAY
+from AI.generativeListing import generateSummaryOfListing
 
 listingAPI = blueprints.Blueprint('listingAPI', __name__)
 
@@ -50,7 +50,7 @@ def match_jobs_by_skills():
         return jsonify({'error': 'No data returned or user embedding not found'}), 500
 
     return jsonify(response.data), 200
-    
+
 
 
     # print("Received user ID:", user_id)
@@ -83,7 +83,7 @@ def match_jobs_by_skills():
 #     except Exception as e:
 #         print("Exception in /matching route:", str(e))
 #         return jsonify({'error': str(e)}), 500
- 
+
 @listingAPI.route('/search', methods=['GET'])
 def search_listings():
     search_text = request.args.get('searchText')
@@ -125,7 +125,8 @@ def get_default_listings():
             'worktype': listing.WorkType,
             'workcondition': listing.WorkCondition,
             'experience':listing.Experience,
-            'industry':listing.companylistingmapping_mapping.company_mapping.companyindustrylist_mapping.IndustryName
+            'industry':listing.companylistingmapping_mapping.company_mapping.companyindustrylist_mapping.IndustryName,
+            'companyID': listing.companylistingmapping_mapping.company_mapping.CompanyID if listing.companylistingmapping_mapping.company_mapping.CompanyID else None,
             }
             for listing in listings
         ]
@@ -174,7 +175,7 @@ def create_listing():
         if not isinstance(qualifications, list):
             return jsonify({'error': 'Qualification must be an array of text'}), 400
 
-        
+
         new_listing = Listing(
             ListingID=str(uuid.uuid4()),
             CreatedBy=data.get('createdBy' if data.get('createdBy') else None),

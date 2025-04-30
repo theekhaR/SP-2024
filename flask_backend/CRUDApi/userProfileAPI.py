@@ -106,3 +106,26 @@ def update_portfolio():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@userProfileAPI.route('/get_user_profile', methods=['GET'])
+def get_user_profile():
+    user_id = request.args.get('userID')
+    if not user_id:
+        return jsonify({'error': 'Missing required field userID'}), 400
+
+    profile = UserProfile.query.filter_by(UserID=user_id).first()
+
+    if not profile:
+        return jsonify({'error': 'This user does not exists or do not have a following'}), 409
+
+    profile_json = {
+            "DoB": profile.DoB,
+            "sex": profile.Sex,
+            "phone": profile.Phone,
+            "about": profile.About,
+            "CV": profile.CV,
+            "portfolio": profile.Portfolio,
+            "portfolioSummary": profile.PortfolioSummary
+        }
+
+    return jsonify(profile_json)

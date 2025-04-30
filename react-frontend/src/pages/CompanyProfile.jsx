@@ -84,16 +84,16 @@ function CompanyProfile() {
             <hr />
 
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex space-x-12 text-center">
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">8</div>
-                  <div className="text-sm text-gray-500">Opening Position</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">23,408</div>
-                  <div className="text-sm text-gray-500">Followers</div>
-                </div>
-              </div>
+              {/*<div className="flex space-x-12 text-center">*/}
+              {/*  <div>*/}
+              {/*    <div className="text-2xl font-bold text-gray-900">8</div>*/}
+              {/*    <div className="text-sm text-gray-500">Opening Position</div>*/}
+              {/*  </div>*/}
+              {/*  <div>*/}
+              {/*    <div className="text-2xl font-bold text-gray-900">23,408</div>*/}
+              {/*    <div className="text-sm text-gray-500">Followers</div>*/}
+              {/*  </div>*/}
+              {/*</div>*/}
 
 
 

@@ -85,7 +85,7 @@ def get_user_application():
     if not userID:
         return jsonify({'error': 'Missing required field userID'}), 400
 
-    listings = UserApplication.query.filter_by(UserID=userID)
+    listings = ListingApplicantMapping.query.filter_by(UserID=userID)
     listings_count = listings.count()
 
     if listings_count == 0:
@@ -94,8 +94,11 @@ def get_user_application():
     listings_json = [
         {
             "listingID": listing.ListingID,
-            'listingName': listing.listing_mapping.Position if listing.listing_mapping.Position else None,
-            'companyName': listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyName if listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyName else None
+            'position': listing.listing_mapping.Position if listing.listing_mapping.Position else None,
+            'companyLogoURL': listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyLogoURL,
+            'companyName': listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyName if listing.listing_mapping.companylistingmapping_mapping.company_mapping.CompanyName else None,
+            'appliedOn': listing.AppliedOn,
+            'status': listing.Status,
         }
         for listing in listings
     ]

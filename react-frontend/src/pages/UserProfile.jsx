@@ -6,32 +6,65 @@ import { supabase } from "../supabaseClient.jsx";
 import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { useUserContext } from "../components/UserContext.jsx";
+import {useNavigate} from "react-router-dom";
 
 function UserProfile() {
+  const { userID } = useUserContext();
   const hiddenFileInput = useRef(null);
   const [profileImageURL, setProfileImageURL] = useState(); //Current pfp of user
-  const [userID, setUserID] = useState("");
   const [newProfileImage, setNewProfileImage] = useState(null); //New pfp of user, to be uploaded
   const [fileName, setFileName] = useState("No file chosen"); // Track of current chosen file name
   const [profileExistBoolean, setprofileExistBoolean] = useState(false);
+  const navigate = useNavigate();
 
   //Upload CV
   const [portfolioFileName, setPortfolioFileName] = useState([]);
   const [portfolioFile, setPortfolioFile] = useState([]);
   const portfolioFileInput = useRef(null);
-
-  const mockSkillDatabase = ["JavaScript", "React", "Tailwind CSS"];
-  // const mockSkillDatabase = [];
+  const [userProfileEdit, setUserProfileEdit] = useState({
+    DoB: '',
+    sex: '',
+    phone: '',
+    about: '',
+    portfolioSummary: [],
+  });
 
   useEffect(() => {
-    getUserId();
-    console.log(userID);
-    getCurrentProfilePic();
+    if (userID) {
+      getCurrentProfilePic();
+      getUserProfile();
+    }
   }, [userID, newProfileImage]);
 
-  useEffect(() => {
-    console.log(portfolioFile);
-  }, [portfolioFile]);
+  const getUserProfile = async (event) => {
+    try {
+      const response = await fetch(`http://localhost:5000/get_user_profile?userID=${userID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json(); // Moved inside try block
+
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      setUserProfileEdit({
+        DoB: data.DoB,
+        sex: data.sex,
+        phone: data.phone,
+        about: data.about,
+        portfolioSummary: data.portfolioSummary,
+      });
+
+    } catch (error) {
+      console.error("Error encountered:", error);
+    }
+  };
 
   // Programatically click the hidden file input element
   // when the Button component is clicked
@@ -166,20 +199,20 @@ function UserProfile() {
     }
   }
 
-  const getUserId = async () => {
-    try {
-      const {
-        data: {user},
-      } = await supabase.auth.getUser();
-      if (user !== null) {
-        setUserID(user.id);
-      } else {
-        setUserID("");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const getUserId = async () => {
+  //   try {
+  //     const {
+  //       data: {user},
+  //     } = await supabase.auth.getUser();
+  //     if (user !== null) {
+  //       setUserID(user.id);
+  //     } else {
+  //       setUserID("");
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   const handlePortfolioClick = (event) => {
     portfolioFileInput.current.click();
@@ -229,6 +262,7 @@ function UserProfile() {
       await updatePortfolioURL(); // now fetch new URL after small delay
     }, 1000); // try with 1000ms (1 sec), tweak if needed
     alert("Portfolio Uploaded");
+    navigate(`/listing`);
   }
 
   async function removeAllItemInPortfolioFolder() {
@@ -535,28 +569,22 @@ function UserProfile() {
           <div className="flex flex-col space-y-2">
             <h2 className="text-xl font-bold text-gray-800">User Skill</h2>
 
-            {(() => {
-              if (mockSkillDatabase.length === 0) {
-                return (
-                    <h1 className="text-sm text-center text-gray-500">
-                      Upload Portfolio to get the list of skill
-                    </h1>
-                );
-              } else {
-                return (
-                    <div className="flex flex-wrap gap-2">
-                      {mockSkillDatabase.map((skill, index) => (
-                          <span
-                              key={index}
-                              className="px-3 py-1 text-sm bg-orange-500 text-white rounded-full"
-                          >
-                      {skill}
-                    </span>
-                      ))}
-                    </div>
-                );
-              }
-            })()}
+            {userProfileEdit.portfolioSummary.length === 0 ? (
+                <h1 className="text-sm text-center text-gray-500">
+                  Upload Portfolio to get the list of skills
+                </h1>
+            ) : (
+                <div className="flex flex-wrap gap-2">
+                  {userProfileEdit.portfolioSummary.map((skill, index) => (
+                      <span
+                          key={index}
+                          className="px-3 py-1 text-sm bg-orange-500 text-white rounded-full"
+                      >
+          {skill}
+        </span>
+                  ))}
+                </div>
+            )}
           </div>
 
           <div className="flex flex-col space-y-4">

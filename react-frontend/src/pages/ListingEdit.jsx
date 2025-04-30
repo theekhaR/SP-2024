@@ -137,6 +137,28 @@ function ListingEdit() {
     }));
   };
 
+  const handleDeleteListing = async (event) => {
+    try {
+      const response = await fetch(`http://localhost:5000/delete_listing?listingID=${listingID}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json(); // Moved inside try block
+      if (data){
+        navigate("/companylisting")
+      }
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+    } catch (error) {
+      console.error("Error encountered:", error);
+    }
+  };
+
   useEffect(() => {
     getListing();
   }, []);
@@ -426,25 +448,35 @@ function ListingEdit() {
             + Add new qualification
           </button>
         </div>
+          <div className="flex justify-between mt-4">
+            {/* Left-aligned Delete button */}
+            <button
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
+                onClick={handleDeleteListing}
+            >
+              Delete Listing
+            </button>
 
-        <div className="flex justify-end mt-4">
-          <button
-            className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800 mr-4"
-            onClick={handleEditListing}
-          >
-            Save
-          </button>
-          <Link
-            className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800 "
-            to={`/companylisting`}
-          >
-            Cancel
-          </Link>
+            {/* Right-aligned Save and Cancel buttons */}
+            <div className="flex space-x-4">
+              <button
+                  className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-800"
+                  onClick={handleEditListing}
+              >
+                Save
+              </button>
+              <Link
+                  className="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-800"
+                  to={`/companylisting`}
+              >
+                Cancel
+              </Link>
+            </div>
+          </div>
+          {/* End the form this line */}
         </div>
-        {/* End the form this line */}
+        <Footer />
       </div>
-      <Footer />
-    </div>
   );
 }
 

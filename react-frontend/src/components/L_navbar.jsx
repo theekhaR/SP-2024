@@ -94,10 +94,10 @@ function L_navbar() {
                 </li>
                 <li>
                   <a
-                    href="/status"
+                    href="/applicationstatus"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
                   >
-                    Apply Status
+                    Application Status
                   </a>
                 </li>
                 <li>

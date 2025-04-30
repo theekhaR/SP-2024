@@ -7,7 +7,7 @@ from typing import Dict
 from rouge_score import rouge_scorer
 
 # ───── Configuration ─────
-API_KEY = "AIzaSyDykqAz66fGRzi0jAIpcwD-8kshDK_2EnA"  
+API_KEY = ""
 MODEL_NAME = "gemini-2.0-flash"
 ASSETS_FOLDER = "assets"
 SUPPORTED_EXTENSIONS = ('.pdf', '.png', '.jpg', '.jpeg')
