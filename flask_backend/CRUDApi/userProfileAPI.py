@@ -7,12 +7,15 @@ from dataModel.userApplicationModel import UserApplication
 from dataModel.userFollowingModel import UserFollowing
 from dataModel.userProfileModel import UserProfile
 from dataModel.listingApplicantMapping import ListingApplicantMapping
+from dataModel.userCareerPathModel import UserCareerPath
 
 from AI.generativeUser import generateQueryFromURL
 from openai import OpenAI
 from sqlalchemy.dialects.postgresql import ARRAY
 from flask.cli import load_dotenv
 import os
+
+
 
 userProfileAPI = blueprints.Blueprint('userProfileAPI', __name__)
 
@@ -148,7 +151,7 @@ def get_portfolio():
     profile = UserProfile.query.filter_by(UserID=user_id).first()
 
     if not profile:
-        return jsonify({'error': 'This user does not exists or do not have a following'}), 409
+        return jsonify({'error': 'This user does not exists'}), 409
 
     profile_json = {
             "CV": profile.CV,
@@ -158,3 +161,4 @@ def get_portfolio():
     print(profile_json)
 
     return jsonify(profile_json)
+

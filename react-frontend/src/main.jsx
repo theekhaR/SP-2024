@@ -23,12 +23,13 @@ import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 import ManageApplication from "./pages/ManageApplication.jsx";
 import CompanyProfileUser from "./pages/CompanyProfileUser.jsx";
+import PortfolioView from "./pages/PortfolioView.jsx";
+import CareerCompass from "./pages/CareerCompass.jsx";
 
 // Components
 import ProtectedRouteWrapper from "./components/ProtectedRouteWrapper.jsx";
 import { UserProvider } from "./components/UserContext.jsx";
 import { CompanyProvider } from "./components/CompanyContext.jsx";
-import PortfolioView from "./pages/PortfolioView.jsx";
 
 
 // Wrapping component defined inline
@@ -70,6 +71,7 @@ const router = createBrowserRouter([
       { path: "/applicationstatus", element: <ApplicationStatus /> },
       { path: "/manageapplication/:listingID", element: <ManageApplication /> },
       { path: "/portfolioview/:userID", element: <PortfolioView /> },
+        { path: "/careercompass", element: <CareerCompass /> },
     ],
   },
 ]);
