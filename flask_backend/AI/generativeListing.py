@@ -47,7 +47,7 @@ print(is_valid, message)
 
 # ───── ROUGE Score ─────
 def calculate_rouge(candidate: str, reference: str) -> Dict[str, Dict[str, float]]:
-    scorer = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
+    scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
     return scorer.score(reference, candidate)
 
 def run_generation(inputText):

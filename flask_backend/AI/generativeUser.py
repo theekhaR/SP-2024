@@ -217,7 +217,7 @@ print(is_valid, message)
 
 # ───── ROUGE Score ─────
 def calculate_rouge(candidate: str, reference: str) -> Dict[str, Dict[str, float]]:
-    scorer = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
+    scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
     return scorer.score(reference, candidate)
 
 # ───── Main Logic ─────
@@ -320,16 +320,14 @@ def generateQueryFromURL(URLList):
                 print(f"    recall:    {score.recall:.4f}")
                 print(f"    fmeasure:  {score.fmeasure:.4f}")
 
-                # Select the better summary
-                if avg_f1 >= avg_f2:
-                    print("RUN 1 IS SELECTED")
-                    best_summaries = data_run1[key1]['summary']
-                else:
-                    print("RUN 2 IS SELECTED")
-                    best_summaries = data_run2[key2]['summary']
+            if avg_f1 >= avg_f2:
+                print("RUN 1 IS SELECTED")
+                best_summaries = data_run1[key1]['summary']
+            else:
+                print("RUN 2 IS SELECTED")
+                best_summaries = data_run2[key2]['summary']
 
         return best_summaries
-
 
 
 if __name__ == "__main__":

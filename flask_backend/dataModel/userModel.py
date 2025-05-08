@@ -31,8 +31,10 @@ class User(db.Model): #To indicate that this is a database model
     from .userFollowingModel import UserFollowing
     from .userProfileModel import UserProfile
     from .userSkillModel import UserSkill
+
     userapplication_mapping = db.relationship('UserApplication', back_populates='user_mapping')
     userbookmark_mapping = db.relationship('UserBookmark', back_populates='user_mapping')
+    usercareerpath_mapping = db.relationship('UserCareerPath', back_populates='user_mapping')
     usereducation_mapping = db.relationship('UserEducation', back_populates='user_mapping')
     userexperience_mapping = db.relationship('UserExperience', back_populates='user_mapping')
     userfollowing_mapping = db.relationship('UserFollowing', back_populates='user_mapping')

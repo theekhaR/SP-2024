@@ -102,6 +102,14 @@ function L_navbar() {
                 </li>
                 <li>
                   <a
+                    href="/careercompass"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
+                  >
+                    Career Compass
+                  </a>
+                </li>
+                <li>
+                  <a
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
                     href="/login"
                   >

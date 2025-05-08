@@ -6,7 +6,6 @@ from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from dataModel.__init__ import db
 
-
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
@@ -48,6 +47,8 @@ from CRUDApi.listingApplicantMappingAPI import listingApplicantMappingAPI
 from CRUDApi.userProfileAPI import userProfileAPI
 from CRUDApi.aiAPI import aiAPI
 from CRUDApi.userFollowingAPI import userFollowingAPI
+from CRUDApi.userCareerPathAPI import userCareerPathAPI
+
 from AI.generativeUser import generateQueryFromURL
 app.register_blueprint(userAPI)
 app.register_blueprint(companyAPI)
@@ -62,6 +63,7 @@ app.register_blueprint(companyListingMappingAPI)
 app.register_blueprint(companyPermissionListAPI)
 app.register_blueprint(listingApplicantMappingAPI)
 app.register_blueprint(userProfileAPI)
+app.register_blueprint(userCareerPathAPI)
 
 app.register_blueprint(aiAPI)
 
