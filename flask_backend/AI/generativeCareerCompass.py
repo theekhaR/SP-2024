@@ -43,6 +43,7 @@ def generate_recommendation(portfolio_summary: str) -> str:
 def generate_AIgenerative_career_path(portfolio_summary: str, career_name: str) -> str:
     try:
         prompt = f"""
+
         The user has the following set of skills:\n{portfolio_summary}
 
         Their desired career path is: {career_name}
@@ -50,14 +51,15 @@ def generate_AIgenerative_career_path(portfolio_summary: str, career_name: str) 
         Based on the user's current skills and their target career path:
         - Explain why this career path could be a suitable match for the user.
         - Identify which of their existing skills are most relevant to this goal.
-        - Suggest practical ways they can further develop or adapt their skill set to better align with the requirements of this career path.
-        
-        The response must be professionally readable. Does not have any intro. Do not repeat the question.
+        - Suggest practical ways they can further develop or adapt their skill set to better align with the requirements of this career path. 
+        Make sure to start the suggestion section with a new line symbol, follow with a bolded "Suggestion of Improvement" as the header so it is easy to spot
+
+        The response must be professionally readable. Does not include any intro. Do not repeat the question.
         Refer to the user as you. Pretend you are a career advisor or consultant.
         """
 
-
         response = model.generate_content(prompt)
+
         return response.text.strip() if hasattr(response, 'text') else ""
     except Exception as e:
         print(f"⚠️ Error generating summary: {e}")
